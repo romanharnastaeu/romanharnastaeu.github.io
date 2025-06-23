@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>harnastaeuDev</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background: linear-gradient(135deg, #000000 0%, #111111 50%, #1a1a1a 100%);
+            background-attachment: fixed;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 0, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px, 25px 25px;
+            color: #00ff00;
+            line-height: 1.5;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: normal;
+        }
+        
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 3px solid #00ff00;
+            background: linear-gradient(45deg, #0a2f0a, #1a401a, #0a2f0a);
+            box-shadow: 5px 5px 0px #00ff00;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+
+        
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #00ff00;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .subtitle {
+            font-size: 10px;
+            color: #66ff66;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #00ff00;
+            border-radius: 2px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            flex-shrink: 0;
+        }
+        
+        .profile-text {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+            border: 2px solid #00ff00;
+            background: linear-gradient(145deg, rgba(10, 40, 10, 0.9), rgba(26, 46, 26, 0.9));
+            border-radius: 3px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+            background: linear-gradient(90deg, rgba(0, 255, 0, 0.1), transparent);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .section-header:hover {
+            background: linear-gradient(90deg, rgba(0, 255, 0, 0.2), transparent);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            color: #66ff66;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .section-icon {
+            font-size: 10px;
+            transition: transform 0.3s ease;
+            color: #00ff00;
+        }
+        
+        .section.collapsed .section-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .section-content {
+            padding: 15px;
+            max-height: 1000px;
+            opacity: 1;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        
+        .section.collapsed .section-content {
+            max-height: 0;
+            opacity: 0;
+            padding: 0 15px;
+        }
+        
+        .item {
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            background: linear-gradient(135deg, rgba(26, 46, 26, 0.8), rgba(15, 40, 15, 0.6));
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .item:hover {
+            border-color: rgba(102, 255, 102, 0.6);
+        }
+        
+        .item-title {
+            font-size: 10px;
+            color: #66ff66;
+            margin-bottom: 8px;
+        }
+        
+        .item-desc {
+            font-size: 8px;
+            color: #99ff99;
+            line-height: 1.5;
+        }
+        
+        .github-list, .project-list, .links-list {
+            list-style: none;
+        }
+        
+        .github-list li, .project-list li, .links-list li {
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(26, 46, 26, 0.6));
+            font-size: 8px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .github-list li:hover, .project-list li:hover, .links-list li:hover {
+            border-color: rgba(102, 255, 102, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .github-list li a, .project-list li a, .links-list li a {
+            color: #00ff00;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .github-list li a:hover, .project-list li a:hover, .links-list li a:hover {
+            color: #66ff66;
+        }
+        
+        .project-link {
+            display: inline-block;
+            color: #00ff00 !important;
+            text-decoration: underline !important;
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 2px;
+            background: rgba(0, 255, 0, 0.1);
+            margin-top: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .project-link:hover {
+            color: #ffffff !important;
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .contact-link {
+            color: #66ff66 !important;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: underline;
+            display: inline-block;
+        }
+        
+        .contact-link:hover {
+            color: #99ff99 !important;
+        }
+        
+        .location-info {
+            color: #33ff33;
+            cursor: default;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #333333);
+            margin: 15% auto;
+            padding: 25px;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-title {
+            font-size: 12px;
+            color: #66ff66;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            background: linear-gradient(45deg, #00ff00, #009900);
+            color: #000;
+            border: 2px solid #00ff00;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 120px;
+        }
+        
+        .modal-btn:hover {
+            background: linear-gradient(45deg, #66ff66, #33cc33);
+            border-color: #66ff66;
+            transform: translateY(-2px);
+        }
+        
+        .modal-btn.cancel {
+            background: linear-gradient(45deg, #666666, #555555);
+            border-color: #666666;
+        }
+        
+        .modal-btn.cancel:hover {
+            background: linear-gradient(45deg, #999999, #777777);
+        }
+        
+
+        
+        .pixel-decoration {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(45deg, #00ff00, #66ff66);
+            margin: 0 8px;
+            border-radius: 1px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+            }
+            50% { 
+                transform: scale(1.1);
+            }
+        }
+        
+        .glitch {
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .section-title {
+                font-size: 10px;
+            }
+            
+            .item-title {
+                font-size: 9px;
+            }
+            
+            .item-desc {
+                font-size: 7px;
+            }
+            
+            .github-list li, .project-list li, .links-list li {
+                font-size: 7px;
+            }
+            
+            .project-link {
+                font-size: 6px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="profile-section">
+                <img src="mePixelized.png" alt="Roman Harnastaeu" class="profile-image">
+                <div class="profile-text">
+                    <h1>Roman Harnastaeu</h1>
+                    <div class="subtitle">
+                        FRONTEND DEVELOPER
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GitHub Accounts Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► GitHub Accounts</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <ul class="github-list">
+                    <li>
+                        <a href="https://github.com/usert0n" target="_blank">
+                            🔗 Blockchain Projects: @usert0n
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/rharnastaeu" target="_blank">
+                            🎓 School Account: @rharnastaeu
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/romanharnastaeu" target="_blank">
+                            📚 2nd School Account: @romanharnastaeu
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► Projects</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <ul class="project-list">
+                    <li>
+                        <div class="item-title">⚡ BOLT Foundation</div>
+                        <div class="item-desc">Decentralized community of web3 enthusiasts, builders, projects, and holders with its own token and utilities.<br>
+                        <a href="https://huebel.art/" target="_blank" class="project-link">🌐 Visit huebel.art</a></div>
+                    </li>
+                    <li>
+                        <div class="item-title">✍️ SmartSign NFT Project</div>
+                        <div class="item-desc">Co-founded a decentralized solution for NFT signatures implemented as smart contracts. The project served as a handshake between token owners and signatories, receiving a grant from TON Foundation.</div>
+                    </li>
+                    <li>
+                        <div class="item-title">📱 Blockchain Mini App (React)</div>
+                        <div class="item-desc">Redesigned and rebuilt on-chain solution as a scalable React mini-app with improved UI/UX. Enhanced stability while maintaining all tracking features from the original bot.<br>
+                        <a href="https://my-telegram-miniapp-alpha.vercel.app/" target="_blank" class="project-link">🚀 Launch App</a></div>
+                    </li>
+                    <li>
+                        <div class="item-title">📚 TON Ecosystem Wiki</div>
+                        <div class="item-desc">Created a comprehensive wiki-like platform dedicated to BOLT Foundation and The Open Network ecosystem. Includes interactive features and mini-games like BoltClicker, Flappy Bolt, and Find Bolt.</div>
+                    </li>
+                    <li>
+                        <div class="item-title">🧽 CleanFormula Mobile App</div>
+                        <div class="item-desc">Co-founded and developed an on-demand service mobile application similar to Uber but specialized for cleaning and dry cleaning services. Managed both business operations and technical development.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Links Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► Links</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <ul class="links-list">
+                    <li>
+                        <a href="https://t.me/uerton" target="_blank">
+                            📱 Telegram: @uerton.t.me
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/romanharnastaeu" target="_blank">
+                            💻 Main GitHub: @romanharnastaeu
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/roman-harnastaeu-3433a634b/?originalSubdomain=ca" target="_blank">
+                            💼 LinkedIn: Roman Harnastaeu
+                        </a>
+                    </li>
+                    <li>
+                        <span onclick="handleEmailClick()" class="contact-link">
+                            📧 Email: harnastaeudev@gmail.com
+                        </span>
+                    </li>
+                    <li>
+                        <span onclick="handlePhoneClick()" class="contact-link">
+                            📞 Phone: +1 647 641 1410
+                        </span>
+                    </li>
+                    <li>
+                        <span class="location-info">
+                            📍 Location: GTA, Ontario
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">Choose Action</div>
+            <div class="modal-buttons">
+                <button class="modal-btn" id="copyBtn">📋 Copy</button>
+                <button class="modal-btn" id="actionBtn">📧 Send</button>
+                <button class="modal-btn cancel" onclick="closeModal()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle section functionality
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const icon = header.querySelector('.section-icon');
+            
+            section.classList.toggle('collapsed');
+            
+            // Add visual feedback
+            header.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                header.style.transform = 'scale(1)';
+            }, 100);
+        }
+        
+        // Contact interaction functions
+        function handleEmailClick() {
+            showContactModal('email', 'harnastaeudev@gmail.com');
+        }
+        
+        function handlePhoneClick() {
+            showContactModal('phone', '+1 647 641 1410');
+        }
+        
+        function showContactModal(type, value) {
+            const modal = document.getElementById('contactModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const copyBtn = document.getElementById('copyBtn');
+            const actionBtn = document.getElementById('actionBtn');
+            
+            if (type === 'email') {
+                modalTitle.textContent = 'What would you like to do with this email?';
+                actionBtn.innerHTML = '📧 Send Email';
+                actionBtn.onclick = () => {
+                    window.location.href = `mailto:${value}`;
+                    closeModal();
+                };
+            } else if (type === 'phone') {
+                modalTitle.textContent = 'What would you like to do with this phone number?';
+                actionBtn.innerHTML = '📞 Call';
+                actionBtn.onclick = () => {
+                    window.location.href = `tel:${value}`;
+                    closeModal();
+                };
+            }
+            
+            copyBtn.onclick = () => {
+                copyToClipboard(value, type);
+            };
+            
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+        
+        function copyToClipboard(text, type) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification(`${type === 'email' ? 'Email' : 'Phone number'} copied to clipboard!`, 'success');
+                    closeModal();
+                }).catch(() => {
+                    fallbackCopyTextToClipboard(text, type);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text, type);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text, type) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showNotification(`${type === 'email' ? 'Email' : 'Phone number'} copied to clipboard!`, 'success');
+            } catch (err) {
+                showNotification('Failed to copy. Please copy manually.', 'error');
+            }
+            
+            document.body.removeChild(textArea);
+            closeModal();
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Custom notification system
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border: 2px solid ${type === 'success' ? '#00ff00' : '#ff6b6b'};
+                background: linear-gradient(45deg, rgba(26, 26, 46, 0.95), rgba(15, 52, 96, 0.95));
+                color: ${type === 'success' ? '#00ff00' : '#ff6b6b'};
+                font-family: 'Press Start 2P', monospace;
+                font-size: 6px;
+                border-radius: 2px;
+                box-shadow: 0 0 20px ${type === 'success' ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 107, 107, 0.3)'};
+                z-index: 1000;
+                max-width: 300px;
+                line-height: 1.4;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add matrix-style background animation
+        function createMatrixEffect() {
+            const chars = '01';
+            const matrix = document.createElement('div');
+            matrix.className = 'matrix-bg';
+            matrix.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: -1;
+                overflow: hidden;
+            `;
+            
+            for (let i = 0; i < 50; i++) {
+                const char = document.createElement('div');
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                char.style.cssText = `
+                    position: absolute;
+                    color: rgba(0, 255, 255, 0.1);
+                    font-family: 'Press Start 2P', monospace;
+                    font-size: 8px;
+                    left: ${Math.random() * 100}%;
+                    animation: fall ${3 + Math.random() * 7}s linear infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                `;
+                matrix.appendChild(char);
+            }
+            
+            document.body.appendChild(matrix);
+        }
+        
+        // Add matrix animation CSS
+        const matrixStyle = document.createElement('style');
+        matrixStyle.textContent = `
+            @keyframes fall {
+                from { 
+                    transform: translateY(-100vh); 
+                    opacity: 0; 
+                }
+                10% { 
+                    opacity: 0.1; 
+                }
+                90% { 
+                    opacity: 0.1; 
+                }
+                to { 
+                    transform: translateY(100vh); 
+                    opacity: 0; 
+                }
+            }
+        `;
+        document.head.appendChild(matrixStyle);
+        
+        // Initialize effects
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixEffect();
+            
+            // Add hover effects to sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                section.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+        
+        // Konami code easter egg
+        let konamiCode = [];
+        const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
+        
+        document.addEventListener('keydown', function(e) {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.length === konamiSequence.length && 
+                konamiCode.every((code, index) => code === konamiSequence[index])) {
+                
+                // Easter egg activation
+                document.body.classList.add('glitch');
+                showNotification('🎮 CHEAT CODE ACTIVATED! 🎮', 'success');
+                
+                setTimeout(() => {
+                    document.body.classList.remove('glitch');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html> 
