@@ -314,8 +314,156 @@
             background: linear-gradient(45deg, #999999, #777777);
         }
         
-
+        /* Diploma Progress in Header */
+        .diploma-progress {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
         
+        .mini-battery-container {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .mini-battery-body {
+            width: 120px;
+            height: 16px;
+            border: 2px solid #00ff00;
+            border-radius: 2px;
+            background: rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 5px rgba(0, 0, 0, 0.5),
+                0 0 5px rgba(0, 255, 0, 0.2);
+        }
+        
+        .mini-battery-fill {
+            height: 100%;
+            position: relative;
+            transition: width 2s ease-in-out;
+        }
+        
+        .mini-battery-segments {
+            display: flex;
+            height: 100%;
+            width: 120px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .mini-segment {
+            flex: 1;
+            height: 100%;
+            margin: 1px 0.5px;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .mini-segment.filled {
+            animation: miniPixelGlow 2s infinite alternate;
+        }
+        
+        .mini-segment.red { background: linear-gradient(180deg, #ff4444, #cc0000); }
+        .mini-segment.red-orange { background: linear-gradient(180deg, #ff6644, #dd2200); }
+        .mini-segment.orange { background: linear-gradient(180deg, #ff8844, #ee4400); }
+        .mini-segment.yellow-orange { background: linear-gradient(180deg, #ffaa44, #ff6600); }
+        .mini-segment.yellow { background: linear-gradient(180deg, #ffdd44, #ffaa00); }
+        .mini-segment.yellow-green { background: linear-gradient(180deg, #aaff44, #88cc00); }
+        .mini-segment.green { background: linear-gradient(180deg, #44ff44, #00cc00); }
+        
+        .mini-segment.empty {
+            background: linear-gradient(180deg, rgba(102, 255, 102, 0.08), rgba(0, 255, 0, 0.03));
+            border: 0.5px solid rgba(0, 255, 0, 0.15);
+        }
+        
+        .mini-battery-tip {
+            width: 5px;
+            height: 10px;
+            background: linear-gradient(180deg, #00ff00, #00cc00);
+            border-radius: 0 1px 1px 0;
+            border: 1px solid #00ff00;
+            border-left: none;
+            box-shadow: 0 0 3px rgba(0, 255, 0, 0.3);
+        }
+        
+        .diploma-text {
+            font-size: 8px;
+            color: #99ff99;
+            text-align: center;
+        }
+        
+        .percentage {
+            color: #00ff00;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+            animation: percentageGlow 2s infinite alternate;
+        }
+        
+        .loading-dots {
+            display: inline-block;
+        }
+        
+        .dot1, .dot2, .dot3 {
+            animation: typingDots 2s infinite;
+        }
+        
+        .dot2 {
+            animation-delay: 0.2s;
+        }
+        
+        .dot3 {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes miniPixelGlow {
+            0% { 
+                box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.2);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.4);
+                filter: brightness(1.15);
+            }
+        }
+        
+        @keyframes typingDots {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            50% { opacity: 1; }
+            60% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        
+        @keyframes percentageGlow {
+            0% { 
+                text-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+                color: #00ff00;
+            }
+            100% { 
+                text-shadow: 0 0 12px rgba(0, 255, 0, 0.8);
+                color: #66ff66;
+            }
+        }
+
+        /* Resume Section Styles */
+        .resume-container {
+            padding: 15px;
+        }
+        
+        .resume-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 2px solid rgba(0, 255, 0, 0.4);
+            border-radius: 3px;
+        }
+
         .pixel-decoration {
             display: inline-block;
             width: 10px;
@@ -386,6 +534,29 @@
                 font-size: 6px;
                 padding: 3px 6px;
             }
+            
+            .diploma-progress {
+                margin-top: 8px;
+                gap: 6px;
+            }
+            
+            .mini-battery-body {
+                width: 100px;
+                height: 14px;
+            }
+            
+            .mini-battery-segments {
+                width: 100px;
+            }
+            
+            .mini-battery-tip {
+                width: 4px;
+                height: 8px;
+            }
+            
+            .diploma-text {
+                font-size: 7px;
+            }
         }
     </style>
 </head>
@@ -399,6 +570,28 @@
                     <h1>Roman Harnastaeu</h1>
                     <div class="subtitle">
                         FRONTEND DEVELOPER
+                    </div>
+                    <div class="diploma-progress">
+                        <div class="diploma-text">Computer Programming & Analysis diploma: <span class="percentage">52%</span> complete<span class="loading-dots"><span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></span></div>
+                        <div class="mini-battery-container">
+                            <div class="mini-battery-body">
+                                <div class="mini-battery-fill" style="width: 52%;">
+                                    <div class="mini-battery-segments">
+                                        <div class="mini-segment filled red"></div>
+                                        <div class="mini-segment filled red-orange"></div>
+                                        <div class="mini-segment filled orange"></div>
+                                        <div class="mini-segment filled yellow-orange"></div>
+                                        <div class="mini-segment filled yellow"></div>
+                                        <div class="mini-segment filled yellow-green"></div>
+                                        <div class="mini-segment empty"></div>
+                                        <div class="mini-segment empty"></div>
+                                        <div class="mini-segment empty"></div>
+                                        <div class="mini-segment empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mini-battery-tip"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -469,6 +662,21 @@
             </div>
         </div>
 
+        <!-- Resume Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► Resume</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="resume-container">
+                    <img src="myRes.png" alt="Roman Harnastaeu Resume" class="resume-image">
+                </div>
+            </div>
+        </div>
+
         <!-- Links Section -->
         <div class="section collapsed">
             <div class="section-header" onclick="toggleSection(this)">
@@ -527,6 +735,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script>
         // Toggle section functionality
@@ -621,8 +831,8 @@
         
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('contactModal');
-            if (event.target === modal) {
+            const contactModal = document.getElementById('contactModal');
+            if (event.target === contactModal) {
                 closeModal();
             }
         }
