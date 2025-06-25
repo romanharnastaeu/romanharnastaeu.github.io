@@ -464,6 +464,454 @@
             border-radius: 3px;
         }
 
+        /* Skills Section Styles */
+        .subsection {
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            background: linear-gradient(135deg, rgba(15, 30, 15, 0.6), rgba(20, 35, 20, 0.8));
+            border-radius: 2px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .subsection:hover {
+            border-color: rgba(102, 255, 102, 0.5);
+        }
+        
+        .subsection-header {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            background: linear-gradient(90deg, rgba(0, 255, 0, 0.05), transparent);
+            transition: all 0.3s ease;
+        }
+        
+        .subsection-header:hover {
+            background: linear-gradient(90deg, rgba(0, 255, 0, 0.1), transparent);
+        }
+        
+        .subsection-title {
+            font-size: 10px;
+            color: #99ff99;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .subsection-icon {
+            font-size: 8px;
+            transition: transform 0.3s ease;
+            color: #66ff66;
+        }
+        
+        .subsection.collapsed .subsection-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .subsection-content {
+            padding: 15px;
+            max-height: 800px;
+            opacity: 1;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        
+        .subsection.collapsed .subsection-content {
+            max-height: 0;
+            opacity: 0;
+            padding: 0 15px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .skill-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+        }
+        
+        .skill-item:last-child {
+            border-bottom: none;
+        }
+        
+        .skill-name {
+            font-size: 8px;
+            color: #66ff66;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+        
+        .skill-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            margin-left: 15px;
+        }
+        
+        .skill-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4444, #ffaa44, #44ff44);
+            border-radius: 1px;
+            transition: width 2s ease-in-out;
+            position: relative;
+            animation: skillGlow 3s infinite alternate;
+        }
+        
+        .skill-percentage {
+            font-size: 7px;
+            color: #00ff00;
+            min-width: 30px;
+            text-align: right;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+        
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            padding: 6px 10px;
+            background: linear-gradient(45deg, rgba(0, 255, 0, 0.1), rgba(0, 255, 0, 0.2));
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            border-radius: 2px;
+            font-size: 7px;
+            color: #99ff99;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        
+        .skill-tag:hover {
+            background: linear-gradient(45deg, rgba(0, 255, 0, 0.2), rgba(0, 255, 0, 0.3));
+            border-color: rgba(102, 255, 102, 0.6);
+            transform: translateY(-1px);
+            color: #66ff66;
+            box-shadow: 0 2px 8px rgba(0, 255, 0, 0.2);
+        }
+        
+        @keyframes skillGlow {
+            0% { 
+                box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.1);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+                filter: brightness(1.1);
+            }
+        }
+
+        /* GitHub Activity Dashboard Styles */
+        .main-account-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        }
+        
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .main-account-title {
+            font-size: 12px;
+            color: #66ff66;
+            margin: 0;
+        }
+        
+        .main-account-link {
+            color: #00ff00;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .main-account-link:hover {
+            color: #66ff66;
+        }
+        
+
+        
+        .other-accounts-section {
+            margin-top: 20px;
+        }
+        
+        .other-accounts-title {
+            font-size: 10px;
+            color: #99ff99;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        
+        .activity-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .activity-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.05), rgba(0, 255, 0, 0.1));
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .activity-card:hover {
+            border-color: rgba(102, 255, 102, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.2);
+        }
+        
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .activity-card:hover::before {
+            left: 100%;
+        }
+        
+        .activity-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .activity-data {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .activity-number {
+            font-size: 12px;
+            color: #00ff00;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+            animation: numberGlow 2s infinite alternate;
+        }
+        
+        .activity-label {
+            font-size: 7px;
+            color: #99ff99;
+            text-transform: uppercase;
+        }
+        
+        .repo-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .repo-card {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(15, 30, 15, 0.8), rgba(20, 35, 20, 0.6));
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .repo-card:hover {
+            border-color: rgba(102, 255, 102, 0.6);
+            transform: translateX(5px);
+        }
+        
+        .repo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .repo-name {
+            font-size: 10px;
+            color: #66ff66;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .repo-name:hover {
+            color: #00ff00;
+        }
+        
+        .repo-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 7px;
+            color: #99ff99;
+        }
+        
+        .repo-stat {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .repo-description {
+            font-size: 8px;
+            color: #ccffcc;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .repo-language {
+            font-size: 7px;
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 2px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+        
+        .language-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .language-name {
+            font-size: 8px;
+            color: #66ff66;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+        
+        .language-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .language-fill {
+            height: 100%;
+            border-radius: 1px;
+            transition: width 2s ease-in-out;
+            position: relative;
+            animation: languageGlow 3s infinite alternate;
+        }
+        
+        .language-percentage {
+            font-size: 7px;
+            color: #00ff00;
+            min-width: 35px;
+            text-align: right;
+        }
+        
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .activity-item {
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(26, 46, 26, 0.6));
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 2px;
+            font-size: 8px;
+            color: #99ff99;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .activity-item:hover {
+            border-color: rgba(102, 255, 102, 0.5);
+            transform: translateX(3px);
+        }
+        
+        .activity-type {
+            color: #66ff66;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .activity-repo {
+            color: #00ff00;
+            text-decoration: none;
+        }
+        
+        .activity-time {
+            color: #ccffcc;
+            font-size: 7px;
+            opacity: 0.8;
+        }
+        
+        .repo-loading, .language-loading, .activity-loading {
+            text-align: center;
+            padding: 20px;
+            color: #66ff66;
+            font-size: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes numberGlow {
+            0% { 
+                text-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+                color: #00ff00;
+            }
+            100% { 
+                text-shadow: 0 0 12px rgba(0, 255, 0, 0.8);
+                color: #66ff66;
+            }
+        }
+        
+        @keyframes languageGlow {
+            0% { 
+                box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.1);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
+                filter: brightness(1.2);
+            }
+        }
+        
+
+
         .pixel-decoration {
             display: inline-block;
             width: 10px;
@@ -557,6 +1005,103 @@
             .diploma-text {
                 font-size: 7px;
             }
+            
+            .subsection-title {
+                font-size: 9px;
+            }
+            
+            .skill-name {
+                font-size: 7px;
+                min-width: 60px;
+            }
+            
+            .skill-percentage {
+                font-size: 6px;
+                min-width: 25px;
+            }
+            
+            .skill-bar {
+                height: 6px;
+            }
+            
+            .skill-tag {
+                font-size: 6px;
+                padding: 4px 6px;
+            }
+            
+            .skills-tags {
+                gap: 6px;
+            }
+            
+            .activity-summary {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .activity-card {
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .activity-icon {
+                font-size: 14px;
+            }
+            
+            .activity-number {
+                font-size: 10px;
+            }
+            
+            .activity-label {
+                font-size: 6px;
+            }
+            
+            .repo-card {
+                padding: 12px;
+            }
+            
+            .repo-name {
+                font-size: 9px;
+            }
+            
+            .repo-description {
+                font-size: 7px;
+            }
+            
+            .repo-stats {
+                font-size: 6px;
+                gap: 8px;
+            }
+            
+            .language-name {
+                min-width: 60px;
+                font-size: 7px;
+            }
+            
+            .language-bar {
+                height: 5px;
+            }
+            
+            .language-percentage {
+                font-size: 6px;
+                min-width: 30px;
+            }
+            
+            .activity-item {
+                padding: 8px;
+                font-size: 7px;
+            }
+            
+            .activity-time {
+                font-size: 6px;
+            }
+            
+            .main-account-title {
+                font-size: 10px;
+            }
+            
+            .other-accounts-title {
+                font-size: 9px;
+            }
         }
     </style>
 </head>
@@ -597,35 +1142,6 @@
             </div>
         </div>
 
-        <!-- GitHub Accounts Section -->
-        <div class="section collapsed">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title">
-                    <span>► GitHub Accounts</span>
-                    <span class="section-icon">▼</span>
-                </div>
-            </div>
-            <div class="section-content">
-                <ul class="github-list">
-                    <li>
-                        <a href="https://github.com/usert0n" target="_blank">
-                            🔗 Blockchain Projects: @usert0n
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/rharnastaeu" target="_blank">
-                            🎓 School Account: @rharnastaeu
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/romanharnastaeu" target="_blank">
-                            📚 2nd School Account: @romanharnastaeu
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
         <!-- Projects Section -->
         <div class="section collapsed">
             <div class="section-header" onclick="toggleSection(this)">
@@ -662,6 +1178,317 @@
             </div>
         </div>
 
+
+
+        <!-- Skills Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► Skills</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <!-- Favourite Languages Subsection -->
+                <div class="subsection collapsed">
+                    <div class="subsection-header" onclick="toggleSubsection(this)">
+                        <div class="subsection-title">
+                            <span>💻 Favourite Languages</span>
+                            <span class="subsection-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="subsection-content">
+                        <div class="skills-grid">
+                            <div class="skill-item">
+                                <div class="skill-name">JavaScript</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">TypeScript</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">HTML5</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 98%"></div>
+                                    </div>
+                                    <span class="skill-percentage">98%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">CSS3</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">C++</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 85%"></div>
+                                    </div>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">Java</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 90%"></div>
+                                    </div>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Platforms Subsection -->
+                <div class="subsection collapsed">
+                    <div class="subsection-header" onclick="toggleSubsection(this)">
+                        <div class="subsection-title">
+                            <span>🚀 Platforms & Frameworks</span>
+                            <span class="subsection-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="subsection-content">
+                        <div class="skills-grid">
+                            <div class="skill-item">
+                                <div class="skill-name">React.js</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">Next.js</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">Node.js</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">Express.js</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">WordPress</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 80%"></div>
+                                    </div>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">Docker</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 80%"></div>
+                                    </div>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Skills Subsection -->
+                <div class="subsection collapsed">
+                    <div class="subsection-header" onclick="toggleSubsection(this)">
+                        <div class="subsection-title">
+                            <span>🛠️ Other Skills</span>
+                            <span class="subsection-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="subsection-content">
+                        <div class="skills-tags">
+                            <div class="skill-tag">Responsive Design</div>
+                            <div class="skill-tag">Mobile-First Design</div>
+                            <div class="skill-tag">Flexbox & Grid</div>
+                            <div class="skill-tag">Redux/MobX</div>
+                            <div class="skill-tag">AJAX/Fetch</div>
+                            <div class="skill-tag">GraphQL</div>
+                            <div class="skill-tag">RESTful APIs</div>
+                            <div class="skill-tag">Webpack</div>
+                            <div class="skill-tag">Babel</div>
+                            <div class="skill-tag">npm/Yarn</div>
+                            <div class="skill-tag">Git</div>
+                            <div class="skill-tag">Jest</div>
+                            <div class="skill-tag">React Testing Library</div>
+                            <div class="skill-tag">Cypress</div>
+                            <div class="skill-tag">CI/CD</div>
+                            <div class="skill-tag">GitHub Actions</div>
+                            <div class="skill-tag">Jenkins</div>
+                            <div class="skill-tag">Agile/Scrum</div>
+                            <div class="skill-tag">MySQL</div>
+                            <div class="skill-tag">PostgreSQL</div>
+                            <div class="skill-tag">Oracle</div>
+                            <div class="skill-tag">MongoDB</div>
+                            <div class="skill-tag">SEO/SEM</div>
+                            <div class="skill-tag">Smart Contracts</div>
+                            <div class="skill-tag">Blockchain Development</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GitHub Accounts Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► GitHub Accounts</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <!-- Main Account Live Stats -->
+                <div class="main-account-section">
+                    <div class="account-header">
+                        <h3 class="main-account-title">
+                            <a href="https://github.com/romanharnastaeu" target="_blank" class="main-account-link">
+                                📊 @romanharnastaeu (Main Account)
+                            </a>
+                        </h3>
+                    </div>
+                    
+                    <!-- Activity Summary Cards -->
+                    <div class="activity-summary">
+                        <div class="activity-card">
+                            <div class="activity-icon">📊</div>
+                            <div class="activity-data">
+                                <div class="activity-number" id="totalRepos">--</div>
+                                <div class="activity-label">Total Repos</div>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon">📝</div>
+                            <div class="activity-data">
+                                <div class="activity-number" id="publicRepos">--</div>
+                                <div class="activity-label">Public Repos</div>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon">⭐</div>
+                            <div class="activity-data">
+                                <div class="activity-number" id="totalStars">--</div>
+                                <div class="activity-label">Total Stars</div>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon">🔄</div>
+                            <div class="activity-data">
+                                <div class="activity-number" id="totalForks">--</div>
+                                <div class="activity-label">Total Forks</div>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon">👥</div>
+                            <div class="activity-data">
+                                <div class="activity-number" id="followers">--</div>
+                                <div class="activity-label">Followers</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Repositories -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🏆 Top Repositories</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div id="topRepos" class="repo-grid">
+                                <div class="repo-loading">Loading repositories...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language Usage -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>💻 Language Usage</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div id="languageStats" class="language-stats">
+                                <div class="language-loading">Analyzing code languages...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                                                    <div class="subsection-title">
+                            <span>⚡ Recent Activity</span>
+                            <span class="subsection-icon">▼</span>
+                        </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div id="recentActivity" class="activity-feed">
+                                <div class="activity-loading">Fetching recent activity...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Accounts -->
+                <div class="other-accounts-section">
+                    <h4 class="other-accounts-title">Other Accounts:</h4>
+                    <ul class="github-list">
+                        <li>
+                            <a href="https://github.com/usert0n" target="_blank">
+                                🔗 Blockchain Projects: @usert0n
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/rharnastaeu" target="_blank">
+                                🎓 School Account: @rharnastaeu
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <!-- Resume Section -->
         <div class="section collapsed">
             <div class="section-header" onclick="toggleSection(this)">
@@ -677,18 +1504,18 @@
             </div>
         </div>
 
-        <!-- Links Section -->
+        <!-- Other Links Section -->
         <div class="section collapsed">
             <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title">
-                    <span>► Links</span>
+                    <span>► Other Links</span>
                     <span class="section-icon">▼</span>
                 </div>
             </div>
             <div class="section-content">
                 <ul class="links-list">
                     <li>
-                        <a href="https://t.me/uerton" target="_blank">
+                        <a href="https://t.me/userton" target="_blank">
                             📱 Telegram: @userton.t.me
                         </a>
                     </li>
@@ -745,6 +1572,20 @@
             const icon = header.querySelector('.section-icon');
             
             section.classList.toggle('collapsed');
+            
+            // Add visual feedback
+            header.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                header.style.transform = 'scale(1)';
+            }, 100);
+        }
+        
+        // Toggle subsection functionality
+        function toggleSubsection(header) {
+            const subsection = header.parentElement;
+            const icon = header.querySelector('.subsection-icon');
+            
+            subsection.classList.toggle('collapsed');
             
             // Add visual feedback
             header.style.transform = 'scale(0.98)';
@@ -940,6 +1781,241 @@
         `;
         document.head.appendChild(matrixStyle);
         
+        // GitHub Activity Dashboard
+        const GITHUB_USERNAME = 'romanharnastaeu';
+        const GITHUB_API_BASE = 'https://api.github.com';
+        
+        // Language colors from GitHub
+        const LANGUAGE_COLORS = {
+            'JavaScript': '#f1e05a',
+            'TypeScript': '#2b7489',
+            'HTML': '#e34c26',
+            'CSS': '#563d7c',
+            'Python': '#3572A5',
+            'Java': '#b07219',
+            'C++': '#f34b7d',
+            'C': '#555555',
+            'Shell': '#89e051',
+            'PHP': '#4F5D95',
+            'Go': '#00ADD8',
+            'Rust': '#dea584',
+            'Swift': '#ffac45',
+            'Kotlin': '#F18E33',
+            'Dart': '#00B4AB',
+            'Ruby': '#701516',
+            'Vue': '#2c3e50',
+            'React': '#61dafb',
+            'Jupyter Notebook': '#DA5B0B'
+        };
+        
+        async function fetchGitHubData() {
+            try {
+                // Fetch user data
+                const userResponse = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}`);
+                const userData = await userResponse.json();
+                
+                // Fetch repositories
+                const reposResponse = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`);
+                const reposData = await reposResponse.json();
+                
+                // Update activity summary
+                updateActivitySummary(userData, reposData);
+                
+                // Update repositories
+                updateTopRepositories(reposData);
+                
+                // Update language stats
+                await updateLanguageStats(reposData);
+                
+                // Update recent activity
+                await updateRecentActivity();
+                
+            } catch (error) {
+                console.error('Error fetching GitHub data:', error);
+                showGitHubError();
+            }
+        }
+        
+        function updateActivitySummary(userData, reposData) {
+            const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+            const totalForks = reposData.reduce((sum, repo) => sum + repo.forks_count, 0);
+            
+            animateNumber('totalRepos', userData.public_repos);
+            animateNumber('publicRepos', userData.public_repos);
+            animateNumber('totalStars', totalStars);
+            animateNumber('totalForks', totalForks);
+            animateNumber('followers', userData.followers);
+        }
+        
+        function animateNumber(elementId, finalValue) {
+            const element = document.getElementById(elementId);
+            const duration = 2000;
+            const steps = 60;
+            const increment = finalValue / steps;
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= finalValue) {
+                    current = finalValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, duration / steps);
+        }
+        
+        function updateTopRepositories(reposData) {
+            const topRepos = reposData
+                .filter(repo => !repo.fork)
+                .sort((a, b) => (b.stargazers_count + b.forks_count) - (a.stargazers_count + a.forks_count))
+                .slice(0, 6);
+            
+            const repoGrid = document.getElementById('topRepos');
+            repoGrid.innerHTML = '';
+            
+            topRepos.forEach(repo => {
+                const repoCard = document.createElement('div');
+                repoCard.className = 'repo-card';
+                repoCard.innerHTML = `
+                    <div class="repo-header">
+                        <a href="${repo.html_url}" target="_blank" class="repo-name">${repo.name}</a>
+                        <div class="repo-stats">
+                            <div class="repo-stat">
+                                <span>⭐</span>
+                                <span>${repo.stargazers_count}</span>
+                            </div>
+                            <div class="repo-stat">
+                                <span>🔄</span>
+                                <span>${repo.forks_count}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="repo-description">${repo.description || 'No description available'}</div>
+                    ${repo.language ? `<div class="repo-language">${repo.language}</div>` : ''}
+                `;
+                repoGrid.appendChild(repoCard);
+            });
+        }
+        
+        async function updateLanguageStats(reposData) {
+            const languageStats = {};
+            
+            // Get language data for each repo
+            for (const repo of reposData.slice(0, 10)) { // Limit to avoid rate limiting
+                if (repo.language) {
+                    try {
+                        const langResponse = await fetch(`${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/languages`);
+                        const langData = await langResponse.json();
+                        
+                        Object.entries(langData).forEach(([lang, bytes]) => {
+                            languageStats[lang] = (languageStats[lang] || 0) + bytes;
+                        });
+                    } catch (error) {
+                        // Skip if language data unavailable
+                        if (repo.language) {
+                            languageStats[repo.language] = (languageStats[repo.language] || 0) + 1000;
+                        }
+                    }
+                }
+            }
+            
+            const total = Object.values(languageStats).reduce((sum, bytes) => sum + bytes, 0);
+            const sortedLanguages = Object.entries(languageStats)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8);
+            
+            const languageContainer = document.getElementById('languageStats');
+            languageContainer.innerHTML = '';
+            
+            sortedLanguages.forEach(([language, bytes]) => {
+                const percentage = ((bytes / total) * 100).toFixed(1);
+                const color = LANGUAGE_COLORS[language] || '#00ff00';
+                
+                const langItem = document.createElement('div');
+                langItem.className = 'language-item';
+                langItem.innerHTML = `
+                    <div class="language-name">${language}</div>
+                    <div class="language-bar">
+                        <div class="language-fill" style="width: ${percentage}%; background: ${color};"></div>
+                    </div>
+                    <div class="language-percentage">${percentage}%</div>
+                `;
+                languageContainer.appendChild(langItem);
+            });
+        }
+        
+        async function updateRecentActivity() {
+            try {
+                const eventsResponse = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/events/public?per_page=10`);
+                const eventsData = await eventsResponse.json();
+                
+                const activityFeed = document.getElementById('recentActivity');
+                activityFeed.innerHTML = '';
+                
+                eventsData.slice(0, 8).forEach(event => {
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+                    
+                    const timeAgo = getTimeAgo(new Date(event.created_at));
+                    const actionText = getActionText(event);
+                    
+                    activityItem.innerHTML = `
+                        <div class="activity-type">${actionText}</div>
+                        <a href="https://github.com/${event.repo.name}" target="_blank" class="activity-repo">${event.repo.name}</a>
+                        <div class="activity-time">${timeAgo}</div>
+                    `;
+                    activityFeed.appendChild(activityItem);
+                });
+            } catch (error) {
+                document.getElementById('recentActivity').innerHTML = '<div class="activity-loading">Recent activity unavailable</div>';
+            }
+        }
+        
+        function getActionText(event) {
+            switch (event.type) {
+                case 'PushEvent':
+                    const commits = event.payload.commits ? event.payload.commits.length : 1;
+                    return `🚀 Pushed ${commits} commit${commits > 1 ? 's' : ''}`;
+                case 'CreateEvent':
+                    return `✨ Created ${event.payload.ref_type}`;
+                case 'DeleteEvent':
+                    return `🗑️ Deleted ${event.payload.ref_type}`;
+                case 'ForkEvent':
+                    return `🔄 Forked repository`;
+                case 'WatchEvent':
+                    return `⭐ Starred repository`;
+                case 'IssuesEvent':
+                    return `🐛 ${event.payload.action} issue`;
+                case 'PullRequestEvent':
+                    return `📝 ${event.payload.action} pull request`;
+                case 'ReleaseEvent':
+                    return `🎉 ${event.payload.action} release`;
+                default:
+                    return `📋 ${event.type.replace('Event', '')}`;
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return `${diff}s ago`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
+            return `${Math.floor(diff / 2592000)}mo ago`;
+        }
+        
+        function showGitHubError() {
+            ['totalRepos', 'totalStars', 'totalForks', 'publicRepos', 'followers'].forEach(id => {
+                document.getElementById(id).textContent = 'N/A';
+            });
+            
+            document.getElementById('topRepos').innerHTML = '<div class="repo-loading">Unable to load repositories</div>';
+            document.getElementById('languageStats').innerHTML = '<div class="language-loading">Unable to load language stats</div>';
+            document.getElementById('recentActivity').innerHTML = '<div class="activity-loading">Unable to load recent activity</div>';
+        }
+        
         // Initialize effects
         document.addEventListener('DOMContentLoaded', function() {
             createMatrixEffect();
@@ -954,6 +2030,11 @@
                     this.style.transform = 'translateY(0)';
                 });
             });
+            
+            // Load GitHub data after a short delay
+            setTimeout(() => {
+                fetchGitHubData();
+            }, 1000);
         });
         
         // Konami code easter egg
