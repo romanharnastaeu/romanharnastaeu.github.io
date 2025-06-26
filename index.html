@@ -2157,6 +2157,8 @@
                 // Show loading state
                 loaderElement.classList.remove('hidden');
                 
+                console.log('Fetching visitor count from:', VISITOR_API_URL);
+                
                 const response = await fetch(VISITOR_API_URL, {
                     method: 'GET',
                     headers: {
@@ -2164,12 +2166,37 @@
                     }
                 });
                 
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('API error response:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
                 }
                 
                 const data = await response.json();
-                const visitorCount = data.visitors;
+                console.log('API response data:', data);
+                
+                // Handle different response formats with fallbacks
+                let visitorCount = 0;
+                if (data.visitors !== undefined) {
+                    visitorCount = data.visitors;
+                } else if (data.count !== undefined) {
+                    visitorCount = data.count;
+                } else if (data.Count !== undefined) {
+                    visitorCount = data.Count;
+                } else if (typeof data === 'number') {
+                    visitorCount = data;
+                } else {
+                    console.warn('Unexpected API response format:', data);
+                    visitorCount = 0;
+                }
+                
+                // Ensure visitorCount is a valid number
+                visitorCount = parseInt(visitorCount) || 0;
+                
+                console.log('Final visitor count:', visitorCount);
                 
                 // Animate the counter
                 animateVisitorCount(visitorCount);
@@ -2184,7 +2211,7 @@
                 console.error('Error fetching visitor count:', error);
                 
                 // Show error state
-                countElement.textContent = 'Error';
+                countElement.textContent = 'N/A';
                 countElement.classList.add('visitor-error');
                 pixelsElement.innerHTML = '⚠️ Error';
                 pixelsElement.classList.add('visitor-error');
@@ -2197,6 +2224,10 @@
         
         function animateVisitorCount(finalCount) {
             const countElement = document.getElementById('visitorCount');
+            
+            // Ensure finalCount is a valid number
+            finalCount = parseInt(finalCount) || 0;
+            
             const duration = 2000;
             const steps = 60;
             const increment = finalCount / steps;
@@ -2210,12 +2241,16 @@
                     current = finalCount;
                     clearInterval(timer);
                 }
-                countElement.textContent = Math.floor(current).toLocaleString();
+                const displayCount = Math.floor(current);
+                countElement.textContent = displayCount.toLocaleString();
             }, duration / steps);
         }
         
         function updateVisitorPixels(count) {
             const pixelsElement = document.getElementById('visitorPixels');
+            
+            // Ensure count is a valid number
+            count = parseInt(count) || 0;
             
             // Create a visual representation based on visitor count
             // Scale the count to fit the visual bar (0-100%)
