@@ -4272,7 +4272,7 @@
             analysis.protocol = {
                 current: location.protocol,
                 secure: location.protocol === 'https:',
-                http2: 'h2' in navigator.connection || window.chrome?.loadTimes?.().connectionInfo === 'h2'
+                http2: 'h2' in (navigator.connection || {}) || window.chrome?.loadTimes?.().connectionInfo === 'h2'
             };
             
             // Additional network capabilities with CORS support detection
