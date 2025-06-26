@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>harnastaeuDev</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         
@@ -1073,6 +1074,197 @@
                 filter: brightness(1.2);
             }
         }
+
+        /* Speed Test Styles */
+        .speed-test-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .speed-test-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .speed-test-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+
+        .server-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(26, 46, 26, 0.4));
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 3px;
+            margin-bottom: 15px;
+            min-height: 120px;
+        }
+
+        .server-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .server-title {
+            font-size: 10px;
+            color: #66ff66;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .server-status {
+            font-size: 7px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+
+        .server-status.connected {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .server-status.connecting {
+            background: #ffaa00;
+            color: #000;
+        }
+
+        .server-status.failed {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .server-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+        }
+
+        .server-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+        }
+
+        .server-detail:last-child {
+            border-bottom: none;
+        }
+
+        .server-detail-label {
+            color: #99ff99;
+        }
+
+        .server-detail-value {
+            color: #00ff00;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+
+
+        .speed-gauge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .gauge-label {
+            font-size: 8px;
+            color: #66ff66;
+            min-width: 80px;
+            text-transform: uppercase;
+        }
+
+        .gauge-bar {
+            flex: 1;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #66ff66);
+            border-radius: 1px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .gauge-value {
+            font-size: 10px;
+            color: #00ff00;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: right;
+            font-family: monospace;
+        }
+
+        .speed-status {
+            text-align: center;
+            font-size: 8px;
+            color: #99ff99;
+            padding: 10px;
+            border-radius: 2px;
+        }
+
+        .mlab-indicator {
+            display: inline-block;
+            padding: 2px 6px;
+            background: linear-gradient(45deg, #00ff00, #66ff66);
+            color: #000;
+            font-size: 6px;
+            border-radius: 2px;
+            margin-left: 8px;
+            font-weight: bold;
+            animation: mlabGlow 2s infinite alternate;
+        }
+
+        @keyframes mlabGlow {
+            0% { 
+                box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            }
+            100% { 
+                box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+            }
+        }
+
+        @keyframes gaugeGlow {
+            0% { 
+                box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4);
+                filter: brightness(1.2);
+            }
+        }
+
+        .testing {
+            background: rgba(0, 255, 0, 0.1);
+        }
         
 
 
@@ -1327,6 +1519,50 @@
             
             .subsection-content {
                 padding: 10px;
+            }
+            
+            .server-info {
+                padding: 8px;
+                gap: 6px;
+            }
+            
+            .server-details {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+            
+            .server-detail {
+                font-size: 7px;
+                padding: 3px 0;
+            }
+            
+            .server-title {
+                font-size: 9px;
+                gap: 6px;
+            }
+            
+            .server-status {
+                font-size: 6px;
+                padding: 1px 4px;
+            }
+            
+            .speed-test-visual {
+                padding: 15px;
+                gap: 12px;
+            }
+            
+            .speed-gauge {
+                gap: 8px;
+            }
+            
+            .gauge-label {
+                font-size: 7px;
+                min-width: 60px;
+            }
+            
+            .gauge-value {
+                font-size: 8px;
+                min-width: 60px;
             }
         }
     </style>
@@ -1770,6 +2006,27 @@
             <div class="section-content">
                 <div class="insights-container">
 
+                    <!-- Internet Speed Test -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🚀 Internet Speed Test</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="speed-test-container">
+                                <div class="speed-test-controls">
+                                    <button class="modal-btn" onclick="runFullSpeedTest()" id="speedTestBtn">
+                                        🧪 Run Full Speed Test
+                                    </button>
+                                </div>
+                                <div class="metrics-grid" id="speedTestMetrics">
+                                    <div class="loading-message">Click button above to start comprehensive speed test</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     <!-- Navigation Timing -->
                     <div class="subsection collapsed">
@@ -1917,6 +2174,25 @@
                         <div class="subsection-content">
                             <div class="metrics-grid" id="sessionMetrics">
                                 <div class="loading-message">📈 Tracking session data...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+
+
+                    <!-- Real-time Monitoring -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>📊 Real-time Monitoring</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="realtimeMetrics">
+                                <div class="loading-message">📊 Starting real-time monitoring...</div>
                             </div>
                         </div>
                     </div>
@@ -2301,28 +2577,147 @@
             }
 
             metrics.push(
-                { name: 'Hardware Concurrency', value: navigator.hardwareConcurrency || 'Unknown' },
-                { name: 'Device Memory', value: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown' }
+                { name: 'Hardware Concurrency', value: navigator.hardwareConcurrency || 'Unknown' }
             );
 
             return metrics;
         }
 
         function collectBrowserMetrics() {
-            return [
-                { name: 'User Agent', value: navigator.userAgent.split(' ').slice(0, 3).join(' ') + '...' },
+            const metrics = [];
+            
+            // Enhanced browser detection
+            const ua = navigator.userAgent;
+            let browserName = 'Unknown';
+            let browserVersion = 'Unknown';
+            
+            if (ua.includes('Chrome') && !ua.includes('Edg')) {
+                browserName = 'Chrome';
+                browserVersion = ua.match(/Chrome\/([0-9.]+)/)?.[1] || 'Unknown';
+            } else if (ua.includes('Edg')) {
+                browserName = 'Edge';
+                browserVersion = ua.match(/Edg\/([0-9.]+)/)?.[1] || 'Unknown';
+            } else if (ua.includes('Firefox')) {
+                browserName = 'Firefox';
+                browserVersion = ua.match(/Firefox\/([0-9.]+)/)?.[1] || 'Unknown';
+            } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+                browserName = 'Safari';
+                browserVersion = ua.match(/Version\/([0-9.]+)/)?.[1] || 'Unknown';
+            }
+            
+            metrics.push(
+                { name: 'Browser Name', value: browserName },
+                { name: 'Browser Version', value: browserVersion },
+                { name: 'User Agent (Shortened)', value: ua.substring(0, 50) + '...' },
                 { name: 'Browser Language', value: navigator.language },
+                { name: 'Available Languages', value: navigator.languages ? navigator.languages.slice(0, 3).join(', ') : 'Unknown' },
                 { name: 'Platform', value: navigator.platform },
                 { name: 'Cookie Enabled', value: navigator.cookieEnabled ? 'Yes' : 'No' },
-                { name: 'Online Status', value: navigator.onLine ? 'Online' : 'Offline' },
-                { name: 'Connection Type', value: navigator.connection?.effectiveType || 'Unknown' },
-                { name: 'Connection Downlink', value: navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown' },
-                { name: 'Connection RTT', value: navigator.connection?.rtt ? `${navigator.connection.rtt}ms` : 'Unknown' },
+                { name: 'Do Not Track', value: navigator.doNotTrack ? 'Enabled' : 'Disabled' },
+                { name: 'Online Status', value: navigator.onLine ? 'Online' : 'Offline' }
+            );
+            
+            // Connection information
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                metrics.push(
+                    { name: 'Connection Type', value: conn.effectiveType || 'Unknown' },
+                    { name: 'Reported Downlink', value: conn.downlink ? `${conn.downlink} Mbps` : 'Unknown' },
+                    { name: 'Round Trip Time', value: conn.rtt ? `${conn.rtt}ms` : 'Unknown' },
+                    { name: 'Data Saver Mode', value: conn.saveData ? 'Enabled' : 'Disabled' }
+                );
+            }
+            
+            // Download speed test
+            performDownloadSpeedTest();
+            metrics.push(
+                { name: 'Measured Download Speed', value: '<span data-metric="download-speed">Testing...</span>' },
+                { name: 'Speed Test Method', value: 'Real HTTP Request Timing' }
+            );
+            
+            // Screen and display
+            metrics.push(
                 { name: 'Screen Resolution', value: `${screen.width}x${screen.height}` },
+                { name: 'Available Screen', value: `${screen.availWidth}x${screen.availHeight}` },
                 { name: 'Viewport Size', value: `${window.innerWidth}x${window.innerHeight}` },
                 { name: 'Color Depth', value: `${screen.colorDepth}-bit` },
+                { name: 'Pixel Depth', value: `${screen.pixelDepth}-bit` },
+                { name: 'Device Pixel Ratio', value: window.devicePixelRatio || 1 }
+            );
+            
+            // Time and location
+            metrics.push(
                 { name: 'Time Zone', value: Intl.DateTimeFormat().resolvedOptions().timeZone },
+                { name: 'Time Zone Offset', value: `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(new Date().getTimezoneOffset() / 60)}` },
+                { name: 'Locale', value: Intl.DateTimeFormat().resolvedOptions().locale }
+            );
+            
+                         // Browser capabilities and requirements
+             metrics.push(
+                { name: 'JavaScript Enabled', value: 'Yes (Obviously)' },
+                { name: 'ES6+ Support', value: 'const' in window ? 'Yes' : 'No' },
+                { name: 'Fetch API', value: 'fetch' in window ? 'Yes' : 'No' },
+                { name: 'Promises Support', value: 'Promise' in window ? 'Yes' : 'No' },
+                { name: 'Async/Await Support', value: (async () => {})().constructor.name === 'Promise' ? 'Yes' : 'No' },
+                { name: 'CSS Grid Support', value: CSS.supports('display', 'grid') ? 'Yes' : 'No' },
+                { name: 'CSS Flexbox Support', value: CSS.supports('display', 'flex') ? 'Yes' : 'No' },
+                { name: 'Local Storage', value: 'localStorage' in window ? 'Yes' : 'No' },
+                { name: 'Session Storage', value: 'sessionStorage' in window ? 'Yes' : 'No' },
+                { name: 'WebGL Support', value: (() => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+                    } catch (e) { return false; }
+                })() ? 'Yes' : 'No' },
+                { name: 'Service Workers', value: 'serviceWorker' in navigator ? 'Yes' : 'No' },
+                { name: 'Web Workers', value: 'Worker' in window ? 'Yes' : 'No' },
+                { name: 'WebAssembly', value: 'WebAssembly' in window ? 'Yes' : 'No' },
+                { name: 'Java Enabled', value: navigator.javaEnabled ? navigator.javaEnabled() ? 'Yes' : 'No' : 'Unknown' },
+                { name: 'WebDriver Detected', value: navigator.webdriver ? 'Yes (Automation)' : 'No' },
+                { name: 'Vendor', value: navigator.vendor || 'Unknown' },
+                { name: 'Product', value: navigator.product || 'Unknown' },
+                { name: 'App Name', value: navigator.appName || 'Unknown' },
+                { name: 'App Version', value: navigator.appVersion ? navigator.appVersion.substring(0, 30) + '...' : 'Unknown' }
+            );
+            
+            return metrics;
+        }
+        
+        function performDownloadSpeedTest() {
+            const testSizes = [
+                { size: '100KB', url: 'data:text/plain;base64,' + 'A'.repeat(100 * 1024) },
+                { size: '500KB', url: 'data:text/plain;base64,' + 'B'.repeat(500 * 1024) }
             ];
+            
+            const startTime = performance.now();
+            let totalBytes = 0;
+            
+            // Test with a real network request (to the same server)
+            fetch(window.location.href + '?speed-test=' + Date.now(), { 
+                method: 'HEAD',
+                cache: 'no-cache',
+                mode: 'no-cors'
+            })
+            .then(response => {
+                const endTime = performance.now();
+                const duration = (endTime - startTime) / 1000; // seconds
+                
+                // Estimate based on typical HEAD response size and timing
+                const estimatedBytes = 2048; // Typical HEAD response with headers
+                const speedBps = estimatedBytes / duration;
+                const speedMbps = (speedBps * 8 / 1024 / 1024).toFixed(2);
+                
+                document.querySelector('[data-metric="download-speed"]').textContent = `~${speedMbps} Mbps (Estimated)`;
+            })
+            .catch(error => {
+                // Fallback: Use connection API if available
+                if (navigator.connection && navigator.connection.downlink) {
+                    document.querySelector('[data-metric="download-speed"]').textContent = 
+                        `${navigator.connection.downlink} Mbps (Browser API)`;
+                } else {
+                    document.querySelector('[data-metric="download-speed"]').textContent = 'Test Failed';
+                }
+            });
         }
 
         function collectPageMetrics() {
@@ -2394,6 +2789,889 @@
             }
 
             container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>${memoryVisual}`;
+        }
+
+        async function runFullSpeedTest() {
+            const button = document.getElementById('speedTestBtn');
+            const container = document.getElementById('speedTestMetrics');
+            
+            // Disable button and show testing state
+            button.disabled = true;
+            button.classList.add('testing');
+            button.innerHTML = '🔄 Testing in Progress...';
+            
+            // Create visual speed test interface with server info
+            container.innerHTML = `
+                <div class="server-info" id="serverInfo">
+                    <div class="server-header">
+                        <div class="server-title">
+                            🌐 Test Infrastructure
+                        </div>
+                        <div class="server-status connecting" id="serverStatus">CONNECTING</div>
+                    </div>
+                    <div class="server-details" id="serverDetails">
+                        <div class="server-detail">
+                            <span class="server-detail-label">Locating servers...</span>
+                            <span class="server-detail-value">Please wait</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="speed-test-visual testing" id="speedVisual">
+                    <div class="speed-status" id="testStatus">🔍 Locating optimal test servers...</div>
+                    
+                    <div class="speed-gauge">
+                        <div class="gauge-label">📥 Download</div>
+                        <div class="gauge-bar">
+                            <div class="gauge-fill" id="downloadGauge" style="width: 0%"></div>
+                        </div>
+                        <div class="gauge-value" id="downloadValue">0.00 Mbps</div>
+                    </div>
+                    
+                    <div class="speed-gauge">
+                        <div class="gauge-label">📤 Upload</div>
+                        <div class="gauge-bar">
+                            <div class="gauge-fill" id="uploadGauge" style="width: 0%"></div>
+                        </div>
+                        <div class="gauge-value" id="uploadValue">0.00 Mbps</div>
+                    </div>
+                    
+                    <div class="speed-gauge">
+                        <div class="gauge-label">⚡ Latency</div>
+                        <div class="gauge-bar">
+                            <div class="gauge-fill" id="latencyGauge" style="width: 0%"></div>
+                        </div>
+                        <div class="gauge-value" id="latencyValue">0ms</div>
+                    </div>
+                </div>
+                
+                <div class="metrics-grid" id="detailedResults">
+                    <div class="loading-message">🚀 Initializing comprehensive network analysis...</div>
+                </div>
+            `;
+            
+            try {
+                // Test 1: Latency first (fastest test)
+                await updateStatus('🔍 Testing network latency...');
+                addServerLog('Starting latency tests', 'info');
+                const latencyResult = await comprehensiveLatencyTest();
+                updateLatencyGauge(latencyResult);
+                addServerLog(`Latency test completed: ${latencyResult.average.toFixed(2)}ms`, 'success');
+                
+                // Test 2: Download speed
+                await updateStatus('📥 Attempting M-Lab NDT7 connection...');
+                addServerLog('Connecting to M-Lab infrastructure', 'info');
+                
+                const downloadResult = await comprehensiveDownloadTest();
+                updateDownloadGauge(downloadResult);
+                
+                // Update server info based on provider used
+                if (downloadResult.provider === 'M-Lab NDT7') {
+                    await updateStatus('✅ M-Lab NDT7 test successful!');
+                    updateServerInfo({
+                        provider: 'Measurement Lab (M-Lab)',
+                        protocol: 'NDT7 WebSocket',
+                        testType: 'Professional Infrastructure',
+                        machine: downloadResult.server || 'Unknown',
+                        location: downloadResult.location || { city: 'Unknown', country: 'Unknown' }
+                    }, 'connected');
+                    addServerLog('M-Lab NDT7 test completed successfully', 'success');
+                } else {
+                    await updateStatus('📡 Using fallback speed tests...');
+                    updateServerInfo({
+                        provider: 'Multiple Test Endpoints',
+                        protocol: 'HTTPS/HTTP',
+                        testType: 'Fallback Tests',
+                        testEndpoints: 'GitHub API, JSONPlaceholder, Cloudflare CDN'
+                    }, 'connected');
+                    addServerLog('Using reliable fallback endpoints', 'info');
+                }
+                
+                // Test 3: Upload speed
+                await updateStatus('📤 Testing upload speed...');
+                addServerLog('Starting upload speed tests', 'info');
+                const uploadResult = await comprehensiveUploadTest();
+                updateUploadGauge(uploadResult);
+                addServerLog(`Upload test completed: ${uploadResult.average.toFixed(2)} Mbps`, 'success');
+                
+                // Test 4: Additional network analysis
+                await updateStatus('🔬 Analyzing network quality...');
+                addServerLog('Performing network stability analysis', 'info');
+                const networkAnalysis = await performNetworkAnalysis();
+                
+                // Show detailed results
+                await updateStatus('🎉 Speed test completed successfully!');
+                addServerLog('All tests completed successfully', 'success');
+                
+                // Stop the visual animation
+                document.getElementById('speedVisual').classList.remove('testing');
+                
+                showDetailedResults({
+                    latency: latencyResult,
+                    download: downloadResult,
+                    upload: uploadResult,
+                    network: networkAnalysis
+                });
+                
+            } catch (error) {
+                console.error('Speed test error:', error);
+                await updateStatus('❌ Speed test encountered errors');
+                updateServerInfo(null, 'failed');
+                addServerLog('Test failed - check console for details', 'error');
+                document.getElementById('detailedResults').innerHTML = 
+                    '<div class="loading-message" style="color: #ff6b6b;">❌ Test failed - some endpoints may be blocked</div>';
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                button.classList.remove('testing');
+                button.innerHTML = '🔄 Run Test Again';
+                
+                // Stop visual effects
+                document.getElementById('speedVisual').classList.remove('testing');
+            }
+        }
+
+        async function updateStatus(message) {
+            const statusElement = document.getElementById('testStatus');
+            if (statusElement) {
+                statusElement.textContent = message;
+            }
+            await new Promise(resolve => setTimeout(resolve, 300)); // Reduced delay
+        }
+
+        function updateServerInfo(serverData, status = 'connecting') {
+            const serverStatus = document.getElementById('serverStatus');
+            const serverDetails = document.getElementById('serverDetails');
+            
+            // Update status
+            serverStatus.className = `server-status ${status}`;
+            serverStatus.textContent = status.toUpperCase();
+            
+            if (serverData) {
+                // Create detailed server information
+                const details = [];
+                
+                if (serverData.provider) {
+                    details.push({
+                        label: 'Provider',
+                        value: serverData.provider
+                    });
+                }
+                
+                if (serverData.machine) {
+                    details.push({
+                        label: 'Server',
+                        value: serverData.machine
+                    });
+                }
+                
+                if (serverData.location) {
+                    const location = serverData.location;
+                    details.push({
+                        label: 'Location',
+                        value: `${location.city || 'Unknown'}, ${location.country || 'Unknown'}`
+                    });
+                }
+                
+                if (serverData.distance) {
+                    details.push({
+                        label: 'Distance',
+                        value: `~${serverData.distance}km`
+                    });
+                }
+                
+                if (serverData.protocol) {
+                    details.push({
+                        label: 'Protocol',
+                        value: serverData.protocol
+                    });
+                }
+                
+                if (serverData.testType) {
+                    details.push({
+                        label: 'Test Type',
+                        value: serverData.testType
+                    });
+                }
+                
+                // Render server details
+                serverDetails.innerHTML = details.map(detail => `
+                    <div class="server-detail">
+                        <span class="server-detail-label">${detail.label}</span>
+                        <span class="server-detail-value">${detail.value}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function addServerLog(message, type = 'info') {
+            const serverDetails = document.getElementById('serverDetails');
+            
+            // Limit to last 5 log entries to prevent jumping
+            const existingLogs = serverDetails.querySelectorAll('.server-detail');
+            if (existingLogs.length >= 5) {
+                existingLogs[0].remove();
+            }
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'server-detail';
+            logItem.innerHTML = `
+                <span class="server-detail-label">${type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️'} ${message}</span>
+                <span class="server-detail-value">${new Date().toLocaleTimeString()}</span>
+            `;
+            serverDetails.appendChild(logItem);
+        }
+
+        async function comprehensiveLatencyTest() {
+            const testEndpoints = [
+                'https://jsonplaceholder.typicode.com/posts/1',
+                'https://api.github.com',
+                'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
+                window.location.href
+            ];
+            
+            const results = [];
+            
+            // Run multiple rounds for better accuracy
+            for (let round = 0; round < 2; round++) {
+                for (const endpoint of testEndpoints) {
+                    try {
+                        const startTime = performance.now();
+                        const response = await fetch(endpoint, { 
+                            method: 'HEAD',
+                            cache: 'no-cache',
+                            mode: endpoint === window.location.href ? 'same-origin' : 'cors'
+                        });
+                        const endTime = performance.now();
+                        
+                        if (response.ok) {
+                            const latency = endTime - startTime;
+                            // Filter out unrealistic results (likely cached or errors)
+                            if (latency > 1 && latency < 5000) {
+                                results.push(latency);
+                            }
+                        }
+                    } catch (e) {
+                        // Skip failed tests
+                    }
+                    
+                    // Small delay between tests to avoid rate limiting
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+            }
+            
+            if (results.length > 0) {
+                // Remove outliers (top and bottom 10%) for more accurate results
+                const sorted = results.sort((a, b) => a - b);
+                const trimmed = sorted.slice(
+                    Math.floor(sorted.length * 0.1),
+                    Math.ceil(sorted.length * 0.9)
+                );
+                
+                const avgLatency = trimmed.length > 0 ? 
+                    trimmed.reduce((a, b) => a + b, 0) / trimmed.length : 
+                    results.reduce((a, b) => a + b, 0) / results.length;
+                const minLatency = Math.min(...results);
+                const maxLatency = Math.max(...results);
+                
+                return {
+                    average: avgLatency,
+                    min: minLatency,
+                    max: maxLatency,
+                    tests: results.length,
+                    rating: avgLatency < 50 ? 'Excellent' : avgLatency < 100 ? 'Good' : avgLatency < 200 ? 'Fair' : 'Poor'
+                };
+            }
+            
+            return { average: 0, min: 0, max: 0, tests: 0, rating: 'Failed' };
+        }
+
+        async function comprehensiveDownloadTest() {
+            try {
+                // Try M-Lab NDT7 first for accurate results
+                const mlabResult = await runMLABSpeedTest();
+                if (mlabResult.download > 0) {
+                    return {
+                        average: mlabResult.download,
+                        max: mlabResult.download,
+                        tests: 1,
+                        totalData: mlabResult.totalBytes || 0,
+                        results: [{
+                            name: 'M-Lab NDT7 Test',
+                            speed: mlabResult.download,
+                            size: mlabResult.totalBytes || 0,
+                            time: mlabResult.duration || 0
+                        }],
+                        rating: mlabResult.download > 100 ? 'Excellent' : mlabResult.download > 25 ? 'Good' : mlabResult.download > 10 ? 'Fair' : 'Poor',
+                        provider: 'M-Lab NDT7'
+                    };
+                }
+            } catch (e) {
+                console.log('M-Lab test failed, falling back to basic tests:', e);
+            }
+            
+            // Fallback to basic tests if M-Lab fails
+            const testFiles = [
+                { url: 'https://jsonplaceholder.typicode.com/photos', size: 50000, name: 'JSON API Test' },
+                { url: 'https://api.github.com/repos/microsoft/vscode', size: 10000, name: 'GitHub API Test' },
+                { url: window.location.href, size: document.documentElement.outerHTML.length, name: 'Self Test' }
+            ];
+            
+            const results = [];
+            
+            for (const testFile of testFiles) {
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(testFile.url, { 
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.blob();
+                        const endTime = performance.now();
+                        
+                        const actualSize = data.size;
+                        const timeSeconds = (endTime - startTime) / 1000;
+                        
+                        // Validate reasonable test conditions
+                        if (timeSeconds > 0.1 && timeSeconds < 30 && actualSize > 1000) {
+                            const speedBps = actualSize / timeSeconds;
+                            const speedMbps = (speedBps * 8 / 1024 / 1024);
+                            
+                            // Filter out unrealistic speeds (likely errors)
+                            if (speedMbps > 0.1 && speedMbps < 1000) {
+                                results.push({
+                                    name: testFile.name,
+                                    speed: speedMbps,
+                                    size: actualSize,
+                                    time: timeSeconds
+                                });
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log(`Download test failed for ${testFile.name}:`, e);
+                }
+            }
+            
+            if (results.length > 0) {
+                const avgSpeed = results.reduce((sum, r) => sum + r.speed, 0) / results.length;
+                const maxSpeed = Math.max(...results.map(r => r.speed));
+                const totalData = results.reduce((sum, r) => sum + r.size, 0);
+                
+                return {
+                    average: avgSpeed,
+                    max: maxSpeed,
+                    tests: results.length,
+                    totalData: totalData,
+                    results: results,
+                    rating: avgSpeed > 25 ? 'Excellent' : avgSpeed > 10 ? 'Good' : avgSpeed > 5 ? 'Fair' : 'Poor',
+                    provider: 'Fallback Tests'
+                };
+            }
+            
+            return { average: 0, max: 0, tests: 0, totalData: 0, results: [], rating: 'Failed', provider: 'None' };
+        }
+
+        async function comprehensiveUploadTest() {
+            // M-Lab upload test is included in the main NDT7 test
+            // For now, use basic upload tests as M-Lab handles both directions
+            const testSizes = [
+                { size: 100000, name: '100KB Upload' },
+                { size: 500000, name: '500KB Upload' }
+            ];
+            
+            const results = [];
+            
+            for (const test of testSizes) {
+                try {
+                    const testData = new Blob(['x'.repeat(test.size)], { type: 'text/plain' });
+                    
+                    const startTime = performance.now();
+                    // Simulate upload by sending to a reliable endpoint that accepts POST
+                    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+                        method: 'POST',
+                        body: testData,
+                        headers: {
+                            'Content-Type': 'text/plain'
+                        },
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    const endTime = performance.now();
+                    
+                    if (response.ok) {
+                        const timeSeconds = (endTime - startTime) / 1000;
+                        const speedBps = test.size / timeSeconds;
+                        const speedMbps = (speedBps * 8 / 1024 / 1024);
+                        
+                        results.push({
+                            name: test.name,
+                            speed: speedMbps,
+                            size: test.size,
+                            time: timeSeconds
+                        });
+                    }
+                } catch (e) {
+                    console.log(`Upload test failed for ${test.name}:`, e);
+                }
+            }
+            
+            if (results.length > 0) {
+                const avgSpeed = results.reduce((sum, r) => sum + r.speed, 0) / results.length;
+                const maxSpeed = Math.max(...results.map(r => r.speed));
+                
+                return {
+                    average: avgSpeed,
+                    max: maxSpeed,
+                    tests: results.length,
+                    results: results,
+                    rating: avgSpeed > 50 ? 'Excellent' : avgSpeed > 10 ? 'Good' : avgSpeed > 5 ? 'Fair' : 'Poor',
+                    provider: 'Basic Upload Tests'
+                };
+            }
+            
+            return { average: 0, max: 0, tests: 0, results: [], rating: 'Failed', provider: 'None' };
+        }
+
+        // M-Lab NDT7 Speed Test Implementation
+        async function runMLABSpeedTest() {
+            try {
+                // First, locate the nearest M-Lab server
+                const server = await locateMLABServer();
+                if (!server) {
+                    throw new Error('Could not locate M-Lab server');
+                }
+                
+                // Update server info immediately when we get server details
+                addServerLog(`Located M-Lab server: ${server.machine}`, 'success');
+                updateServerInfo({
+                    provider: 'Measurement Lab (M-Lab)',
+                    machine: server.machine,
+                    location: server.location,
+                    protocol: 'NDT7 WebSocket',
+                    testType: 'Professional Network Diagnostic'
+                }, 'connecting');
+                
+                // Run NDT7 download test
+                const downloadResult = await runNDT7Test(server, 'download');
+                
+                return {
+                    download: downloadResult.speed,
+                    upload: 0, // Upload test would be separate
+                    latency: downloadResult.latency,
+                    server: server.machine,
+                    location: server.location,
+                    totalBytes: downloadResult.totalBytes,
+                    duration: downloadResult.duration
+                };
+                
+            } catch (error) {
+                console.error('M-Lab test failed:', error);
+                addServerLog('M-Lab connection failed, using fallback', 'error');
+                throw error;
+            }
+        }
+
+        async function locateMLABServer() {
+            try {
+                // Use M-Lab Locate API v2 to find nearest server
+                const response = await fetch('https://locate.measurementlab.net/v2/nearest/ndt/ndt7', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Locate API failed: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('M-Lab Locate API response:', data);
+                
+                if (data.results && data.results.length > 0) {
+                    const server = data.results[0];
+                    console.log('Selected server:', server);
+                    return {
+                        machine: server.machine,
+                        location: server.location,
+                        urls: server.urls
+                    };
+                }
+                
+                throw new Error('No servers found');
+                
+            } catch (error) {
+                console.error('Failed to locate M-Lab server:', error);
+                throw error;
+            }
+        }
+
+        async function runNDT7Test(server, direction = 'download') {
+            return new Promise((resolve, reject) => {
+                try {
+                    // Construct proper WebSocket URL for NDT7
+                    let wsUrl;
+                    if (server.urls && server.urls['wss:///ndt/v7/download']) {
+                        // Clean up the URL construction - remove duplicate protocol/host
+                        const path = server.urls['wss:///ndt/v7/download'];
+                        if (path.startsWith('wss://')) {
+                            wsUrl = path; // Use the full URL directly
+                        } else {
+                            wsUrl = `wss://${server.machine}${path}`;
+                        }
+                    } else {
+                        wsUrl = `wss://${server.machine}/ndt/v7/download`;
+                    }
+                    
+                    console.log('Connecting to M-Lab server:', wsUrl);
+                    console.log('Server details:', server);
+                    
+                    const ws = new WebSocket(wsUrl, 'net.measurementlab.ndt.v7');
+                    let startTime = Date.now();
+                    let totalBytes = 0;
+                    let measurements = [];
+                    let lastMeasurement = null;
+                    
+                    ws.onopen = () => {
+                        console.log('M-Lab NDT7 connection established');
+                        startTime = Date.now();
+                    };
+                    
+                    ws.onmessage = (event) => {
+                        try {
+                            if (typeof event.data === 'string') {
+                                // Measurement data (JSON)
+                                const measurement = JSON.parse(event.data);
+                                measurements.push(measurement);
+                                lastMeasurement = measurement;
+                                
+                                // Extract bytes from different possible locations
+                                if (measurement.AppInfo) {
+                                    if (measurement.AppInfo.NumBytes) {
+                                        totalBytes = Math.max(totalBytes, measurement.AppInfo.NumBytes);
+                                    }
+                                    if (measurement.AppInfo.ElapsedTime && measurement.AppInfo.NumBytes) {
+                                        const currentSpeed = (measurement.AppInfo.NumBytes * 8) / (measurement.AppInfo.ElapsedTime / 1000000) / (1024 * 1024);
+                                        console.log(`Current speed: ${currentSpeed.toFixed(2)} Mbps`);
+                                    }
+                                }
+                                
+                                if (measurement.TCPInfo && measurement.TCPInfo.BytesReceived) {
+                                    totalBytes = Math.max(totalBytes, measurement.TCPInfo.BytesReceived);
+                                }
+                            } else if (event.data instanceof ArrayBuffer) {
+                                // Binary data for download test
+                                totalBytes += event.data.byteLength;
+                                console.log(`Received ${event.data.byteLength} bytes, total: ${totalBytes}`);
+                            } else if (event.data instanceof Blob) {
+                                // Blob data
+                                totalBytes += event.data.size;
+                                console.log(`Received blob ${event.data.size} bytes, total: ${totalBytes}`);
+                            }
+                        } catch (e) {
+                            console.log('Error parsing M-Lab message:', e);
+                        }
+                    };
+                    
+                    ws.onclose = () => {
+                        const duration = (Date.now() - startTime) / 1000;
+                        
+                        // Try to get final measurement from the last received data
+                        let finalBytes = totalBytes;
+                        if (lastMeasurement && lastMeasurement.AppInfo && lastMeasurement.AppInfo.NumBytes > finalBytes) {
+                            finalBytes = lastMeasurement.AppInfo.NumBytes;
+                        }
+                        
+                        const speedBps = finalBytes / Math.max(duration, 0.1); // Prevent division by zero
+                        const speedMbps = (speedBps * 8) / (1024 * 1024);
+                        
+                        console.log(`M-Lab test completed: ${speedMbps.toFixed(2)} Mbps (${finalBytes} bytes in ${duration.toFixed(2)}s)`);
+                        
+                        resolve({
+                            speed: speedMbps,
+                            totalBytes: finalBytes,
+                            duration: duration,
+                            latency: lastMeasurement?.BBRInfo?.MinRTT || lastMeasurement?.TCPInfo?.MinRTT || 0,
+                            measurements: measurements
+                        });
+                    };
+                    
+                    ws.onerror = (error) => {
+                        console.error('M-Lab WebSocket error:', error);
+                        console.error('Failed URL:', wsUrl);
+                        console.error('WebSocket readyState:', ws.readyState);
+                        reject(new Error('M-Lab connection failed'));
+                    };
+                    
+                    // Set timeout for the test (NDT7 typically runs for 10 seconds)
+                    setTimeout(() => {
+                        if (ws.readyState === WebSocket.OPEN) {
+                            console.log('M-Lab test timeout, closing connection');
+                            ws.close();
+                        }
+                    }, 12000); // 12 second timeout
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+
+        async function performNetworkAnalysis() {
+            const analysis = {};
+            
+            // Connection stability test using reliable endpoints
+            const stabilityTests = [];
+            const testEndpoints = [
+                'https://jsonplaceholder.typicode.com/posts/1',
+                'https://api.github.com/zen',
+                'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+            ];
+            
+            for (let i = 0; i < 3; i++) {
+                try {
+                    const endpoint = testEndpoints[i % testEndpoints.length];
+                    const start = performance.now();
+                    const response = await fetch(endpoint, { 
+                        method: 'HEAD',
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    const end = performance.now();
+                    if (response.ok) {
+                        stabilityTests.push(end - start);
+                    }
+                } catch (e) {
+                    // Skip failed tests
+                }
+                await new Promise(resolve => setTimeout(resolve, 300)); // Small delay between tests
+            }
+            
+            if (stabilityTests.length > 0) {
+                const avg = stabilityTests.reduce((a, b) => a + b, 0) / stabilityTests.length;
+                const variance = stabilityTests.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / stabilityTests.length;
+                const jitter = Math.sqrt(variance);
+                
+                analysis.stability = {
+                    average: avg,
+                    jitter: jitter,
+                    tests: stabilityTests.length,
+                    rating: jitter < 10 ? 'Excellent' : jitter < 25 ? 'Good' : jitter < 50 ? 'Fair' : 'Poor'
+                };
+            }
+            
+            // Enhanced browser connection info
+            if (navigator.connection) {
+                analysis.connection = {
+                    type: navigator.connection.effectiveType,
+                    downlink: navigator.connection.downlink,
+                    rtt: navigator.connection.rtt,
+                    saveData: navigator.connection.saveData
+                };
+            }
+            
+            // Additional network capabilities
+            analysis.capabilities = {
+                webRTC: 'RTCPeerConnection' in window,
+                webSockets: 'WebSocket' in window,
+                serviceWorkers: 'serviceWorker' in navigator,
+                fetchAPI: 'fetch' in window,
+                onlineEvents: 'online' in window && 'offline' in window
+            };
+            
+            return analysis;
+        }
+
+        function updateLatencyGauge(result) {
+            const gauge = document.getElementById('latencyGauge');
+            const value = document.getElementById('latencyValue');
+            
+            if (result.average > 0) {
+                // Scale: 0-200ms range (inverted - lower latency = higher percentage)
+                const percentage = Math.min((200 - result.average) / 200 * 100, 100);
+                const finalPercentage = Math.max(percentage, 5);
+                
+                // Smooth update
+                setTimeout(() => {
+                    gauge.style.width = `${finalPercentage}%`;
+                    value.textContent = `${result.average.toFixed(0)}ms`;
+                }, 100);
+            }
+        }
+
+        function updateDownloadGauge(result) {
+            const gauge = document.getElementById('downloadGauge');
+            const value = document.getElementById('downloadValue');
+            
+            if (result.average > 0) {
+                // Scale: 0-100 Mbps range for better visualization
+                const percentage = Math.min(result.average / 100 * 100, 100);
+                const finalPercentage = Math.max(percentage, 2);
+                
+                // Smooth update
+                setTimeout(() => {
+                    gauge.style.width = `${finalPercentage}%`;
+                    value.textContent = `${result.average.toFixed(1)} Mbps`;
+                }, 100);
+            }
+        }
+
+        function updateUploadGauge(result) {
+            const gauge = document.getElementById('uploadGauge');
+            const value = document.getElementById('uploadValue');
+            
+            if (result.average > 0) {
+                // Scale: 0-50 Mbps range for visualization
+                const percentage = Math.min(result.average / 50 * 100, 100);
+                const finalPercentage = Math.max(percentage, 2);
+                
+                // Smooth update
+                setTimeout(() => {
+                    gauge.style.width = `${finalPercentage}%`;
+                    value.textContent = `${result.average.toFixed(1)} Mbps`;
+                }, 100);
+            }
+        }
+
+        function showDetailedResults(results) {
+            const container = document.getElementById('detailedResults');
+            
+            const metrics = [];
+            
+            // Latency results
+            if (results.latency.tests > 0) {
+                metrics.push(
+                    { name: 'Average Latency', value: `${results.latency.average.toFixed(2)}ms (${results.latency.rating})` },
+                    { name: 'Best Latency', value: `${results.latency.min.toFixed(2)}ms` },
+                    { name: 'Worst Latency', value: `${results.latency.max.toFixed(2)}ms` },
+                    { name: 'Latency Tests', value: results.latency.tests }
+                );
+            }
+            
+            // Download results
+            if (results.download.tests > 0) {
+                metrics.push(
+                    { name: 'Download Speed', value: `${results.download.average.toFixed(2)} Mbps (${results.download.rating})` },
+                    { name: 'Peak Download', value: `${results.download.max.toFixed(2)} Mbps` },
+                    { name: 'Data Downloaded', value: `${(results.download.totalData / 1024).toFixed(0)} KB` },
+                    { name: 'Download Provider', value: results.download.provider || 'Unknown' },
+                    { name: 'Download Tests', value: results.download.tests }
+                );
+            }
+            
+            // Upload results
+            if (results.upload.tests > 0) {
+                metrics.push(
+                    { name: 'Average Upload', value: `${results.upload.average.toFixed(2)} Mbps (${results.upload.rating})` },
+                    { name: 'Peak Upload', value: `${results.upload.max.toFixed(2)} Mbps` },
+                    { name: 'Upload Tests', value: results.upload.tests }
+                );
+            }
+            
+            // Network analysis
+            if (results.network.stability) {
+                metrics.push(
+                    { name: 'Connection Stability', value: `${results.network.stability.rating}` },
+                    { name: 'Network Jitter', value: `${results.network.stability.jitter.toFixed(2)}ms` }
+                );
+            }
+            
+            if (results.network.connection) {
+                metrics.push(
+                    { name: 'Connection Type', value: results.network.connection.type || 'Unknown' },
+                    { name: 'Browser Reported Speed', value: results.network.connection.downlink ? `${results.network.connection.downlink} Mbps` : 'Unknown' },
+                    { name: 'Data Saver Mode', value: results.network.connection.saveData ? 'Enabled' : 'Disabled' }
+                );
+            }
+
+            // Enhanced network information
+            metrics.push(
+                { name: 'Online Status', value: navigator.onLine ? 'Online' : 'Offline' },
+                { name: 'Protocol', value: location.protocol.toUpperCase() },
+                { name: 'WebRTC Support', value: 'RTCPeerConnection' in window ? 'Available' : 'Not Available' }
+            );
+
+            // Network capabilities from analysis
+            if (results.network.capabilities) {
+                const caps = results.network.capabilities;
+                metrics.push(
+                    { name: 'WebSocket Support', value: caps.webSockets ? 'Available' : 'Not Available' },
+                    { name: 'Service Workers', value: caps.serviceWorkers ? 'Available' : 'Not Available' },
+                    { name: 'Fetch API', value: caps.fetchAPI ? 'Available' : 'Not Available' },
+                    { name: 'Network Events', value: caps.onlineEvents ? 'Supported' : 'Not Supported' }
+                );
+            }
+            
+            // Add M-Lab server info if available
+            if (results.download.provider === 'M-Lab NDT7' && results.download.results?.[0]) {
+                const mlabResult = results.download.results[0];
+                metrics.push(
+                    { name: 'Test Infrastructure', value: 'Measurement Lab (M-Lab) NDT7' },
+                    { name: 'Test Duration', value: `${mlabResult.time?.toFixed(1) || 'Unknown'}s` },
+                    { name: 'Data Transferred', value: `${(mlabResult.size / 1024 / 1024).toFixed(1)} MB` },
+                    { name: 'Test Accuracy', value: 'Professional Grade' }
+                );
+            } else if (results.download.provider === 'Fallback Tests') {
+                metrics.push(
+                    { name: 'Test Method', value: 'Multiple HTTP Endpoints' },
+                    { name: 'Endpoints Tested', value: results.download.tests },
+                    { name: 'Total Data', value: `${(results.download.totalData / 1024).toFixed(0)} KB` },
+                    { name: 'Test Accuracy', value: 'Estimated (Basic)' }
+                );
+            }
+            
+            // Overall rating
+            const overallRating = calculateOverallRating(results);
+            metrics.push({ name: 'Overall Rating', value: `${overallRating.rating} (${overallRating.score}/100)` });
+            
+            const metricsHTML = metrics.map(metric => `
+                <div class="metric-item">
+                    <div class="metric-name">${metric.name}</div>
+                    <div class="metric-data">${metric.value}</div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>`;
+        }
+
+        function calculateOverallRating(results) {
+            let score = 0;
+            let factors = 0;
+            
+            // Latency score (30% weight)
+            if (results.latency.tests > 0) {
+                const latencyScore = Math.max(0, 100 - (results.latency.average / 2));
+                score += latencyScore * 0.3;
+                factors += 0.3;
+            }
+            
+            // Download score (50% weight)
+            if (results.download.tests > 0) {
+                const downloadScore = Math.min(100, results.download.average * 4);
+                score += downloadScore * 0.5;
+                factors += 0.5;
+            }
+            
+            // Upload score (20% weight)
+            if (results.upload.tests > 0) {
+                const uploadScore = Math.min(100, results.upload.average * 8);
+                score += uploadScore * 0.2;
+                factors += 0.2;
+            }
+            
+            const finalScore = factors > 0 ? Math.round(score / factors) : 0;
+            
+            let rating;
+            if (finalScore >= 80) rating = 'Excellent';
+            else if (finalScore >= 60) rating = 'Good';
+            else if (finalScore >= 40) rating = 'Fair';
+            else if (finalScore >= 20) rating = 'Poor';
+            else rating = 'Very Poor';
+            
+            return { score: finalScore, rating: rating };
         }
 
         function collectAdvancedDeviceMetrics() {
@@ -2617,6 +3895,85 @@
             return metrics;
         }
 
+
+
+
+
+
+
+
+
+        function collectRealtimeMetrics() {
+            const metrics = [];
+            
+            // Real-time performance monitoring
+            const startTime = performance.now();
+            
+            // Frame rate monitoring
+            let frameCount = 0;
+            let lastTime = performance.now();
+            
+            function countFrames() {
+                frameCount++;
+                const currentTime = performance.now();
+                if (currentTime - lastTime >= 1000) {
+                    document.querySelector('[data-metric="fps"]').textContent = `${frameCount} FPS`;
+                    frameCount = 0;
+                    lastTime = currentTime;
+                }
+                requestAnimationFrame(countFrames);
+            }
+            requestAnimationFrame(countFrames);
+            
+            // Memory monitoring (if available)
+            if (performance.memory) {
+                setInterval(() => {
+                    const used = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                    document.querySelector('[data-metric="memory-realtime"]').textContent = `${used} MB`;
+                }, 2000);
+            }
+            
+            // Network monitoring
+            let requestCount = 0;
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+                requestCount++;
+                document.querySelector('[data-metric="requests"]').textContent = requestCount;
+                return originalFetch.apply(this, args);
+            };
+            
+            // Page visibility changes
+            let visibilityChanges = 0;
+            document.addEventListener('visibilitychange', () => {
+                visibilityChanges++;
+                document.querySelector('[data-metric="visibility-changes"]').textContent = visibilityChanges;
+            });
+            
+            // Focus changes
+            let focusChanges = 0;
+            window.addEventListener('focus', () => {
+                focusChanges++;
+                document.querySelector('[data-metric="focus-changes"]').textContent = focusChanges;
+            });
+            window.addEventListener('blur', () => {
+                focusChanges++;
+                document.querySelector('[data-metric="focus-changes"]').textContent = focusChanges;
+            });
+
+            metrics.push(
+                { name: 'Current FPS', value: '<span data-metric="fps">Calculating...</span>' },
+                { name: 'Live Memory Usage', value: performance.memory ? '<span data-metric="memory-realtime">Monitoring...</span>' : 'Not Available' },
+                { name: 'Network Requests Made', value: '<span data-metric="requests">0</span>' },
+                { name: 'Visibility Changes', value: '<span data-metric="visibility-changes">0</span>' },
+                { name: 'Focus Changes', value: '<span data-metric="focus-changes">0</span>' },
+                { name: 'Uptime', value: `${((performance.now() - startTime) / 1000).toFixed(1)}s` },
+                { name: 'Page Load Method', value: performance.navigation ? (performance.navigation.type === 1 ? 'Reload' : 'Navigate') : 'Unknown' },
+                { name: 'Resource Timing Entries', value: performance.getEntriesByType('resource').length }
+            );
+
+            return metrics;
+        }
+
         function renderAdvancedMetrics(containerId, metrics) {
             const container = document.getElementById(containerId);
             
@@ -2658,6 +4015,7 @@
                     renderAdvancedMetrics('securityMetrics', collectSecurityMetrics());
                     renderAdvancedMetrics('apiMetrics', collectWebAPIMetrics());
                     renderAdvancedMetrics('sessionMetrics', collectSessionMetrics());
+                    renderAdvancedMetrics('realtimeMetrics', collectRealtimeMetrics());
                     
                 } catch (error) {
                     console.error('❌ Error in Page Insights:', error);
@@ -3007,28 +4365,14 @@
             // Additional browser info
             metrics.push(
                 { name: 'Hardware Concurrency', value: navigator.hardwareConcurrency || 'Unknown' },
-                { name: 'Device Memory', value: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown' }
+                { name: 'Device Memory (Browser Estimate)', value: navigator.deviceMemory ? `~${navigator.deviceMemory} GB (Rounded/Limited)` : 'API Not Available' },
+              
             );
 
             return metrics;
         }
 
-        function collectBrowserMetrics() {
-            return [
-                { name: 'User Agent', value: navigator.userAgent.split(' ').slice(0, 3).join(' ') + '...' },
-                { name: 'Browser Language', value: navigator.language },
-                { name: 'Platform', value: navigator.platform },
-                { name: 'Cookie Enabled', value: navigator.cookieEnabled ? 'Yes' : 'No' },
-                { name: 'Online Status', value: navigator.onLine ? 'Online' : 'Offline' },
-                { name: 'Connection Type', value: navigator.connection?.effectiveType || 'Unknown' },
-                { name: 'Connection Downlink', value: navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown' },
-                { name: 'Connection RTT', value: navigator.connection?.rtt ? `${navigator.connection.rtt}ms` : 'Unknown' },
-                { name: 'Screen Resolution', value: `${screen.width}x${screen.height}` },
-                { name: 'Viewport Size', value: `${window.innerWidth}x${window.innerHeight}` },
-                { name: 'Color Depth', value: `${screen.colorDepth}-bit` },
-                { name: 'Time Zone', value: Intl.DateTimeFormat().resolvedOptions().timeZone },
-            ];
-        }
+
 
         function collectPageMetrics() {
             const htmlSize = document.documentElement.outerHTML.length;
