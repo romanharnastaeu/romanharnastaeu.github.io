@@ -451,100 +451,6 @@
             }
         }
 
-        /* Visitor Counter Styles */
-        .visitor-counter {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .visitor-text {
-            font-size: 8px;
-            color: #99ff99;
-            text-align: center;
-            position: relative;
-        }
-        
-        .visitor-loading {
-            display: inline-block;
-        }
-        
-        .visitor-loading.hidden {
-            display: none;
-        }
-        
-        #visitorCount {
-            color: #00ff00;
-            font-weight: bold;
-            text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
-            animation: visitorGlow 2s infinite alternate;
-            font-size: 9px;
-        }
-        
-        .visitor-bar {
-            width: 150px;
-            height: 12px;
-            border: 2px solid rgba(0, 255, 0, 0.4);
-            border-radius: 2px;
-            background: rgba(0, 0, 0, 0.6);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                inset 0 0 5px rgba(0, 0, 0, 0.5),
-                0 0 5px rgba(0, 255, 0, 0.2);
-        }
-        
-        .visitor-pixels {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(90deg, 
-                rgba(0, 255, 255, 0.8), 
-                rgba(0, 255, 0, 0.8),
-                rgba(255, 255, 0, 0.6));
-            border-radius: 1px;
-            position: relative;
-            animation: visitorPixelFlow 3s ease-in-out infinite;
-            font-size: 6px;
-            color: #000;
-            font-weight: bold;
-            text-shadow: none;
-        }
-        
-        .visitor-error {
-            color: #ff6666 !important;
-            animation: none !important;
-        }
-        
-        @keyframes visitorGlow {
-            0% { 
-                text-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
-                color: #00ff00;
-            }
-            100% { 
-                text-shadow: 0 0 12px rgba(0, 255, 0, 0.8);
-                color: #66ff66;
-            }
-        }
-        
-        @keyframes visitorPixelFlow {
-            0% { 
-                box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2);
-                filter: brightness(1);
-            }
-            50% { 
-                box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4);
-                filter: brightness(1.2);
-            }
-            100% { 
-                box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2);
-                filter: brightness(1);
-            }
-        }
-
         /* Resume Section Styles */
         .resume-container {
             padding: 15px;
@@ -1196,28 +1102,6 @@
             .other-accounts-title {
                 font-size: 9px;
             }
-            
-            .visitor-counter {
-                margin-top: 10px;
-                gap: 6px;
-            }
-            
-            .visitor-text {
-                font-size: 7px;
-            }
-            
-            #visitorCount {
-                font-size: 8px;
-            }
-            
-            .visitor-bar {
-                width: 120px;
-                height: 10px;
-            }
-            
-            .visitor-pixels {
-                font-size: 5px;
-            }
         }
     </style>
 </head>
@@ -1252,19 +1136,6 @@
                                 </div>
                             </div>
                             <div class="mini-battery-tip"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Visitor Counter -->
-                    <div class="visitor-counter">
-                        <div class="visitor-text">
-                            👁️ <span id="visitorCount">---</span> visitors
-                            <span class="loading-dots visitor-loading" id="visitorLoader">
-                                <span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span>
-                            </span>
-                        </div>
-                        <div class="visitor-bar">
-                            <div class="visitor-pixels" id="visitorPixels"></div>
                         </div>
                     </div>
                 </div>
@@ -2145,141 +2016,6 @@
             document.getElementById('recentActivity').innerHTML = '<div class="activity-loading">Unable to load recent activity</div>';
         }
         
-        // Visitor Counter Functionality
-        const VISITOR_API_URL = 'https://worker1.romananikeev21.workers.dev/api/total-users';
-        
-        async function fetchVisitorCount() {
-            const countElement = document.getElementById('visitorCount');
-            const pixelsElement = document.getElementById('visitorPixels');
-            const loaderElement = document.getElementById('visitorLoader');
-            
-            try {
-                // Show loading state
-                loaderElement.classList.remove('hidden');
-                
-                console.log('Fetching visitor count from:', VISITOR_API_URL);
-                
-                const response = await fetch(VISITOR_API_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                    }
-                });
-                
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('API error response:', errorText);
-                    throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
-                }
-                
-                const data = await response.json();
-                console.log('API response data:', data);
-                
-                // Handle different response formats with fallbacks
-                let visitorCount = 0;
-                if (data.visitors !== undefined) {
-                    visitorCount = data.visitors;
-                } else if (data.count !== undefined) {
-                    visitorCount = data.count;
-                } else if (data.Count !== undefined) {
-                    visitorCount = data.Count;
-                } else if (typeof data === 'number') {
-                    visitorCount = data;
-                } else {
-                    console.warn('Unexpected API response format:', data);
-                    visitorCount = 0;
-                }
-                
-                // Ensure visitorCount is a valid number
-                visitorCount = parseInt(visitorCount) || 0;
-                
-                console.log('Final visitor count:', visitorCount);
-                
-                // Animate the counter
-                animateVisitorCount(visitorCount);
-                
-                // Update the pixel bar
-                updateVisitorPixels(visitorCount);
-                
-                // Hide loading state
-                loaderElement.classList.add('hidden');
-                
-            } catch (error) {
-                console.error('Error fetching visitor count:', error);
-                
-                // Show error state
-                countElement.textContent = 'N/A';
-                countElement.classList.add('visitor-error');
-                pixelsElement.innerHTML = '⚠️ Error';
-                pixelsElement.classList.add('visitor-error');
-                loaderElement.classList.add('hidden');
-                
-                // Show notification
-                showNotification('Failed to load visitor count', 'error');
-            }
-        }
-        
-        function animateVisitorCount(finalCount) {
-            const countElement = document.getElementById('visitorCount');
-            
-            // Ensure finalCount is a valid number
-            finalCount = parseInt(finalCount) || 0;
-            
-            const duration = 2000;
-            const steps = 60;
-            const increment = finalCount / steps;
-            let current = 0;
-            
-            countElement.classList.remove('visitor-error');
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= finalCount) {
-                    current = finalCount;
-                    clearInterval(timer);
-                }
-                const displayCount = Math.floor(current);
-                countElement.textContent = displayCount.toLocaleString();
-            }, duration / steps);
-        }
-        
-        function updateVisitorPixels(count) {
-            const pixelsElement = document.getElementById('visitorPixels');
-            
-            // Ensure count is a valid number
-            count = parseInt(count) || 0;
-            
-            // Create a visual representation based on visitor count
-            // Scale the count to fit the visual bar (0-100%)
-            const maxDisplay = 1000; // Adjust this based on expected visitor range
-            const percentage = Math.min(100, (count / maxDisplay) * 100);
-            
-            pixelsElement.classList.remove('visitor-error');
-            pixelsElement.style.width = `${Math.max(20, percentage)}%`; // Minimum 20% width for visibility
-            
-            // Add the count as overlay text
-            pixelsElement.innerHTML = `${count.toLocaleString()}`;
-            
-            // Add special effects for milestones
-            if (count >= 1000) {
-                pixelsElement.innerHTML += ' 🎉';
-            } else if (count >= 500) {
-                pixelsElement.innerHTML += ' ✨';
-            } else if (count >= 100) {
-                pixelsElement.innerHTML += ' 🚀';
-            }
-        }
-        
-        // Refresh visitor count periodically (every 5 minutes)
-        function startVisitorCountRefresh() {
-            setInterval(() => {
-                fetchVisitorCount();
-            }, 300000); // 5 minutes
-        }
-
         // Initialize effects
         document.addEventListener('DOMContentLoaded', function() {
             createMatrixEffect();
@@ -2294,12 +2030,6 @@
                     this.style.transform = 'translateY(0)';
                 });
             });
-            
-            // Load visitor count immediately
-            fetchVisitorCount();
-            
-            // Start periodic refresh
-            startVisitorCountRefresh();
             
             // Load GitHub data after a short delay
             setTimeout(() => {
