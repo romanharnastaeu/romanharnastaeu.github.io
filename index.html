@@ -510,10 +510,11 @@
         
         .subsection-content {
             padding: 15px;
-            max-height: 800px;
+            max-height: 600px;
             opacity: 1;
             transition: all 0.4s ease;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
         
         .subsection.collapsed .subsection-content {
@@ -909,6 +910,162 @@
                 filter: brightness(1.2);
             }
         }
+
+        /* Page Insights Styles */
+        .insights-container {
+            padding: 15px;
+            max-height: 80vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar for Insights */
+        .insights-container::-webkit-scrollbar,
+        .subsection-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .insights-container::-webkit-scrollbar-track,
+        .subsection-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+        }
+
+        .insights-container::-webkit-scrollbar-thumb,
+        .subsection-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00ff00, #66ff66);
+            border-radius: 2px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .insights-container::-webkit-scrollbar-thumb:hover,
+        .subsection-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #66ff66, #99ff99);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, rgba(15, 30, 15, 0.6), rgba(20, 35, 20, 0.8));
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .metric-item:hover {
+            border-color: rgba(102, 255, 102, 0.5);
+            transform: translateX(3px);
+        }
+
+        .metric-name {
+            font-size: 8px;
+            color: #99ff99;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .metric-data {
+            font-size: 9px;
+            color: #00ff00;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            text-align: right;
+            font-family: monospace;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 20px;
+            color: #66ff66;
+            font-size: 8px;
+            font-style: italic;
+            animation: pulse 2s infinite;
+        }
+
+        .resource-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .resource-table th,
+        .resource-table td {
+            padding: 6px 8px;
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            font-size: 7px;
+            text-align: left;
+        }
+
+        .resource-table th {
+            background: rgba(0, 255, 0, 0.1);
+            color: #66ff66;
+            font-weight: bold;
+        }
+
+        .resource-table td {
+            color: #99ff99;
+            font-family: monospace;
+        }
+
+        .resource-table tr:hover {
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        .memory-visual {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0, 255, 0, 0.05);
+            border-radius: 3px;
+        }
+
+        .memory-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .memory-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #44ff44, #ffaa44, #ff4444);
+            border-radius: 1px;
+            transition: width 2s ease-in-out;
+            animation: memoryGlow 3s infinite alternate;
+        }
+
+        .memory-percentage {
+            font-size: 8px;
+            color: #00ff00;
+            min-width: 40px;
+            text-align: right;
+            font-family: monospace;
+        }
+
+        @keyframes memoryGlow {
+            0% { 
+                box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.1);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
+                filter: brightness(1.2);
+            }
+        }
         
 
 
@@ -1102,10 +1259,40 @@
             .other-accounts-title {
                 font-size: 9px;
             }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .metric-item {
+                padding: 6px 8px;
+                margin-bottom: 6px;
+            }
+            
+            .metric-name {
+                font-size: 7px;
+                min-width: 100px;
+            }
+            
+            .metric-data {
+                font-size: 8px;
+            }
+            
+            .insights-container {
+                padding: 10px;
+            }
+            
+            .loading-message {
+                font-size: 7px;
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
+
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -1236,6 +1423,15 @@
                                 </div>
                             </div>
                             <div class="skill-item">
+                                <div class="skill-name">C</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 85%"></div>
+                                    </div>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
                                 <div class="skill-name">C++</div>
                                 <div class="skill-level">
                                     <div class="skill-bar">
@@ -1251,6 +1447,24 @@
                                         <div class="skill-fill" style="width: 90%"></div>
                                     </div>
                                     <span class="skill-percentage">90%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">Python</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 80%"></div>
+                                    </div>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-name">SQL</div>
+                                <div class="skill-level">
+                                    <div class="skill-bar">
+                                        <div class="skill-fill" style="width: 85%"></div>
+                                    </div>
+                                    <span class="skill-percentage">85%</span>
                                 </div>
                             </div>
                         </div>
@@ -1500,6 +1714,171 @@
             <div class="section-content">
                 <div class="resume-container">
                     <img src="myRes.png" alt="Roman Harnastaeu Resume" class="resume-image">
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Insights Section -->
+        <div class="section collapsed">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                    <span>► Show Page Insights</span>
+                    <span class="section-icon">▼</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="insights-container">
+
+                    
+                    <!-- Navigation Timing -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🚀 Navigation Timing</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="navigationMetrics">
+                                <div class="loading-message">📊 Collecting navigation data...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paint Timing -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🎨 Paint Timing</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="paintMetrics">
+                                <div class="loading-message">🎨 Analyzing paint events...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Loading -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>📦 Resource Loading</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="resourceMetrics">
+                                <div class="loading-message">📦 Analyzing resource loading...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Memory Usage -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🧠 Memory Usage</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="memoryMetrics">
+                                <div class="loading-message">🧠 Measuring memory usage...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Browser Info -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🌐 Browser Environment</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="browserMetrics">
+                                <div class="loading-message">🌐 Detecting browser environment...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Size & Statistics -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>📄 Page Statistics</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="pageMetrics">
+                                <div class="loading-message">📄 Calculating page statistics...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Device Detection -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🔬 Advanced Device Detection</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="deviceMetrics">
+                                <div class="loading-message">🔬 Probing device capabilities...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security & Privacy -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>🔒 Security & Privacy</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="securityMetrics">
+                                <div class="loading-message">🔒 Analyzing security features...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web APIs Support -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>⚙️ Web APIs Support</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="apiMetrics">
+                                <div class="loading-message">⚙️ Testing Web APIs support...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Session Analytics -->
+                    <div class="subsection collapsed">
+                        <div class="subsection-header" onclick="toggleSubsection(this)">
+                            <div class="subsection-title">
+                                <span>📈 User Session Analytics</span>
+                                <span class="subsection-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="subsection-content">
+                            <div class="metrics-grid" id="sessionMetrics">
+                                <div class="loading-message">📈 Tracking session data...</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1781,6 +2160,474 @@
         `;
         document.head.appendChild(matrixStyle);
         
+        // Page Insights Functions
+        function collectNavigationMetrics() {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (!navigation) return [];
+
+            return [
+                { name: 'DNS Lookup', value: `${Math.round(navigation.domainLookupEnd - navigation.domainLookupStart)}ms` },
+                { name: 'Connection Time', value: `${Math.round(navigation.connectEnd - navigation.connectStart)}ms` },
+                { name: 'TLS Handshake', value: `${Math.round(navigation.secureConnectionStart > 0 ? navigation.connectEnd - navigation.secureConnectionStart : 0)}ms` },
+                { name: 'Request Time', value: `${Math.round(navigation.responseStart - navigation.requestStart)}ms` },
+                { name: 'Response Time', value: `${Math.round(navigation.responseEnd - navigation.responseStart)}ms` },
+                { name: 'DOM Processing', value: `${Math.round(navigation.domComplete - navigation.domLoading)}ms` },
+                { name: 'DOM Interactive', value: `${Math.round(navigation.domInteractive - navigation.navigationStart)}ms` },
+                { name: 'DOM Content Loaded', value: `${Math.round(navigation.domContentLoadedEventEnd - navigation.navigationStart)}ms` },
+                { name: 'Load Event', value: `${Math.round(navigation.loadEventEnd - navigation.navigationStart)}ms` },
+                { name: 'Total Load Time', value: `${Math.round(navigation.loadEventEnd - navigation.navigationStart)}ms` },
+                { name: 'Redirect Count', value: navigation.redirectCount },
+                { name: 'Transfer Size', value: `${(navigation.transferSize / 1024).toFixed(2)} KB` },
+                { name: 'Encoded Body Size', value: `${(navigation.encodedBodySize / 1024).toFixed(2)} KB` },
+                { name: 'Decoded Body Size', value: `${(navigation.decodedBodySize / 1024).toFixed(2)} KB` }
+            ];
+        }
+
+        function collectPaintMetrics() {
+            const paint = performance.getEntriesByType('paint');
+            const metrics = [];
+
+            paint.forEach(entry => {
+                metrics.push({
+                    name: entry.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                    value: `${Math.round(entry.startTime)}ms`
+                });
+            });
+
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (navigation) {
+                metrics.push(
+                    { name: 'DOM Processing Start', value: `${Math.round(navigation.domLoading - navigation.navigationStart)}ms` },
+                    { name: 'DOM Interactive', value: `${Math.round(navigation.domInteractive - navigation.navigationStart)}ms` },
+                    { name: 'DOM Complete', value: `${Math.round(navigation.domComplete - navigation.navigationStart)}ms` }
+                );
+            }
+
+            return metrics;
+        }
+
+        function collectResourceMetrics() {
+            const resources = performance.getEntriesByType('resource');
+            const metrics = [];
+            const types = {};
+            let totalSize = 0;
+            let totalDuration = 0;
+
+            resources.forEach(resource => {
+                const type = resource.initiatorType || 'other';
+                if (!types[type]) types[type] = { count: 0, size: 0, duration: 0 };
+                
+                types[type].count++;
+                types[type].size += resource.transferSize || 0;
+                types[type].duration += resource.duration || 0;
+                
+                totalSize += resource.transferSize || 0;
+                totalDuration += resource.duration || 0;
+            });
+
+            metrics.push(
+                { name: 'Total Resources', value: resources.length },
+                { name: 'Total Transfer Size', value: `${(totalSize / 1024).toFixed(2)} KB` },
+                { name: 'Average Load Time', value: `${Math.round(totalDuration / resources.length)}ms` }
+            );
+
+            Object.entries(types).forEach(([type, data]) => {
+                metrics.push({
+                    name: `${type.toUpperCase()} Resources`,
+                    value: `${data.count} (${(data.size / 1024).toFixed(1)} KB)`
+                });
+            });
+
+            return metrics;
+        }
+
+        function collectMemoryMetrics() {
+            const metrics = [];
+            
+            if (performance.memory) {
+                const used = performance.memory.usedJSHeapSize;
+                const total = performance.memory.totalJSHeapSize;
+                const limit = performance.memory.jsHeapSizeLimit;
+                
+                metrics.push(
+                    { name: 'Used Heap Size', value: `${(used / 1024 / 1024).toFixed(2)} MB` },
+                    { name: 'Total Heap Size', value: `${(total / 1024 / 1024).toFixed(2)} MB` },
+                    { name: 'Heap Size Limit', value: `${(limit / 1024 / 1024).toFixed(2)} MB` },
+                    { name: 'Heap Usage', value: `${((used / limit) * 100).toFixed(1)}%` }
+                );
+            } else {
+                metrics.push({ name: 'Memory API', value: 'Not Available' });
+            }
+
+            metrics.push(
+                { name: 'Hardware Concurrency', value: navigator.hardwareConcurrency || 'Unknown' },
+                { name: 'Device Memory', value: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown' }
+            );
+
+            return metrics;
+        }
+
+        function collectBrowserMetrics() {
+            return [
+                { name: 'User Agent', value: navigator.userAgent.split(' ').slice(0, 3).join(' ') + '...' },
+                { name: 'Browser Language', value: navigator.language },
+                { name: 'Platform', value: navigator.platform },
+                { name: 'Cookie Enabled', value: navigator.cookieEnabled ? 'Yes' : 'No' },
+                { name: 'Online Status', value: navigator.onLine ? 'Online' : 'Offline' },
+                { name: 'Connection Type', value: navigator.connection?.effectiveType || 'Unknown' },
+                { name: 'Connection Downlink', value: navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown' },
+                { name: 'Connection RTT', value: navigator.connection?.rtt ? `${navigator.connection.rtt}ms` : 'Unknown' },
+                { name: 'Screen Resolution', value: `${screen.width}x${screen.height}` },
+                { name: 'Viewport Size', value: `${window.innerWidth}x${window.innerHeight}` },
+                { name: 'Color Depth', value: `${screen.colorDepth}-bit` },
+                { name: 'Time Zone', value: Intl.DateTimeFormat().resolvedOptions().timeZone },
+            ];
+        }
+
+        function collectPageMetrics() {
+            const htmlSize = document.documentElement.outerHTML.length;
+            const elements = document.querySelectorAll('*').length;
+            const images = document.querySelectorAll('img').length;
+            const links = document.querySelectorAll('a').length;
+            const scripts = document.querySelectorAll('script').length;
+            const stylesheets = document.querySelectorAll('link[rel="stylesheet"]').length;
+
+            return [
+                { name: 'HTML Size', value: `${(htmlSize / 1024).toFixed(2)} KB` },
+                { name: 'DOM Elements', value: elements },
+                { name: 'Images', value: images },
+                { name: 'Links', value: links },
+                { name: 'Script Tags', value: scripts },
+                { name: 'Stylesheets', value: stylesheets },
+                { name: 'Document Title', value: document.title },
+                { name: 'Character Set', value: document.characterSet },
+                { name: 'Document Mode', value: document.compatMode },
+                { name: 'Last Modified', value: document.lastModified || 'Unknown' },
+                { name: 'Referrer', value: document.referrer || 'Direct' },
+                { name: 'Current URL', value: window.location.href.split('?')[0] }
+            ];
+        }
+
+        function renderMetrics(containerId, metrics) {
+            const container = document.getElementById(containerId);
+            
+            if (metrics.length === 0) {
+                container.innerHTML = '<div class="loading-message">No data available</div>';
+                return;
+            }
+
+            const metricsHTML = metrics.map(metric => `
+                <div class="metric-item">
+                    <div class="metric-name">${metric.name}</div>
+                    <div class="metric-data">${metric.value}</div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>`;
+        }
+
+        function renderMemoryWithVisual(containerId, metrics) {
+            const container = document.getElementById(containerId);
+            
+            const metricsHTML = metrics.map(metric => `
+                <div class="metric-item">
+                    <div class="metric-name">${metric.name}</div>
+                    <div class="metric-data">${metric.value}</div>
+                </div>
+            `).join('');
+
+            let memoryVisual = '';
+            if (performance.memory) {
+                const used = performance.memory.usedJSHeapSize;
+                const limit = performance.memory.jsHeapSizeLimit;
+                const percentage = ((used / limit) * 100).toFixed(1);
+                
+                memoryVisual = `
+                    <div class="memory-visual">
+                        <div class="memory-bar">
+                            <div class="memory-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="memory-percentage">${percentage}%</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>${memoryVisual}`;
+        }
+
+        function collectAdvancedDeviceMetrics() {
+            const metrics = [];
+            
+            // WebGL Info
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    metrics.push(
+                        { name: 'GPU Vendor', value: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'Unknown' },
+                        { name: 'GPU Renderer', value: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown' },
+                        { name: 'WebGL Version', value: gl.getParameter(gl.VERSION) },
+                        { name: 'GLSL Version', value: gl.getParameter(gl.SHADING_LANGUAGE_VERSION) }
+                    );
+                } else {
+                    metrics.push({ name: 'WebGL Support', value: 'Not Available' });
+                }
+            } catch (e) {
+                metrics.push({ name: 'WebGL Detection', value: 'Failed' });
+            }
+
+            // Device capabilities
+            metrics.push(
+                { name: 'Touch Support', value: 'ontouchstart' in window ? 'Yes' : 'No' },
+                { name: 'Max Touch Points', value: navigator.maxTouchPoints || 0 },
+                { name: 'Pointer Events', value: 'PointerEvent' in window ? 'Supported' : 'Not Supported' },
+                { name: 'Device Pixel Ratio', value: window.devicePixelRatio || 1 },
+                { name: 'Screen Orientation', value: screen.orientation ? screen.orientation.type : 'Unknown' },
+                { name: 'PDF Viewer', value: navigator.pdfViewerEnabled ? 'Enabled' : 'Disabled' },
+                { name: 'WebRTC Support', value: 'RTCPeerConnection' in window ? 'Yes' : 'No' }
+            );
+
+            // Audio capabilities
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                metrics.push(
+                    { name: 'Audio Context State', value: audioContext.state },
+                    { name: 'Audio Sample Rate', value: `${audioContext.sampleRate} Hz` },
+                    { name: 'Audio Base Latency', value: `${audioContext.baseLatency?.toFixed(4) || 'Unknown'}s` }
+                );
+                audioContext.close();
+            } catch (e) {
+                metrics.push({ name: 'Audio Context', value: 'Not Available' });
+            }
+
+            // Gamepad support
+            metrics.push({ name: 'Gamepad Support', value: 'getGamepads' in navigator ? 'Yes' : 'No' });
+
+            // Clipboard capabilities  
+            metrics.push({ name: 'Clipboard API', value: 'clipboard' in navigator ? 'Supported' : 'Not Supported' });
+
+            return metrics;
+        }
+
+        function collectSecurityMetrics() {
+            const metrics = [];
+
+            // Protocol and security
+            metrics.push(
+                { name: 'Protocol', value: location.protocol },
+                { name: 'HTTPS Secure', value: location.protocol === 'https:' ? 'Yes' : 'No' },
+                { name: 'Mixed Content', value: location.protocol === 'https:' && document.querySelector('[src^="http:"]') ? 'Detected' : 'None' },
+                { name: 'Referrer Policy', value: document.referrerPolicy || 'Default' },
+                { name: 'Document Domain', value: document.domain },
+                { name: 'Document Origin', value: location.origin }
+            );
+
+            // Storage capabilities and usage
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                navigator.storage.estimate().then(estimate => {
+                    const usedMB = (estimate.usage / 1024 / 1024).toFixed(2);
+                    const quotaMB = (estimate.quota / 1024 / 1024).toFixed(2);
+                    document.querySelector('[data-metric="storage-used"]').textContent = `${usedMB} MB`;
+                    document.querySelector('[data-metric="storage-quota"]').textContent = `${quotaMB} MB`;
+                });
+            }
+
+            metrics.push(
+                { name: 'Local Storage', value: 'localStorage' in window ? 'Available' : 'Not Available' },
+                { name: 'Session Storage', value: 'sessionStorage' in window ? 'Available' : 'Not Available' },
+                { name: 'IndexedDB', value: 'indexedDB' in window ? 'Available' : 'Not Available' },
+                { name: 'WebSQL', value: 'openDatabase' in window ? 'Available' : 'Deprecated/Not Available' }
+            );
+
+            // Add placeholder metrics for storage (will be updated by promise above)
+            metrics.push(
+                { name: 'Storage Used', value: '<span data-metric="storage-used">Calculating...</span>' },
+                { name: 'Storage Quota', value: '<span data-metric="storage-quota">Calculating...</span>' }
+            );
+
+            // Permissions API
+            if ('permissions' in navigator) {
+                metrics.push({ name: 'Permissions API', value: 'Supported' });
+            } else {
+                metrics.push({ name: 'Permissions API', value: 'Not Supported' });
+            }
+
+            // Content Security Policy
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            metrics.push({ name: 'CSP Meta Tag', value: cspMeta ? 'Present' : 'Not Found' });
+
+            return metrics;
+        }
+
+        function collectWebAPIMetrics() {
+            const apis = [
+                'ServiceWorker', 'PushManager', 'Notification', 'Geolocation', 'DeviceOrientationEvent',
+                'DeviceMotionEvent', 'BatteryManager', 'Bluetooth', 'USB', 'MediaDevices', 'IntersectionObserver',
+                'MutationObserver', 'ResizeObserver', 'PerformanceObserver', 'PaymentRequest', 'WebShare',
+                'Workbox', 'Cache', 'BroadcastChannel', 'MessageChannel', 'SharedWorker', 'WebAssembly',
+                'OffscreenCanvas', 'ImageCapture', 'MediaRecorder', 'SpeechRecognition', 'SpeechSynthesis'
+            ];
+
+            const metrics = [];
+
+            apis.forEach(api => {
+                let supported = false;
+                try {
+                    switch (api) {
+                        case 'ServiceWorker':
+                            supported = 'serviceWorker' in navigator;
+                            break;
+                        case 'PushManager':
+                            supported = 'PushManager' in window;
+                            break;
+                        case 'Notification':
+                            supported = 'Notification' in window;
+                            break;
+                        case 'Geolocation':
+                            supported = 'geolocation' in navigator;
+                            break;
+                        case 'DeviceOrientationEvent':
+                            supported = 'DeviceOrientationEvent' in window;
+                            break;
+                        case 'DeviceMotionEvent':
+                            supported = 'DeviceMotionEvent' in window;
+                            break;
+                        case 'BatteryManager':
+                            supported = 'getBattery' in navigator;
+                            break;
+                        case 'Bluetooth':
+                            supported = 'bluetooth' in navigator;
+                            break;
+                        case 'USB':
+                            supported = 'usb' in navigator;
+                            break;
+                        case 'MediaDevices':
+                            supported = 'mediaDevices' in navigator;
+                            break;
+                        case 'SpeechRecognition':
+                            supported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+                            break;
+                        case 'SpeechSynthesis':
+                            supported = 'speechSynthesis' in window;
+                            break;
+                        default:
+                            supported = api in window;
+                    }
+                } catch (e) {
+                    supported = false;
+                }
+
+                metrics.push({
+                    name: api,
+                    value: supported ? '✅ Supported' : '❌ Not Available'
+                });
+            });
+
+            return metrics;
+        }
+
+        function collectSessionMetrics() {
+            const metrics = [];
+            const now = new Date();
+
+            // Session timing
+            const sessionStart = performance.timing.navigationStart;
+            const timeOnPage = Date.now() - sessionStart;
+
+            metrics.push(
+                { name: 'Session Start', value: new Date(sessionStart).toLocaleTimeString() },
+                { name: 'Time on Page', value: `${Math.floor(timeOnPage / 1000)}s` },
+                { name: 'Current Time', value: now.toLocaleTimeString() },
+                { name: 'Time Zone Offset', value: `UTC${now.getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(now.getTimezoneOffset() / 60)}` }
+            );
+
+            // Page visibility
+            metrics.push(
+                { name: 'Page Visible', value: !document.hidden ? 'Yes' : 'No' },
+                { name: 'Visibility State', value: document.visibilityState },
+                { name: 'Focus State', value: document.hasFocus() ? 'Focused' : 'Not Focused' }
+            );
+
+            // URL analysis
+            const urlParams = new URLSearchParams(window.location.search);
+            metrics.push(
+                { name: 'URL Parameters', value: urlParams.toString() || 'None' },
+                { name: 'Hash Fragment', value: window.location.hash || 'None' },
+                { name: 'History Length', value: history.length }
+            );
+
+            // Performance navigation type
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (navigation) {
+                const typeMap = { 0: 'Navigate', 1: 'Reload', 2: 'Back/Forward', 255: 'Reserved' };
+                metrics.push({ name: 'Navigation Type', value: typeMap[navigation.type] || 'Unknown' });
+            }
+
+            // User preferences (if available)
+            if ('matchMedia' in window) {
+                metrics.push(
+                    { name: 'Prefers Dark Mode', value: matchMedia('(prefers-color-scheme: dark)').matches ? 'Yes' : 'No' },
+                    { name: 'Prefers Reduced Motion', value: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'Yes' : 'No' },
+                    { name: 'Prefers High Contrast', value: matchMedia('(prefers-contrast: high)').matches ? 'Yes' : 'No' }
+                );
+            }
+
+            return metrics;
+        }
+
+        function renderAdvancedMetrics(containerId, metrics) {
+            const container = document.getElementById(containerId);
+            
+            if (!container) {
+                console.error(`❌ Container not found: ${containerId}`);
+                return;
+            }
+            
+            if (!metrics || metrics.length === 0) {
+                container.innerHTML = '<div class="loading-message">No data available</div>';
+                return;
+            }
+
+            const metricsHTML = metrics.map(metric => `
+                <div class="metric-item">
+                    <div class="metric-name">${metric.name}</div>
+                    <div class="metric-data">${metric.value}</div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>`;
+        }
+
+
+
+        function initializePageInsights() {
+            setTimeout(() => {
+                try {
+                    // Basic metrics
+                    renderMetrics('navigationMetrics', collectNavigationMetrics());
+                    renderMetrics('paintMetrics', collectPaintMetrics());
+                    renderMetrics('resourceMetrics', collectResourceMetrics());
+                    renderMemoryWithVisual('memoryMetrics', collectMemoryMetrics());
+                    renderMetrics('browserMetrics', collectBrowserMetrics());
+                    renderMetrics('pageMetrics', collectPageMetrics());
+                    
+                    // Advanced metrics
+                    renderAdvancedMetrics('deviceMetrics', collectAdvancedDeviceMetrics());
+                    renderAdvancedMetrics('securityMetrics', collectSecurityMetrics());
+                    renderAdvancedMetrics('apiMetrics', collectWebAPIMetrics());
+                    renderAdvancedMetrics('sessionMetrics', collectSessionMetrics());
+                    
+                } catch (error) {
+                    console.error('❌ Error in Page Insights:', error);
+                    document.querySelectorAll('.loading-message').forEach(msg => {
+                        msg.textContent = '❌ Error loading data. Check browser console.';
+                        msg.style.color = '#ff6b6b';
+                    });
+                }
+            }, 1500);
+        }
+
         // GitHub Activity Dashboard
         const GITHUB_USERNAME = 'romanharnastaeu';
         const GITHUB_API_BASE = 'https://api.github.com';
@@ -2016,9 +2863,209 @@
             document.getElementById('recentActivity').innerHTML = '<div class="activity-loading">Unable to load recent activity</div>';
         }
         
+        // Page Insights Functions
+        function collectNavigationMetrics() {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (!navigation) return [];
+
+            return [
+                { name: 'DNS Lookup', value: `${Math.round(navigation.domainLookupEnd - navigation.domainLookupStart)}ms` },
+                { name: 'Connection Time', value: `${Math.round(navigation.connectEnd - navigation.connectStart)}ms` },
+                { name: 'TLS Handshake', value: `${Math.round(navigation.secureConnectionStart > 0 ? navigation.connectEnd - navigation.secureConnectionStart : 0)}ms` },
+                { name: 'Request Time', value: `${Math.round(navigation.responseStart - navigation.requestStart)}ms` },
+                { name: 'Response Time', value: `${Math.round(navigation.responseEnd - navigation.responseStart)}ms` },
+                { name: 'DOM Processing', value: `${Math.round(navigation.domComplete - navigation.domLoading)}ms` },
+                { name: 'DOM Interactive', value: `${Math.round(navigation.domInteractive - navigation.navigationStart)}ms` },
+                { name: 'DOM Content Loaded', value: `${Math.round(navigation.domContentLoadedEventEnd - navigation.navigationStart)}ms` },
+                { name: 'Load Event', value: `${Math.round(navigation.loadEventEnd - navigation.navigationStart)}ms` },
+                { name: 'Total Load Time', value: `${Math.round(navigation.loadEventEnd - navigation.navigationStart)}ms` },
+                { name: 'Redirect Count', value: navigation.redirectCount },
+                { name: 'Transfer Size', value: `${(navigation.transferSize / 1024).toFixed(2)} KB` },
+                { name: 'Encoded Body Size', value: `${(navigation.encodedBodySize / 1024).toFixed(2)} KB` },
+                { name: 'Decoded Body Size', value: `${(navigation.decodedBodySize / 1024).toFixed(2)} KB` }
+            ];
+        }
+
+        function collectPaintMetrics() {
+            const paint = performance.getEntriesByType('paint');
+            const metrics = [];
+
+            paint.forEach(entry => {
+                metrics.push({
+                    name: entry.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                    value: `${Math.round(entry.startTime)}ms`
+                });
+            });
+
+            // Add additional paint-related metrics
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (navigation) {
+                metrics.push(
+                    { name: 'DOM Processing Start', value: `${Math.round(navigation.domLoading - navigation.navigationStart)}ms` },
+                    { name: 'DOM Interactive', value: `${Math.round(navigation.domInteractive - navigation.navigationStart)}ms` },
+                    { name: 'DOM Complete', value: `${Math.round(navigation.domComplete - navigation.navigationStart)}ms` }
+                );
+            }
+
+            return metrics;
+        }
+
+        function collectResourceMetrics() {
+            const resources = performance.getEntriesByType('resource');
+            const metrics = [];
+            const types = {};
+            let totalSize = 0;
+            let totalDuration = 0;
+
+            resources.forEach(resource => {
+                const type = resource.initiatorType || 'other';
+                if (!types[type]) types[type] = { count: 0, size: 0, duration: 0 };
+                
+                types[type].count++;
+                types[type].size += resource.transferSize || 0;
+                types[type].duration += resource.duration || 0;
+                
+                totalSize += resource.transferSize || 0;
+                totalDuration += resource.duration || 0;
+            });
+
+            metrics.push(
+                { name: 'Total Resources', value: resources.length },
+                { name: 'Total Transfer Size', value: `${(totalSize / 1024).toFixed(2)} KB` },
+                { name: 'Average Load Time', value: `${Math.round(totalDuration / resources.length)}ms` }
+            );
+
+            Object.entries(types).forEach(([type, data]) => {
+                metrics.push({
+                    name: `${type.toUpperCase()} Resources`,
+                    value: `${data.count} (${(data.size / 1024).toFixed(1)} KB)`
+                });
+            });
+
+            return metrics;
+        }
+
+        function collectMemoryMetrics() {
+            const metrics = [];
+            
+            if (performance.memory) {
+                const used = performance.memory.usedJSHeapSize;
+                const total = performance.memory.totalJSHeapSize;
+                const limit = performance.memory.jsHeapSizeLimit;
+                
+                metrics.push(
+                    { name: 'Used Heap Size', value: `${(used / 1024 / 1024).toFixed(2)} MB` },
+                    { name: 'Total Heap Size', value: `${(total / 1024 / 1024).toFixed(2)} MB` },
+                    { name: 'Heap Size Limit', value: `${(limit / 1024 / 1024).toFixed(2)} MB` },
+                    { name: 'Heap Usage', value: `${((used / limit) * 100).toFixed(1)}%` }
+                );
+            } else {
+                metrics.push({ name: 'Memory API', value: 'Not Available' });
+            }
+
+            // Additional browser info
+            metrics.push(
+                { name: 'Hardware Concurrency', value: navigator.hardwareConcurrency || 'Unknown' },
+                { name: 'Device Memory', value: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown' }
+            );
+
+            return metrics;
+        }
+
+        function collectBrowserMetrics() {
+            return [
+                { name: 'User Agent', value: navigator.userAgent.split(' ').slice(0, 3).join(' ') + '...' },
+                { name: 'Browser Language', value: navigator.language },
+                { name: 'Platform', value: navigator.platform },
+                { name: 'Cookie Enabled', value: navigator.cookieEnabled ? 'Yes' : 'No' },
+                { name: 'Online Status', value: navigator.onLine ? 'Online' : 'Offline' },
+                { name: 'Connection Type', value: navigator.connection?.effectiveType || 'Unknown' },
+                { name: 'Connection Downlink', value: navigator.connection?.downlink ? `${navigator.connection.downlink} Mbps` : 'Unknown' },
+                { name: 'Connection RTT', value: navigator.connection?.rtt ? `${navigator.connection.rtt}ms` : 'Unknown' },
+                { name: 'Screen Resolution', value: `${screen.width}x${screen.height}` },
+                { name: 'Viewport Size', value: `${window.innerWidth}x${window.innerHeight}` },
+                { name: 'Color Depth', value: `${screen.colorDepth}-bit` },
+                { name: 'Time Zone', value: Intl.DateTimeFormat().resolvedOptions().timeZone },
+            ];
+        }
+
+        function collectPageMetrics() {
+            const htmlSize = document.documentElement.outerHTML.length;
+            const elements = document.querySelectorAll('*').length;
+            const images = document.querySelectorAll('img').length;
+            const links = document.querySelectorAll('a').length;
+            const scripts = document.querySelectorAll('script').length;
+            const stylesheets = document.querySelectorAll('link[rel="stylesheet"]').length;
+
+            return [
+                { name: 'HTML Size', value: `${(htmlSize / 1024).toFixed(2)} KB` },
+                { name: 'DOM Elements', value: elements },
+                { name: 'Images', value: images },
+                { name: 'Links', value: links },
+                { name: 'Script Tags', value: scripts },
+                { name: 'Stylesheets', value: stylesheets },
+                { name: 'Document Title', value: document.title },
+                { name: 'Character Set', value: document.characterSet },
+                { name: 'Document Mode', value: document.compatMode },
+                { name: 'Last Modified', value: document.lastModified || 'Unknown' },
+                { name: 'Referrer', value: document.referrer || 'Direct' },
+                { name: 'Current URL', value: window.location.href.split('?')[0] }
+            ];
+        }
+
+        function renderMetrics(containerId, metrics) {
+            const container = document.getElementById(containerId);
+            
+            if (metrics.length === 0) {
+                container.innerHTML = '<div class="loading-message">No data available</div>';
+                return;
+            }
+
+            const metricsHTML = metrics.map(metric => `
+                <div class="metric-item">
+                    <div class="metric-name">${metric.name}</div>
+                    <div class="metric-data">${metric.value}</div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>`;
+        }
+
+        function renderMemoryWithVisual(containerId, metrics) {
+            const container = document.getElementById(containerId);
+            
+            const metricsHTML = metrics.map(metric => `
+                <div class="metric-item">
+                    <div class="metric-name">${metric.name}</div>
+                    <div class="metric-data">${metric.value}</div>
+                </div>
+            `).join('');
+
+            let memoryVisual = '';
+            if (performance.memory) {
+                const used = performance.memory.usedJSHeapSize;
+                const limit = performance.memory.jsHeapSizeLimit;
+                const percentage = ((used / limit) * 100).toFixed(1);
+                
+                memoryVisual = `
+                    <div class="memory-visual">
+                        <div class="memory-bar">
+                            <div class="memory-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="memory-percentage">${percentage}%</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>${memoryVisual}`;
+        }
+
+
+
         // Initialize effects
         document.addEventListener('DOMContentLoaded', function() {
             createMatrixEffect();
+            initializePageInsights();
             
             // Add hover effects to sections
             document.querySelectorAll('.section').forEach(section => {
