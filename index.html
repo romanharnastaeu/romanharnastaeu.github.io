@@ -3037,41 +3037,41 @@
             return data.filter(x => Math.abs(x - median) / medianDeviation <= threshold);
         }
 
-        // Geographic endpoint selection based on browser's accept-language
+                // Geographic endpoint selection with CORS-compatible endpoints
         function selectGeoEndpoints() {
             const language = navigator.language || 'en-US';
             const region = language.split('-')[1] || 'US';
             
+            // Use endpoints that properly support CORS
             const endpointsByRegion = {
                 'US': [
-                    'https://api.github.com/zen',
                     'https://jsonplaceholder.typicode.com/posts/1',
-                    'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-                    'https://httpbin.org/headers'
+                    'https://jsonplaceholder.typicode.com/users/1',
+                    'https://jsonplaceholder.typicode.com/comments/1',
+                    'https://httpbin.org/get'
                 ],
                 'EU': [
-                    'https://api.github.com/zen',
-                    'https://jsonplaceholder.typicode.com/posts/1', 
-                    'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js',
-                    'https://httpbin.org/headers'
+                    'https://jsonplaceholder.typicode.com/posts/1',
+                    'https://jsonplaceholder.typicode.com/users/1', 
+                    'https://jsonplaceholder.typicode.com/comments/1',
+                    'https://httpbin.org/get'
                 ],
                 'AS': [
-                    'https://api.github.com/zen',
                     'https://jsonplaceholder.typicode.com/posts/1',
-                    'https://unpkg.com/jquery@3.6.0/dist/jquery.min.js',
-                    'https://httpbin.org/headers'
+                    'https://jsonplaceholder.typicode.com/users/1',
+                    'https://jsonplaceholder.typicode.com/comments/1',
+                    'https://httpbin.org/get'
                 ]
             };
             
             return endpointsByRegion[region] || endpointsByRegion['US'];
         }
 
-        // Enhanced WebSocket ping test for pure network latency
-        async function webSocketLatencyTest(endpoint) {
+        // Enhanced WebSocket ping test for actual WebSocket endpoints
+        async function webSocketLatencyTest(wsEndpoint) {
             return new Promise((resolve) => {
                 try {
-                    const wsUrl = endpoint.replace('https://', 'wss://').replace('http://', 'ws://');
-                    const ws = new WebSocket(wsUrl);
+                    const ws = new WebSocket(wsEndpoint);
                     const startTime = performance.now();
                     
                     ws.onopen = () => {
@@ -3109,11 +3109,7 @@
                         const response = await fetch(endpoint, { 
                             method: 'HEAD',
                             cache: 'no-cache',
-                            mode: 'cors',
-                            headers: {
-                                'Cache-Control': 'no-cache',
-                                'Pragma': 'no-cache'
-                            }
+                            mode: 'cors'
                         });
                         const endTime = performance.now();
                         
@@ -3143,11 +3139,13 @@
             const validResults = latencyResults.filter(r => r !== null);
             results.push(...validResults);
             
-            // Try WebSocket latency tests for supported endpoints
-            const wsTests = testEndpoints.map(endpoint => webSocketLatencyTest(endpoint));
-            const wsResults = await Promise.all(wsTests);
-            const validWsResults = wsResults.filter(r => r !== null);
-            results.push(...validWsResults);
+            // Skip WebSocket tests for HTTP endpoints - they don't support WebSocket upgrade
+            // Only use WebSocket tests for actual WebSocket endpoints
+            // const wsEndpoints = ['wss://echo.websocket.org']; // Example WebSocket endpoint
+            // const wsTests = wsEndpoints.map(endpoint => webSocketLatencyTest(endpoint));
+            // const wsResults = await Promise.all(wsTests);
+            // const validWsResults = wsResults.filter(r => r !== null);  
+            // results.push(...validWsResults);
             
             if (results.length > 0) {
                 // Use MAD for more robust outlier removal
@@ -3176,10 +3174,11 @@
         // TCP warm-up to overcome slow-start effects
         async function tcpWarmup(url) {
             try {
+                // Use GET instead of HEAD for better compatibility
                 await fetch(url, { 
-                    method: 'HEAD', 
+                    method: 'GET', 
                     cache: 'no-cache',
-                    mode: 'cors' 
+                    mode: 'cors'
                 });
             } catch (e) {
                 // Warm-up failures are non-critical
@@ -3196,8 +3195,7 @@
                     const startTime = performance.now();
                     const response = await fetch(url, {
                         cache: 'no-cache',
-                        mode: 'cors',
-                        headers: { 'Cache-Control': 'no-cache' }
+                        mode: 'cors'
                     });
                     
                     if (!response.ok) {
@@ -3321,8 +3319,8 @@
             const testFiles = [
                 { url: 'https://jsonplaceholder.typicode.com/photos', size: 500000, name: 'Large JSON Dataset' },
                 { url: 'https://httpbin.org/drip?duration=5&numbytes=2048000', size: 2048000, name: 'HTTPBin Streaming (2MB)' },
-                { url: 'https://api.github.com/repos/microsoft/vscode/releases', size: 100000, name: 'GitHub API Large' },
-                { url: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', size: 87000, name: 'CDN Resource Test' }
+                { url: 'https://jsonplaceholder.typicode.com/posts', size: 100000, name: 'JSONPlaceholder Large' },
+                { url: 'https://httpbin.org/json', size: 10000, name: 'HTTPBin JSON Test' }
             ];
             
             // Run parallel download tests
@@ -3437,8 +3435,8 @@
             
             for (const test of testSizes) {
                 try {
-                    // TCP warm-up
-                    await tcpWarmup('https://httpbin.org/post');
+                    // TCP warm-up - use GET endpoint for warm-up since POST endpoint rejects HEAD
+                    await tcpWarmup('https://httpbin.org/get');
                     
                     // Create larger test data with pattern-based generation for efficiency
                     const testData = createTestData(test.size);
@@ -3455,8 +3453,7 @@
                             body: testData,
                             headers: {
                                 'Content-Type': 'application/octet-stream',
-                                'X-Upload-Test': 'enhanced',
-                                'Cache-Control': 'no-cache'
+                                'X-Upload-Test': 'enhanced'
                             },
                             cache: 'no-cache',
                             mode: 'cors',
@@ -3538,11 +3535,10 @@
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     body: testData,
-                    headers: {
-                        'Content-Type': 'application/octet-stream',
-                        'X-Upload-Test': 'parallel',
-                        'Cache-Control': 'no-cache'
-                    },
+                                            headers: {
+                            'Content-Type': 'application/octet-stream',
+                            'X-Upload-Test': 'parallel'
+                        },
                     cache: 'no-cache',
                     mode: 'cors'
                 });
@@ -4080,23 +4076,19 @@
             for (let round = 0; round < 5; round++) {
                 const roundTests = testEndpoints.map(async (endpoint) => {
                     try {
-                        const start = performance.now();
-                        const response = await fetch(endpoint, { 
+                    const start = performance.now();
+                                            const response = await fetch(endpoint, { 
                             method: 'HEAD',
                             cache: 'no-cache',
-                            mode: 'cors',
-                            headers: {
-                                'Cache-Control': 'no-cache',
-                                'Pragma': 'no-cache'
-                            }
+                            mode: 'cors'
                         });
-                        const end = performance.now();
+                    const end = performance.now();
                         if (response.ok && response.status < 400) {
                             return end - start;
-                        }
-                    } catch (e) {
-                        // Skip failed tests
                     }
+                } catch (e) {
+                    // Skip failed tests
+                }
                     return null;
                 });
                 
@@ -4164,9 +4156,9 @@
         // Test CORS support across different endpoints
         async function testCORSSupport() {
             const corsEndpoints = [
-                'https://httpbin.org/headers',
-                'https://api.github.com/zen',
-                'https://jsonplaceholder.typicode.com/posts/1'
+                'https://jsonplaceholder.typicode.com/posts/1',
+                'https://jsonplaceholder.typicode.com/users/1',
+                'https://httpbin.org/get'
             ];
             
             let supportedEndpoints = 0;
@@ -4196,9 +4188,9 @@
         // Test HTTP/2 support detection
         async function testHTTP2Support() {
             try {
-                // Try to detect HTTP/2 through various methods
+                // Use a CORS-friendly endpoint that supports HTTP/2
                 const start = performance.now();
-                const response = await fetch('https://http2.akamai.com/demo/h2_demo_frame.html', {
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1', {
                     method: 'HEAD',
                     cache: 'no-cache',
                     mode: 'cors'
@@ -4209,7 +4201,7 @@
                 return {
                     detected: response.ok && (end - start) < 500,
                     connectionTime: end - start,
-                    available: 'h2' in navigator.connection || window.chrome?.loadTimes
+                    available: 'h2' in (navigator.connection || {}) || !!window.chrome?.loadTimes
                 };
             } catch (e) {
                 return {
@@ -4344,7 +4336,7 @@
 
             // Protocol information
             if (results.network.protocol) {
-                metrics.push(
+            metrics.push(
                     { name: 'Protocol', value: results.network.protocol.current.toUpperCase() },
                     { name: 'Secure Connection', value: results.network.protocol.secure ? 'Yes (HTTPS)' : 'No (HTTP)' },
                     { name: 'HTTP/2 Detected', value: results.network.protocol.http2 ? 'Yes' : 'No' }
