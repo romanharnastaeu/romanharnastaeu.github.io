@@ -2791,14 +2791,53 @@
             container.innerHTML = `<div class="metrics-grid">${metricsHTML}</div>${memoryVisual}`;
         }
 
+        // Global test controller for cancellation
+        let globalTestController = null;
+        let isTestRunning = false;
+
+        function cancelSpeedTest() {
+            if (globalTestController) {
+                globalTestController.abort();
+                globalTestController = null;
+            }
+            isTestRunning = false;
+            
+            const button = document.getElementById('speedTestBtn');
+            button.textContent = '🧪 Run Full Speed Test';
+            button.disabled = false;
+            button.classList.remove('testing');
+            
+            // Update status
+            const statusElement = document.getElementById('testStatus');
+            if (statusElement) {
+                statusElement.textContent = '🛑 Test cancelled by user';
+            }
+            
+            // Stop visual effects
+            const speedVisual = document.getElementById('speedVisual');
+            if (speedVisual) {
+                speedVisual.classList.remove('testing');
+            }
+        }
+
         async function runFullSpeedTest() {
             const button = document.getElementById('speedTestBtn');
             const container = document.getElementById('speedTestMetrics');
             
-            // Disable button and show testing state
-            button.disabled = true;
+            // Check if test is already running
+            if (isTestRunning) {
+                cancelSpeedTest();
+                return;
+            }
+            
+            // Create global abort controller
+            globalTestController = new AbortController();
+            isTestRunning = true;
+            
+            // Update button to show cancel option
+            button.textContent = '🛑 Cancel Test';
+            button.disabled = false;
             button.classList.add('testing');
-            button.innerHTML = '🔄 Testing in Progress...';
             
             // Create visual speed test interface with server info
             container.innerHTML = `
@@ -2854,7 +2893,7 @@
                 // Test 1: Latency first (fastest test)
                 await updateStatus('🔍 Testing network latency...');
                 addServerLog('Starting latency tests', 'info');
-                const latencyResult = await comprehensiveLatencyTest();
+                const latencyResult = await comprehensiveLatencyTest(globalTestController?.signal);
                 updateLatencyGauge(latencyResult);
                 addServerLog(`Latency test completed: ${latencyResult.average.toFixed(2)}ms`, 'success');
                 
@@ -2923,10 +2962,14 @@
                 document.getElementById('detailedResults').innerHTML = 
                     '<div class="loading-message" style="color: #ff6b6b;">❌ Test failed - some endpoints may be blocked</div>';
             } finally {
+                // Reset global state
+                isTestRunning = false;
+                globalTestController = null;
+                
                 // Re-enable button
                 button.disabled = false;
                 button.classList.remove('testing');
-                button.innerHTML = '🔄 Run Test Again';
+                button.textContent = '🧪 Run Full Speed Test';
                 
                 // Stop visual effects
                 document.getElementById('speedVisual').classList.remove('testing');
@@ -3037,6 +3080,22 @@
             return data.filter(x => Math.abs(x - median) / medianDeviation <= threshold);
         }
 
+        // Helper function to calculate median of an array
+        function calculateMedian(values) {
+            if (values.length === 0) return 0;
+            
+            const sorted = [...values].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            
+            if (sorted.length % 2 === 0) {
+                // Even number of values - average of two middle values
+                return (sorted[mid - 1] + sorted[mid]) / 2;
+            } else {
+                // Odd number of values - middle value
+                return sorted[mid];
+            }
+        }
+
                 // Geographic endpoint selection with CORS-compatible endpoints
         function selectGeoEndpoints() {
             const language = navigator.language || 'en-US';
@@ -3045,7 +3104,7 @@
             // Use endpoints that properly support CORS
             const endpointsByRegion = {
                 'US': [
-                    'https://jsonplaceholder.typicode.com/posts/1',
+                'https://jsonplaceholder.typicode.com/posts/1',
                     'https://jsonplaceholder.typicode.com/users/1',
                     'https://jsonplaceholder.typicode.com/comments/1',
                     'https://httpbin.org/get'
@@ -3094,9 +3153,14 @@
             });
         }
 
-        async function comprehensiveLatencyTest() {
+        async function comprehensiveLatencyTest(signal = null) {
             const testEndpoints = selectGeoEndpoints();
             const results = [];
+            
+            // Check for cancellation
+            if (signal?.aborted) {
+                return { average: 0, median: 0, min: 0, max: 0, tests: 0, filteredTests: 0, rating: 'Cancelled' };
+            }
             
             // Parallel latency testing - fire all tests simultaneously
             const allTests = [];
@@ -3109,7 +3173,8 @@
                         const response = await fetch(endpoint, { 
                             method: 'HEAD',
                             cache: 'no-cache',
-                            mode: 'cors'
+                            mode: 'cors',
+                            signal: signal
                         });
                         const endTime = performance.now();
                         
@@ -3185,17 +3250,24 @@
             }
         }
 
-        // Chunked streaming download test with progress tracking
-        async function streamingDownloadTest(url, expectedSize, name, duration = 20000) {
+        // Enhanced chunked streaming download test with progress tracking
+        async function streamingDownloadTest(url, expectedSize, name, duration = 20000, signal = null) {
             return new Promise(async (resolve) => {
                 try {
+                    // Check for cancellation
+                    if (signal?.aborted) {
+                        resolve(null);
+                        return;
+                    }
+                    
                     // TCP warm-up
                     await tcpWarmup(url);
                     
                     const startTime = performance.now();
                     const response = await fetch(url, {
                         cache: 'no-cache',
-                        mode: 'cors'
+                        mode: 'cors',
+                        signal: signal
                     });
                     
                     if (!response.ok) {
@@ -3255,9 +3327,9 @@
                                 lastUpdate = currentTime;
                                 
                                 console.log(`${name}: ${intervalSpeed.toFixed(2)} Mbps (${totalBytes} bytes)`);
-                            }
                         }
-                    } catch (e) {
+                    }
+                } catch (e) {
                         clearTimeout(testTimeout);
                         resolve(null);
                     }
@@ -3267,8 +3339,8 @@
             });
         }
 
-        // Parallel download test with multiple connections
-        async function parallelDownloadTest(testUrls, connections = 6) {
+        // Enhanced parallel download test with signal support
+        async function parallelDownloadTest(testUrls, connections = 6, signal = null) {
             const allTests = [];
             
             // Create multiple parallel connections for better saturation
@@ -3279,7 +3351,8 @@
                             testUrl.url + `?parallel=${i}&t=${Date.now()}`, 
                             testUrl.size, 
                             `${testUrl.name} (Connection ${i + 1})`,
-                            18000 // 18 second test duration
+                            18000, // 18 second test duration
+                            signal
                         )
                     );
                 }
@@ -3287,13 +3360,32 @@
             
             // Run all tests in parallel
             const results = await Promise.all(allTests);
-            return results.filter(r => r !== null && r.speed > 0.1);
+            const validResults = results.filter(r => r !== null && r.speed > 0.1);
+            
+            // Use median filtering for more robust results
+            if (validResults.length > 0) {
+                const speeds = validResults.map(r => r.speed);
+                const filteredSpeeds = filterOutliersMAD(speeds);
+                
+                // Only keep results within the filtered speed range
+                const minSpeed = Math.min(...filteredSpeeds);
+                const maxSpeed = Math.max(...filteredSpeeds);
+                
+                return validResults.filter(r => r.speed >= minSpeed && r.speed <= maxSpeed);
+            }
+            
+            return validResults;
         }
 
         async function comprehensiveDownloadTest() {
             try {
                 // Try enhanced M-Lab NDT7 with parallel connections first
-                const mlabResult = await enhancedMLABSpeedTest();
+                const mlabResult = await runMLABSpeedTest({ 
+                    enhanced: true, 
+                    connections: 4, 
+                    timeout: 15000,
+                    signal: globalTestController?.signal 
+                });
                 if (mlabResult.download > 0) {
                     return {
                         average: mlabResult.download,
@@ -3324,24 +3416,26 @@
             ];
             
             // Run parallel download tests
-            const parallelResults = await parallelDownloadTest(testFiles, 4);
+            const parallelResults = await parallelDownloadTest(testFiles, 4, globalTestController?.signal);
             
             if (parallelResults.length > 0) {
                 // Use MAD for outlier removal
                 const speeds = parallelResults.map(r => r.speed);
                 const filteredSpeeds = filterOutliersMAD(speeds);
                 
-                const avgSpeed = filteredSpeeds.reduce((sum, s) => sum + s, 0) / filteredSpeeds.length;
+                // Use median for true robustness instead of average
+                const medianSpeed = calculateMedian(filteredSpeeds);
                 const maxSpeed = Math.max(...speeds);
                 const totalData = parallelResults.reduce((sum, r) => sum + r.size, 0);
                 
                 return {
-                    average: avgSpeed,
+                    average: medianSpeed, // Actually median for robustness
+                    median: medianSpeed,
                     max: maxSpeed,
                     tests: parallelResults.length,
                     totalData: totalData,
                     results: parallelResults,
-                    rating: avgSpeed > 25 ? 'Excellent' : avgSpeed > 10 ? 'Good' : avgSpeed > 5 ? 'Fair' : 'Poor',
+                    rating: medianSpeed > 25 ? 'Excellent' : medianSpeed > 10 ? 'Good' : medianSpeed > 5 ? 'Fair' : 'Poor',
                     provider: 'Enhanced Parallel Tests'
                 };
             }
@@ -3405,16 +3499,18 @@
                 const speeds = results.map(r => r.speed);
                 const filteredSpeeds = filterOutliersMAD(speeds);
                 
-                const avgSpeed = filteredSpeeds.reduce((sum, s) => sum + s, 0) / filteredSpeeds.length;
+                // Use median for true robustness instead of average
+                const medianSpeed = calculateMedian(filteredSpeeds);
                 const maxSpeed = Math.max(...speeds);
                 
                 return {
-                    average: avgSpeed,
+                    average: medianSpeed, // Actually median for robustness
+                    median: medianSpeed,
                     max: maxSpeed,
                     tests: results.length,
                     filteredTests: filteredSpeeds.length,
                     results: results,
-                    rating: avgSpeed > 50 ? 'Excellent' : avgSpeed > 10 ? 'Good' : avgSpeed > 5 ? 'Fair' : 'Poor',
+                    rating: medianSpeed > 50 ? 'Excellent' : medianSpeed > 10 ? 'Good' : medianSpeed > 5 ? 'Fair' : 'Poor',
                     provider: results[0].provider || 'Enhanced Upload Tests'
                 };
             }
@@ -3688,9 +3784,21 @@
             return results;
         }
 
-        // Enhanced M-Lab NDT7 with parallel connections
-        async function enhancedMLABSpeedTest() {
+        // Unified M-Lab NDT7 Speed Test with enhanced features
+        async function runMLABSpeedTest(options = {}) {
+            const {
+                enhanced = true,
+                connections = enhanced ? 4 : 1,
+                timeout = 15000,
+                signal = null
+            } = options;
+            
             try {
+                // Respect cancellation signal
+                if (signal?.aborted) {
+                    throw new DOMException('Test cancelled', 'AbortError');
+                }
+                
                 // First, locate the nearest M-Lab server
                 const server = await locateMLABServer();
                 if (!server) {
@@ -3703,88 +3811,86 @@
                     provider: 'Measurement Lab (M-Lab)',
                     machine: server.machine,
                     location: server.location,
-                    protocol: 'Enhanced NDT7 (Parallel)',
+                    protocol: enhanced ? 'Enhanced NDT7 (Parallel)' : 'NDT7 WebSocket',
                     testType: 'Professional Network Diagnostic'
                 }, 'connecting');
                 
-                // Run multiple parallel NDT7 connections (4-6 as recommended)
-                const connections = 4;
-                const parallelTests = [];
-                
-                for (let i = 0; i < connections; i++) {
-                    parallelTests.push(runEnhancedNDT7Test(server, 'download', i + 1));
-                }
-                
-                const results = await Promise.all(parallelTests);
-                const validResults = results.filter(r => r && r.speed > 0);
-                
-                if (validResults.length > 0) {
-                    const speeds = validResults.map(r => r.speed);
-                    const avgSpeed = speeds.reduce((a, b) => a + b, 0) / speeds.length;
-                    const maxSpeed = Math.max(...speeds);
-                    const totalBytes = validResults.reduce((sum, r) => sum + r.totalBytes, 0);
-                    const avgDuration = validResults.reduce((sum, r) => sum + r.duration, 0) / validResults.length;
+                if (enhanced && connections > 1) {
+                    // Run multiple parallel NDT7 connections
+                    const parallelTests = [];
                     
-                    return {
-                        download: avgSpeed,
-                        maxSpeed: maxSpeed,
-                        connections: validResults.length,
-                        upload: 0, // Upload test would be separate
-                        latency: validResults[0].latency,
-                        server: server.machine,
-                        location: server.location,
-                        totalBytes: totalBytes,
-                        duration: avgDuration
-                    };
-                }
-                
-                throw new Error('All parallel connections failed');
-                
-            } catch (error) {
-                console.error('Enhanced M-Lab test failed:', error);
-                addServerLog('Enhanced M-Lab connection failed, using fallback', 'error');
-                throw error;
-            }
-        }
-
-        // M-Lab NDT7 Speed Test Implementation (Legacy single connection)
-        async function runMLABSpeedTest() {
-            try {
-                // First, locate the nearest M-Lab server
-                const server = await locateMLABServer();
-                if (!server) {
-                    throw new Error('Could not locate M-Lab server');
-                }
-                
-                // Update server info immediately when we get server details
-                addServerLog(`Located M-Lab server: ${server.machine}`, 'success');
-                updateServerInfo({
-                    provider: 'Measurement Lab (M-Lab)',
-                    machine: server.machine,
-                    location: server.location,
-                    protocol: 'NDT7 WebSocket',
-                    testType: 'Professional Network Diagnostic'
-                }, 'connecting');
-                
-                // Run NDT7 download test
-                const downloadResult = await runNDT7Test(server, 'download');
+                    for (let i = 0; i < connections; i++) {
+                        parallelTests.push(runEnhancedNDT7Test(server, 'download', i + 1, timeout, signal));
+                    }
+                    
+                    const results = await Promise.all(parallelTests);
+                    const validResults = results.filter(r => r && r.speed > 0);
+                    
+                    if (validResults.length > 0) {
+                        const speeds = validResults.map(r => r.speed);
+                        
+                        // Use median instead of average for more robust results
+                        const sortedSpeeds = speeds.sort((a, b) => a - b);
+                        const medianSpeed = sortedSpeeds[Math.floor(sortedSpeeds.length / 2)];
+                        const maxSpeed = Math.max(...speeds);
+                        
+                        const totalBytes = validResults.reduce((sum, r) => sum + r.totalBytes, 0);
+                        const avgDuration = validResults.reduce((sum, r) => sum + r.duration, 0) / validResults.length;
+                        
+                        // Collect TCP metrics
+                        const tcpMetrics = validResults.reduce((acc, r) => {
+                            if (r.tcpMetrics) {
+                                acc.retransmissions += r.tcpMetrics.retransmissions || 0;
+                                acc.rttSamples.push(...(r.tcpMetrics.rttSamples || []));
+                                acc.congestionWindow.push(...(r.tcpMetrics.congestionWindow || []));
+                            }
+                            return acc;
+                        }, { retransmissions: 0, rttSamples: [], congestionWindow: [] });
                 
                 return {
-                    download: downloadResult.speed,
+                            download: medianSpeed,
+                            maxSpeed: maxSpeed,
+                            connections: validResults.length,
                     upload: 0, // Upload test would be separate
+                            latency: validResults[0].latency,
+                            server: server.machine,
+                            location: server.location,
+                            totalBytes: totalBytes,
+                            duration: avgDuration,
+                            tcpMetrics: tcpMetrics,
+                            enhanced: true
+                        };
+                    }
+                    
+                    throw new Error('All parallel connections failed');
+                } else {
+                    // Single connection fallback
+                    const downloadResult = await runNDT7Test(server, 'download', timeout, signal);
+                    
+                    return {
+                        download: downloadResult.speed,
+                        upload: 0,
                     latency: downloadResult.latency,
                     server: server.machine,
                     location: server.location,
                     totalBytes: downloadResult.totalBytes,
-                    duration: downloadResult.duration
+                        duration: downloadResult.duration,
+                        enhanced: false
                 };
+                }
                 
             } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log('M-Lab test cancelled by user');
+                    throw error;
+                }
                 console.error('M-Lab test failed:', error);
                 addServerLog('M-Lab connection failed, using fallback', 'error');
                 throw error;
             }
         }
+
+
 
         async function locateMLABServer() {
             try {
@@ -3822,9 +3928,21 @@
         }
 
         // Enhanced NDT7 test with TCP metrics analysis
-        async function runEnhancedNDT7Test(server, direction = 'download', connectionId = 1) {
+        async function runEnhancedNDT7Test(server, direction = 'download', connectionId = 1, timeout = 20000, signal = null) {
             return new Promise((resolve, reject) => {
                 try {
+                    // Check for cancellation
+                    if (signal?.aborted) {
+                        reject(new DOMException('Test cancelled', 'AbortError'));
+                        return;
+                    }
+                    
+                    // Listen for abort signal
+                    const abortListener = () => {
+                        reject(new DOMException('Test cancelled', 'AbortError'));
+                    };
+                    signal?.addEventListener('abort', abortListener);
+                    
                     // Construct proper WebSocket URL for NDT7
                     let wsUrl;
                     if (server.urls && server.urls['wss:///ndt/v7/download']) {
@@ -3937,13 +4055,31 @@
                         reject(new Error(`M-Lab connection ${connectionId} failed`));
                     };
                     
-                    // Extended timeout for longer tests (20 seconds)
-                    setTimeout(() => {
+                    // Extended timeout for longer tests (configurable)
+                    const timeoutId = setTimeout(() => {
                         if (ws.readyState === WebSocket.OPEN) {
                             console.log(`[Connection ${connectionId}] M-Lab test timeout, closing connection`);
                             ws.close();
                         }
-                    }, 20000); // 20 second timeout for extended tests
+                    }, timeout);
+                    
+                    // Clean up on completion
+                    const cleanup = () => {
+                        clearTimeout(timeoutId);
+                        signal?.removeEventListener('abort', abortListener);
+                    };
+                    
+                    // Update resolve and reject to include cleanup
+                    const originalResolve = resolve;
+                    const originalReject = reject;
+                    resolve = (value) => {
+                        cleanup();
+                        originalResolve(value);
+                    };
+                    reject = (error) => {
+                        cleanup();
+                        originalReject(error);
+                    };
                     
                 } catch (error) {
                     reject(error);
@@ -4077,11 +4213,11 @@
                 const roundTests = testEndpoints.map(async (endpoint) => {
                     try {
                     const start = performance.now();
-                                            const response = await fetch(endpoint, { 
-                            method: 'HEAD',
-                            cache: 'no-cache',
-                            mode: 'cors'
-                        });
+                    const response = await fetch(endpoint, { 
+                        method: 'HEAD',
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
                     const end = performance.now();
                         if (response.ok && response.status < 400) {
                             return end - start;
