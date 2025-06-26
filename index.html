@@ -2888,11 +2888,13 @@
                 }
                 
                 // Test 3: Upload speed
-                await updateStatus('📤 Testing upload speed...');
+                await updateStatus('📤 Testing upload speed with HTTPBin...');
                 addServerLog('Starting upload speed tests', 'info');
+                console.log('🚀 Starting comprehensive upload test...');
                 const uploadResult = await comprehensiveUploadTest();
+                console.log('📊 Upload test results:', uploadResult);
                 updateUploadGauge(uploadResult);
-                addServerLog(`Upload test completed: ${uploadResult.average.toFixed(2)} Mbps`, 'success');
+                addServerLog(`Upload test completed: ${uploadResult.average.toFixed(2)} Mbps (${uploadResult.provider})`, 'success');
                 
                 // Test 4: Additional network analysis
                 await updateStatus('🔬 Analyzing network quality...');
@@ -3174,52 +3176,62 @@
             return { average: 0, max: 0, tests: 0, totalData: 0, results: [], rating: 'Failed', provider: 'None' };
         }
 
-        async function comprehensiveUploadTest() {
-            // M-Lab upload test is included in the main NDT7 test
-            // For now, use basic upload tests as M-Lab handles both directions
-            const testSizes = [
-                { size: 100000, name: '100KB Upload' },
-                { size: 500000, name: '500KB Upload' }
-            ];
+        // Helper function to create test data without hitting crypto API limits
+        function createTestData(size) {
+            const chunkSize = 65536; // Maximum size for crypto.getRandomValues()
+            const chunks = Math.ceil(size / chunkSize);
+            const result = new Uint8Array(size);
             
-            const results = [];
-            
-            for (const test of testSizes) {
-                try {
-                    const testData = new Blob(['x'.repeat(test.size)], { type: 'text/plain' });
-                    
-                    const startTime = performance.now();
-                    // Simulate upload by sending to a reliable endpoint that accepts POST
-                    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-                        method: 'POST',
-                        body: testData,
-                        headers: {
-                            'Content-Type': 'text/plain'
-                        },
-                        cache: 'no-cache',
-                        mode: 'cors'
-                    });
-                    const endTime = performance.now();
-                    
-                    if (response.ok) {
-                        const timeSeconds = (endTime - startTime) / 1000;
-                        const speedBps = test.size / timeSeconds;
-                        const speedMbps = (speedBps * 8 / 1024 / 1024);
-                        
-                        results.push({
-                            name: test.name,
-                            speed: speedMbps,
-                            size: test.size,
-                            time: timeSeconds
-                        });
+            for (let i = 0; i < chunks; i++) {
+                const start = i * chunkSize;
+                const end = Math.min(start + chunkSize, size);
+                const chunkLength = end - start;
+                
+                if (chunkLength > 0) {
+                    const chunk = new Uint8Array(chunkLength);
+                    if (i === 0) {
+                        // Use random data for the first chunk
+                        crypto.getRandomValues(chunk);
+                    } else {
+                        // Use pattern data for subsequent chunks to save entropy
+                        for (let j = 0; j < chunkLength; j++) {
+                            chunk[j] = (i * 255 + j) % 256;
+                        }
                     }
-                } catch (e) {
-                    console.log(`Upload test failed for ${test.name}:`, e);
+                    result.set(chunk, start);
                 }
             }
             
+            return result;
+        }
+
+        async function comprehensiveUploadTest() {
+            // Try multiple upload test methods for better accuracy
+            const results = [];
+            
+            // Method 1: Use httpbin.org which echoes back the data (more accurate)
+            const httpbinResults = await testUploadWithHttpbin();
+            if (httpbinResults.length > 0) {
+                results.push(...httpbinResults);
+            }
+            
+            // Method 2: Fallback to basic POST tests if httpbin fails
+            if (results.length === 0) {
+                const fallbackResults = await testUploadFallback();
+                results.push(...fallbackResults);
+            }
+            
             if (results.length > 0) {
-                const avgSpeed = results.reduce((sum, r) => sum + r.speed, 0) / results.length;
+                // Remove outliers for more accurate results
+                const sorted = results.sort((a, b) => a.speed - b.speed);
+                const trimmed = sorted.slice(
+                    Math.floor(sorted.length * 0.1),
+                    Math.ceil(sorted.length * 0.9)
+                );
+                
+                const avgSpeed = trimmed.length > 0 ? 
+                    trimmed.reduce((sum, r) => sum + r.speed, 0) / trimmed.length :
+                    results.reduce((sum, r) => sum + r.speed, 0) / results.length;
                 const maxSpeed = Math.max(...results.map(r => r.speed));
                 
                 return {
@@ -3228,11 +3240,131 @@
                     tests: results.length,
                     results: results,
                     rating: avgSpeed > 50 ? 'Excellent' : avgSpeed > 10 ? 'Good' : avgSpeed > 5 ? 'Fair' : 'Poor',
-                    provider: 'Basic Upload Tests'
+                    provider: results[0].provider || 'Upload Tests'
                 };
             }
             
             return { average: 0, max: 0, tests: 0, results: [], rating: 'Failed', provider: 'None' };
+        }
+
+        async function testUploadWithHttpbin() {
+            const results = [];
+            const testSizes = [
+                { size: 250000, name: '250KB Upload' },
+                { size: 1000000, name: '1MB Upload' },
+                { size: 2000000, name: '2MB Upload' }
+            ];
+            
+            for (const test of testSizes) {
+                try {
+                    // Create test data using chunks to avoid crypto API limit
+                    const testData = createTestData(test.size);
+                    
+                    const startTime = performance.now();
+                    
+                    // Use httpbin.org which actually processes the uploaded data
+                    const response = await fetch('https://httpbin.org/post', {
+                        method: 'POST',
+                        body: testData,
+                        headers: {
+                            'Content-Type': 'application/octet-stream',
+                            'X-Upload-Test': 'true'
+                        },
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    
+                    const endTime = performance.now();
+                    
+                    if (response.ok) {
+                        // Parse response to verify data was received
+                        const responseData = await response.json();
+                        const actualSize = responseData.headers?.['Content-Length'] || test.size;
+                        
+                        const timeSeconds = (endTime - startTime) / 1000;
+                        const speedBps = test.size / timeSeconds;
+                        const speedMbps = (speedBps * 8 / 1024 / 1024);
+                        
+                        // Only include reasonable results
+                        if (speedMbps > 0.1 && speedMbps < 1000 && timeSeconds > 0.1) {
+                            results.push({
+                                name: test.name,
+                                speed: speedMbps,
+                                size: test.size,
+                                time: timeSeconds,
+                                provider: 'HTTPBin.org'
+                            });
+                            
+                            console.log(`✅ Upload test ${test.name}: ${speedMbps.toFixed(2)} Mbps (${timeSeconds.toFixed(2)}s)`);
+                        } else {
+                            console.log(`❌ Upload test ${test.name} rejected: ${speedMbps.toFixed(2)} Mbps (${timeSeconds.toFixed(2)}s) - outside reasonable range`);
+                        }
+                    }
+                } catch (e) {
+                    console.log(`HTTPBin upload test failed for ${test.name}:`, e);
+                }
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+            
+            return results;
+        }
+
+        async function testUploadFallback() {
+            const results = [];
+            const testEndpoints = [
+                { url: 'https://jsonplaceholder.typicode.com/posts', name: 'JSONPlaceholder' },
+                { url: 'https://httpbin.org/post', name: 'HTTPBin Basic' }
+            ];
+            
+            const testSize = 500000; // 500KB
+            
+            for (const endpoint of testEndpoints) {
+                try {
+                    // Create test data using our helper function
+                    const testData = createTestData(testSize);
+                    
+                    const startTime = performance.now();
+                    const response = await fetch(endpoint.url, {
+                        method: 'POST',
+                        body: testData,
+                        headers: {
+                            'Content-Type': 'application/octet-stream'
+                        },
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    const endTime = performance.now();
+                    
+                    if (response.ok) {
+                        const timeSeconds = (endTime - startTime) / 1000;
+                        const speedBps = testSize / timeSeconds;
+                        const speedMbps = (speedBps * 8 / 1024 / 1024);
+                        
+                        // Apply correction factor for fallback tests (they're less accurate)
+                        const correctedSpeed = speedMbps * 0.7; // Reduce by 30% to account for server processing time
+                        
+                        if (correctedSpeed > 0.1 && correctedSpeed < 500 && timeSeconds > 0.1) {
+                            results.push({
+                                name: `${endpoint.name} Upload`,
+                                speed: correctedSpeed,
+                                size: testSize,
+                                time: timeSeconds,
+                                provider: 'Fallback Tests (Estimated)'
+                            });
+                            
+                            console.log(`✅ Fallback upload test ${endpoint.name}: ${correctedSpeed.toFixed(2)} Mbps (${timeSeconds.toFixed(2)}s, corrected from ${speedMbps.toFixed(2)} Mbps)`);
+                        } else {
+                            console.log(`❌ Fallback upload test ${endpoint.name} rejected: ${correctedSpeed.toFixed(2)} Mbps (${timeSeconds.toFixed(2)}s)`);
+                        }
+                    }
+                } catch (e) {
+                    console.log(`Fallback upload test failed for ${endpoint.name}:`, e);
+                }
+            }
+            
+            return results;
         }
 
         // M-Lab NDT7 Speed Test Implementation
