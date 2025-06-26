@@ -1,4 +1,4 @@
-# 🚀 Interactive CV — A Frontend Playground
+# 🚀 Interactive CV
 
 Welcome! This isn't your typical static résumé. It's a single-page, interactive CV that doubles as a showcase for modern frontend tricks—everything from pixel-glow animations to live GitHub API calls, all written in vanilla HTML, CSS & JavaScript.
 
