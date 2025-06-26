@@ -176,6 +176,154 @@ function copyToClipboard(text, type) {
 }
 ```
 
+### 10. Internet Speed Test 🌐
+Diagnostic tool that rivals commercial speed test services:
+
+#### **M-Lab NDT7 Integration**
+Uses Measurement Lab's professional infrastructure for accurate download testing:
+
+```javascript
+async function runMLABSpeedTest() {
+  // Locate nearest M-Lab server
+  const server = await locateMLABServer();
+  
+  // Establish WebSocket connection for NDT7 protocol
+  const ws = new WebSocket(server.wsUrl, 'net.measurementlab.ndt.v7');
+  
+  ws.onmessage = (event) => {
+    if (event.data instanceof Blob) {
+      totalBytes += event.data.size;
+      const speedMbps = (totalBytes * 8) / (duration * 1024 * 1024);
+      updateDownloadGauge(speedMbps);
+    }
+  };
+}
+```
+
+#### **Smart Upload Testing**
+Multi-tier upload testing with automatic fallbacks and data generation:
+
+```javascript
+// Bypass crypto API 65KB limit with chunked data generation
+function createTestData(size) {
+  const chunkSize = 65536;
+  const chunks = Math.ceil(size / chunkSize);
+  const result = new Uint8Array(size);
+  
+  for (let i = 0; i < chunks; i++) {
+    const chunk = new Uint8Array(chunkLength);
+    if (i === 0) {
+      crypto.getRandomValues(chunk); // Real random data for first chunk
+    } else {
+      // Pattern data for remaining chunks
+      for (let j = 0; j < chunkLength; j++) {
+        chunk[j] = (i * 255 + j) % 256;
+      }
+    }
+    result.set(chunk, start);
+  }
+  return result;
+}
+
+async function comprehensiveUploadTest() {
+  // Primary: HTTPBin.org for accurate echo testing
+  const httpbinResults = await testUploadWithHttpbin();
+  
+  // Fallback: Multiple endpoints with correction factors
+  if (httpbinResults.length === 0) {
+    const fallbackResults = await testUploadFallback();
+    // Apply 30% correction for server processing overhead
+    results.forEach(r => r.speed *= 0.7);
+  }
+  
+  // Remove outliers (top/bottom 10%)
+  const trimmed = results.slice(
+    Math.floor(results.length * 0.1),
+    Math.ceil(results.length * 0.9)
+  );
+  
+  return calculateAverageSpeed(trimmed);
+}
+```
+
+#### **Multi-Round Latency Testing**
+Enhanced ping testing with outlier removal and multiple endpoints:
+
+```javascript
+async function comprehensiveLatencyTest() {
+  const testEndpoints = [
+    'https://jsonplaceholder.typicode.com/posts/1',
+    'https://api.github.com',
+    'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+  ];
+  
+  const results = [];
+  
+  // Multiple rounds for statistical accuracy
+  for (let round = 0; round < 2; round++) {
+    for (const endpoint of testEndpoints) {
+      const startTime = performance.now();
+      const response = await fetch(endpoint, { method: 'HEAD' });
+      const latency = performance.now() - startTime;
+      
+      // Filter unrealistic results (cached or errors)
+      if (latency > 1 && latency < 5000 && response.ok) {
+        results.push(latency);
+      }
+    }
+  }
+  
+  // Remove outliers for accuracy
+  const sorted = results.sort((a, b) => a - b);
+  const trimmed = sorted.slice(
+    Math.floor(sorted.length * 0.1),
+    Math.ceil(sorted.length * 0.9)
+  );
+  
+  return {
+    average: trimmed.reduce((a, b) => a + b) / trimmed.length,
+    min: Math.min(...results),
+    max: Math.max(...results)
+  };
+}
+```
+
+#### **Real-Time Visual Feedback**
+Dynamic gauges and server information with live updates:
+
+```javascript
+function updateDownloadGauge(speedMbps) {
+  const gauge = document.getElementById('downloadGauge');
+  const percentage = Math.min(speedMbps / 100 * 100, 100);
+  
+  // Smooth animation
+  gauge.style.width = `${percentage}%`;
+  document.getElementById('downloadValue').textContent = `${speedMbps.toFixed(1)} Mbps`;
+}
+
+function updateServerInfo(serverData) {
+  // Display M-Lab server details
+  document.getElementById('serverDetails').innerHTML = `
+    <div class="server-detail">
+      <span>Provider</span>
+      <span>${serverData.provider}</span>
+    </div>
+    <div class="server-detail">
+      <span>Location</span>
+      <span>${serverData.location.city}, ${serverData.location.country}</span>
+    </div>
+  `;
+}
+```
+
+#### **Key Features:**
+- **Professional Infrastructure**: Uses M-Lab's global network of servers
+- **Accurate Measurements**: NDT7 protocol for download, multi-size uploads
+- **Outlier Filtering**: Statistical analysis removes anomalous results
+- **Fallback Systems**: Multiple endpoints ensure tests complete successfully
+- **Real-Time Logging**: Detailed console output for transparency
+- **Visual Feedback**: Live gauges and server information updates
+
 ---
 
 ## 🛠 Tech Stack & Features
@@ -183,7 +331,9 @@ function copyToClipboard(text, type) {
 **Vanilla HTML/CSS/JS** (no frameworks!)  
 **CSS Grid & Flexbox** for responsive layouts  
 **Keyframes, transitions, filters** for smooth animations  
-**Fetch API + async/await** for GitHub data  
+**Fetch API + async/await** for GitHub data & speed testing  
+**WebSocket connections** for M-Lab NDT7 protocol  
+**Professional speed testing** with statistical analysis  
 **Progressive enhancement** & accessibility best practices  
 **Lazy loading** and optimized assets for performance  
 
