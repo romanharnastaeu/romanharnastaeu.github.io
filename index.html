@@ -1,1287 +1,537 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en-CA">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>harnastaeuDev</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
-
-    :root {
-        --bg: #f4f5f7;
-        --surface: #ffffff;
-        --surface-2: #f0f2f5;
-        --text: #1b1f24;
-        --muted: #5b6572;
-        --accent: #2f7a6a;
-        --border: #e2e6eb;
-        --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-    }
-
-    [data-theme="dark"] {
-        --bg: #0e1411;
-        --surface: #171d1a;
-        --surface-2: #1f2622;
-        --text: #f1f5f3;
-        --muted: #c3cbc7;
-        --accent: #5ad1b0;
-        --border: #2a3530;
-        --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-    }
-
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Inter', sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        line-height: 1.6;
-        padding: 32px 16px 64px;
-        min-height: 100vh;
-        overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .container {
-        max-width: 960px;
-        margin: 0 auto;
-    }
-
-    .header {
-        text-align: left;
-        margin-bottom: 32px;
-        padding: 28px;
-        border: 1px solid var(--border);
-        background: var(--surface);
-        box-shadow: var(--shadow);
-        border-radius: 16px;
-    }
-
-    .header h1 {
-        font-size: 28px;
-        margin-bottom: 10px;
-        color: var(--text);
-    }
-
-    .header .subtitle {
-        font-size: 13px;
-        color: var(--muted);
-        margin-top: 6px;
-        letter-spacing: 0.08em;
-    }
-
-    .profile-section {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    .profile-image {
-        width: 120px;
-        height: 120px;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        image-rendering: auto;
-        flex-shrink: 0;
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
-    }
-
-    .profile-text {
-        text-align: left;
-        flex: 1;
-        min-width: 220px;
-    }
-
-    .header-actions {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-    }
-
-    .github-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 14px;
-        border-radius: 999px;
-        background: var(--accent);
-        color: #ffffff;
-        font-size: 12px;
-        font-weight: 600;
-        text-decoration: none;
-        border: 1px solid var(--accent);
-        transition: all 0.2s ease;
-        white-space: nowrap;
-    }
-
-    .github-btn:hover {
-        background: #256654;
-        border-color: #256654;
-    }
-
-    .theme-toggle {
-        margin-left: 10px;
-        padding: 8px 14px;
-        border-radius: 999px;
-        background: var(--surface-2);
-        color: var(--text);
-        border: 1px solid var(--border);
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .theme-toggle:hover {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #ffffff;
-    }
-
-
-
-    .section {
-        margin-bottom: 20px;
-        border: 1px solid var(--border);
-        background: var(--surface);
-        border-radius: 14px;
-        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-        overflow: hidden;
-        transition: box-shadow 0.2s ease;
-    }
-
-    .section:hover {
-        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
-        transform: translateY(-1px);
-    }
-
-    .section-header {
-        padding: 16px 18px;
-        cursor: pointer;
-        border-bottom: 1px solid var(--border);
-        background: var(--surface-2);
-    }
-
-    .section-title {
-        font-size: 12px;
-        color: var(--muted);
-        text-transform: uppercase;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        letter-spacing: 0.12em;
-    }
-
-    .section-icon {
-        font-size: 10px;
-        transition: transform 0.3s ease;
-        color: var(--muted);
-    }
-
-    .section.collapsed .section-icon {
-        transform: rotate(-90deg);
-    }
-
-    .section-content {
-        padding: 18px;
-        max-height: 1200px;
-        opacity: 1;
-        transition: all 0.4s ease;
-        overflow: hidden;
-    }
-
-    .section.collapsed .section-content {
-        max-height: 0;
-        opacity: 0;
-        padding: 0 18px;
-    }
-
-    .item {
-        margin-bottom: 12px;
-        padding: 14px 16px;
-        border: 1px solid var(--border);
-        background: #ffffff;
-        border-radius: 12px;
-    }
-
-    [data-theme="dark"] .item,
-    [data-theme="dark"] .project-list li,
-    [data-theme="dark"] .github-list li,
-    [data-theme="dark"] .links-list li,
-    [data-theme="dark"] .activity-card,
-    [data-theme="dark"] .repo-card,
-    [data-theme="dark"] .activity-item,
-    [data-theme="dark"] .subsection,
-    [data-theme="dark"] .diagnostic-status,
-    [data-theme="dark"] .diagnostic-report {
-        background: var(--surface);
-        border-color: var(--border);
-    }
-
-    [data-theme="dark"] .section-header,
-    [data-theme="dark"] .subsection-header {
-        background: var(--surface-2);
-    }
-
-    [data-theme="dark"] .item-title,
-    [data-theme="dark"] .section-title,
-    [data-theme="dark"] .subsection-title,
-    [data-theme="dark"] .activity-type {
-        color: var(--text);
-    }
-
-    [data-theme="dark"] .item-desc,
-    [data-theme="dark"] .repo-description,
-    [data-theme="dark"] .activity-time {
-        color: var(--muted);
-    }
-
-    .item-title {
-        font-size: 15px;
-        color: var(--text);
-        margin-bottom: 6px;
-        font-weight: 600;
-    }
-
-    .item-desc {
-        font-size: 14px;
-        color: var(--muted);
-        line-height: 1.6;
-    }
-
-    [data-theme="dark"] .item-desc,
-    [data-theme="dark"] .project-list li,
-    [data-theme="dark"] .github-list li,
-    [data-theme="dark"] .links-list li {
-        color: var(--muted);
-    }
-
-    .github-list, .project-list, .links-list {
-        list-style: none;
-    }
-
-    .github-list li, .project-list li, .links-list li {
-        margin-bottom: 12px;
-        padding: 14px 16px;
-        border: 1px solid var(--border);
-        background: #ffffff;
-        font-size: 14px;
-        border-radius: 12px;
-    }
-
-    .github-list li a, .project-list li a, .links-list li a {
-        color: var(--accent);
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-
-    .github-list li a:hover, .project-list li a:hover, .links-list li a:hover {
-        color: #1f5e50;
-    }
-
-    .project-link {
-        display: inline-block;
-        color: var(--accent) !important;
-        text-decoration: none !important;
-        border: 1px solid rgba(47, 122, 106, 0.3);
-        padding: 6px 10px;
-        border-radius: 8px;
-        background: rgba(47, 122, 106, 0.08);
-        margin-top: 8px;
-        font-weight: 600;
-    }
-
-    .project-link:hover {
-        color: #ffffff !important;
-        background: var(--accent);
-        border-color: var(--accent);
-    }
-
-    .contact-link {
-        color: var(--accent) !important;
-        cursor: pointer;
-        text-decoration: underline;
-    }
-
-    .location-info {
-        color: var(--muted);
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 2000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(15, 23, 42, 0.55);
-        backdrop-filter: blur(6px);
-    }
-
-    .modal-content {
-        background: var(--surface);
-        margin: 15% auto;
-        padding: 24px;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        width: 90%;
-        max-width: 420px;
-        text-align: center;
-        box-shadow: var(--shadow);
-    }
-
-    .modal-title {
-        font-size: 15px;
-        color: var(--text);
-        margin-bottom: 16px;
-        font-weight: 600;
-    }
-
-    .modal-buttons {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        margin-top: 18px;
-    }
-
-    .modal-btn {
-        background: var(--accent);
-        color: #ffffff;
-        border: 1px solid var(--accent);
-        padding: 10px 16px;
-        font-family: 'Inter', sans-serif;
-        font-size: 12px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        flex: 1;
-        max-width: 160px;
-    }
-
-    .modal-btn:hover {
-        background: #256654;
-        border-color: #256654;
-        transform: translateY(-1px);
-    }
-
-    .modal-btn.cancel {
-        background: #e5e7eb;
-        border-color: #e5e7eb;
-        color: #1f2937;
-    }
-
-    .modal-btn.cancel:hover {
-        background: #d1d5db;
-        border-color: #d1d5db;
-    }
-
-    .diploma-progress {
-        margin-top: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-    }
-
-    .mini-battery-container {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .mini-battery-body {
-        width: 140px;
-        height: 12px;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: #eef2f6;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .mini-battery-fill {
-        height: 100%;
-        position: relative;
-    }
-
-    .mini-battery-segments {
-        display: flex;
-        height: 100%;
-        width: 140px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        gap: 2px;
-    }
-
-    .mini-segment {
-        flex: 1;
-        height: 100%;
-        border-radius: 999px;
-        background: rgba(47, 122, 106, 0.12);
-    }
-
-    .mini-segment.filled {
-        background: linear-gradient(90deg, #2f7a6a, #6cc8b3);
-    }
-
-    .mini-segment.empty {
-        background: rgba(47, 122, 106, 0.08);
-        border: none;
-    }
-
-    .mini-battery-tip {
-        width: 8px;
-        height: 8px;
-        background: var(--accent);
-        border-radius: 999px;
-    }
-
-    .diploma-text {
-        font-size: 12px;
-        color: var(--muted);
-        text-align: left;
-    }
-
-    .percentage {
-        color: var(--accent);
-        font-weight: 700;
-        text-shadow: none;
-    }
-
-    .loading-dots {
-        display: inline-block;
-    }
-
-    .dot1, .dot2, .dot3 {
-        animation: typingDots 2s infinite;
-    }
-
-    .dot2 {
-        animation-delay: 0.2s;
-    }
-
-    .dot3 {
-        animation-delay: 0.4s;
-    }
-
-    @keyframes typingDots {
-        0% { opacity: 0.3; }
-        50% { opacity: 1; }
-        100% { opacity: 0.3; }
-    }
-
-    .resume-container {
-        padding: 12px;
-    }
-
-    .resume-image {
-        width: 100%;
-        height: auto;
-        display: block;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-    }
-
-    .subsection {
-        margin-bottom: 12px;
-        border: 1px solid var(--border);
-        background: #ffffff;
-        border-radius: 12px;
-    }
-
-    .subsection-header {
-        padding: 12px 14px;
-        cursor: pointer;
-        border-bottom: 1px solid var(--border);
-        background: var(--surface-2);
-    }
-
-    .subsection-title {
-        font-size: 12px;
-        color: var(--muted);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
-
-    .subsection-icon {
-        font-size: 10px;
-        transition: transform 0.3s ease;
-        color: var(--muted);
-    }
-
-    .subsection.collapsed .subsection-icon {
-        transform: rotate(-90deg);
-    }
-
-    .subsection-content {
-        padding: 14px;
-        max-height: 600px;
-        opacity: 1;
-        transition: all 0.4s ease;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .subsection.collapsed .subsection-content {
-        max-height: 0;
-        opacity: 0;
-        padding: 0 14px;
-    }
-
-    .skills-grid {
-        display: grid;
-        gap: 10px;
-    }
-
-    .skill-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .skill-item:last-child {
-        border-bottom: none;
-    }
-
-    .skill-name {
-        font-size: 13px;
-        color: var(--text);
-        min-width: 80px;
-        flex-shrink: 0;
-    }
-
-    .skill-level {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex: 1;
-        margin-left: 12px;
-    }
-
-    .skill-bar {
-        flex: 1;
-        height: 8px;
-        background: #eef2f6;
-        border: 1px solid #d9dee5;
-        border-radius: 999px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .skill-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #2f7a6a, #6cc8b3);
-        border-radius: 999px;
-        transition: width 1.2s ease-in-out;
-    }
-
-    .skill-percentage {
-        font-size: 12px;
-        color: var(--muted);
-        min-width: 30px;
-        text-align: right;
-    }
-
-    .skills-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .skill-tag {
-        display: inline-block;
-        padding: 6px 10px;
-        background: rgba(47, 122, 106, 0.08);
-        border: 1px solid rgba(47, 122, 106, 0.2);
-        border-radius: 999px;
-        font-size: 12px;
-        color: var(--accent);
-        cursor: default;
-    }
-
-    .skill-tag:hover {
-        background: rgba(47, 122, 106, 0.14);
-    }
-
-    .main-account-section {
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .account-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .main-account-title {
-        font-size: 14px;
-        color: var(--text);
-        margin: 0;
-    }
-
-    .main-account-link {
-        color: var(--accent);
-        text-decoration: none;
-    }
-
-    .main-account-link:hover {
-        color: #1f5e50;
-    }
-
-    .other-accounts-title {
-        font-size: 12px;
-        color: var(--muted);
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
-
-    .activity-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 12px;
-        margin-bottom: 18px;
-    }
-
-    .activity-card {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px;
-        background: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-    }
-
-    .activity-icon {
-        font-size: 16px;
-    }
-
-    .activity-number {
-        font-size: 16px;
-        color: var(--text);
-        font-weight: 700;
-    }
-
-    .activity-label {
-        font-size: 11px;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-    }
-
-    .repo-grid {
-        display: grid;
-        gap: 12px;
-    }
-
-    .repo-card {
-        padding: 14px;
-        background: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-    }
-
-    .repo-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
-
-    .repo-name {
-        font-size: 13px;
-        color: var(--accent);
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-    .repo-stats {
-        display: flex;
-        gap: 10px;
-        font-size: 11px;
-        color: var(--muted);
-    }
-
-    .repo-description {
-        font-size: 13px;
-        color: var(--muted);
-        line-height: 1.4;
-        margin-bottom: 8px;
-    }
-
-    .repo-language {
-        font-size: 11px;
-        color: var(--accent);
-        background: rgba(47, 122, 106, 0.08);
-        padding: 2px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(47, 122, 106, 0.2);
-    }
-
-    .language-stats {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .language-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .language-name {
-        font-size: 12px;
-        color: var(--text);
-        min-width: 90px;
-    }
-
-    .language-bar {
-        flex: 1;
-        height: 8px;
-        background: #eef2f6;
-        border: 1px solid #d9dee5;
-        border-radius: 999px;
-        overflow: hidden;
-    }
-
-    .language-fill {
-        height: 100%;
-        border-radius: 999px;
-        transition: width 1.2s ease-in-out;
-    }
-
-    .language-percentage {
-        font-size: 11px;
-        color: var(--muted);
-        min-width: 36px;
-        text-align: right;
-    }
-
-    .activity-feed {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .activity-item {
-        padding: 12px;
-        background: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        font-size: 12px;
-        color: var(--muted);
-    }
-
-    .activity-type {
-        color: var(--text);
-        font-weight: 600;
-        margin-bottom: 4px;
-    }
-
-    .activity-repo {
-        color: var(--accent);
-        text-decoration: none;
-    }
-
-    .activity-time {
-        color: #94a3b8;
-        font-size: 11px;
-    }
-
-    .repo-loading, .language-loading, .activity-loading {
-        text-align: center;
-        padding: 16px;
-        color: var(--muted);
-        font-size: 12px;
-    }
-
-    .diagnostic-panel {
-        display: grid;
-        gap: 12px;
-        font-size: 13px;
-        color: var(--muted);
-    }
-
-    .diagnostic-copy {
-        line-height: 1.6;
-    }
-
-    .diagnostic-controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .diagnostic-btn {
-        background: var(--accent);
-        color: #ffffff;
-        border: 1px solid var(--accent);
-        padding: 10px 14px;
-        font-family: 'Inter', sans-serif;
-        font-size: 12px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-    }
-
-    .diagnostic-btn:hover {
-        background: #256654;
-        border-color: #256654;
-        transform: translateY(-1px);
-    }
-
-    .diagnostic-btn:disabled {
-        cursor: not-allowed;
-        opacity: 0.7;
-    }
-
-    .diagnostic-note {
-        color: var(--muted);
-    }
-
-    .diagnostic-status {
-        padding: 10px 12px;
-        border: 1px solid var(--border);
-        background: #ffffff;
-        border-radius: 8px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
-    }
-
-    .diagnostic-report {
-        background: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 12px;
-        max-height: 260px;
-        overflow-y: auto;
-        white-space: pre-wrap;
-        color: var(--muted);
-        font-family: 'JetBrains Mono', monospace;
-        line-height: 1.5;
-        font-size: 12px;
-    }
-
-    .diagnostic-download {
-        display: inline-block;
-        color: var(--accent);
-        text-decoration: none;
-        border: 1px solid rgba(47, 122, 106, 0.3);
-        padding: 6px 10px;
-        border-radius: 8px;
-        background: rgba(47, 122, 106, 0.08);
-        font-weight: 600;
-    }
-
-    .diagnostic-download:hover {
-        color: #ffffff;
-        background: var(--accent);
-    }
-
-    .diagnostic-consent {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        font-size: 12px;
-        color: var(--muted);
-        line-height: 1.5;
-        margin: 10px 0 12px;
-    }
-
-    .diagnostic-consent input {
-        margin-top: 2px;
-    }
-
-    .diagnostic-hidden {
-        display: none;
-    }
-
-    @media (max-width: 768px) {
-        .profile-section {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .activity-summary {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 480px) {
-        body {
-            padding: 20px 12px 48px;
-        }
-
-        .header h1 {
-            font-size: 22px;
-        }
-
-        .item-desc,
-        .project-list li,
-        .github-list li,
-        .links-list li {
-            font-size: 13px;
-        }
-    }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roman Harnastaeu | Full-Stack Software Developer in the GTA</title>
+  <meta name="description" content="Roman Harnastaeu is a GTA-based full-stack software developer working with C#/.NET, React, TypeScript, SQL, REST APIs, mobile applications and cloud technologies.">
+  <meta name="author" content="Roman Harnastaeu">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#f5f7f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1514" media="(prefers-color-scheme: dark)">
+
+  <link rel="canonical" href="https://romanharnastaeu.github.io/">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:site_name" content="Roman Harnastaeu — Developer Portfolio">
+  <meta property="og:title" content="Roman Harnastaeu | Full-Stack Software Developer in the GTA">
+  <meta property="og:description" content="Backend- and API-oriented full-stack developer working with C#/.NET, React, TypeScript, SQL, mobile applications and cloud technologies.">
+  <meta property="og:url" content="https://romanharnastaeu.github.io/">
+  <meta property="og:image" content="https://romanharnastaeu.github.io/assets/roman-harnastaeu-og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Roman Harnastaeu, Full-Stack Software Developer — C#/.NET, React, TypeScript, SQL and REST APIs">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Roman Harnastaeu | Full-Stack Software Developer">
+  <meta name="twitter:description" content="GTA-based developer focused on backend APIs, full-stack web and mobile software, SQL databases and production support.">
+  <meta name="twitter:image" content="https://romanharnastaeu.github.io/assets/roman-harnastaeu-og.jpg">
+  <meta name="twitter:image:alt" content="Roman Harnastaeu, Full-Stack Software Developer — C#/.NET, React, TypeScript, SQL and REST APIs">
+
+  <script>
+    try {
+      const savedTheme = localStorage.getItem('portfolio-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.dataset.theme = savedTheme;
+    } catch (_) {}
+  </script>
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Roman Harnastaeu",
+      "url": "https://romanharnastaeu.github.io/",
+      "jobTitle": "Full-Stack Software Developer",
+      "email": "mailto:harnastaeudev@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Newmarket",
+        "addressRegion": "Ontario",
+        "addressCountry": "CA"
+      },
+      "sameAs": [
+        "https://github.com/romanharnastaeu",
+        "https://linkedin.com/in/roman-harnastaeu-3433a634b"
+      ],
+      "knowsAbout": [
+        "C#",
+        ".NET",
+        "ASP.NET Core",
+        "REST APIs",
+        "React",
+        "React Native",
+        "TypeScript",
+        "SQL",
+        "Software testing"
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Roman Harnastaeu — Developer Portfolio",
+      "url": "https://romanharnastaeu.github.io/",
+      "description": "Professional portfolio of Roman Harnastaeu, a full-stack software developer based in the Greater Toronto Area.",
+      "inLanguage": "en-CA"
+    }
+  ]
+  </script>
+  <script src="script.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="brand" href="#top" aria-label="Roman Harnastaeu — home">
+        <span class="brand-mark" aria-hidden="true">RH</span>
+        <span class="brand-name">Roman Harnastaeu</span>
+      </a>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="profile-section">
-                <img src="mePixelized.png" alt="Roman Harnastaeu" class="profile-image">
-                <div class="profile-text">
-                    <h1>Roman Harnastaeu</h1>
-                    <div class="subtitle">
-                        FULL STACK DEVELOPER
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <a class="github-btn" href="https://github.com/romanharnastaeu" target="_blank" rel="noreferrer">GitHub</a>
-                    <button class="theme-toggle" id="themeToggle" type="button">Dark</button>
-                </div>
-            </div>
-        </div>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Open navigation</span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
 
-        <!-- About Section -->
-        <div class="section collapsed">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title">
-                    <span>About Me</span>
-                    <span class="section-icon"></span>
-                </div>
-            </div>
-            <div class="section-content">
-                <div class="item">
-                    <div class="item-desc">I’m Roman Harnastaeu, a full-stack developer based in the Greater Toronto Area and a Computer Programming & Analysis student at Seneca Polytechnic. I build practical, reliable software with a strong focus on backend systems, web technologies, and emerging blockchain applications.</div>
-                </div>
-                <div class="item">
-                    <div class="item-desc">I enjoy working on backend services, AWS infrastructure, and API-first development. Databases are a real interest of mine; I like designing clean data models and improving query performance. I’m also building experience in Web3 and FinTech, especially around integrations, automation, and production-ready architecture.</div>
-                </div>
-                <div class="item">
-                    <div class="item-desc">My strengths are systems analysis & design, technical communication, and full-stack web development. I’m good at turning business requirements into clear technical plans and explaining complex ideas to both technical and non-technical audiences.</div>
-                </div>
-            </div>
-        </div>
+      <nav class="primary-nav" id="primary-navigation" aria-label="Primary navigation">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
-        <!-- Projects Section -->
-        <div class="section collapsed">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title">
-                    <span>Projects</span>
-                    <span class="section-icon"></span>
-                </div>
-            </div>
-            <div class="section-content">
-                <ul class="project-list">
-                    <li>
-                        <div class="item-title">🤖 BOLT Telegram Bot Framework</div>
-                        <div class="item-desc">Professional, modular Telegram bot framework for the TON ecosystem with real-time price tracking, wallet analytics, smart contract integration, caching, and dependency injection. Built with Python 3.11+, python-telegram-bot, aiohttp, and Pydantic.<br>
-                        <a href="https://github.com/romanharnastaeu/jettonbot" target="_blank" class="project-link">🔗 View Repository</a></div>
-                    </li>
-                    <li>
-                        <div class="item-title">⚡ BOLT Foundation</div>
-                        <div class="item-desc">Decentralized community of web3 enthusiasts, builders, projects, and holders with its own token and utilities.<br>
-                        <a href="https://huebel.art/" target="_blank" class="project-link">🌐 Visit huebel.art</a></div>
-                    </li>
-                    <li>
-                        <div class="item-title">✍️ SmartSign</div>
-                        <div class="item-desc">Co-founded a decentralized solution for NFT signatures implemented as smart contracts. The project served as a handshake between token owners and signatories, receiving a grant from TON Foundation.</div>
-                    </li>
-                    <li>
-                        <div class="item-title">📱 Blockchain Mini App (React)</div>
-                        <div class="item-desc">Redesigned and rebuilt on-chain solution as a scalable React mini-app with improved UI/UX. Enhanced stability while maintaining all tracking features from the original bot.<br>
-                        <a href="https://my-telegram-miniapp-alpha.vercel.app/" target="_blank" class="project-link">🚀 Launch App</a></div>
-                    </li>
-                    <li>
-                        <div class="item-title">📚 TON Ecosystem Wiki</div>
-                        <div class="item-desc">Created a comprehensive wiki-like platform dedicated to BOLT Foundation and The Open Network ecosystem. Includes interactive features and mini-games like BoltClicker, Flappy Bolt, and Find Bolt.</div>
-                    </li>
-                    <li>
-                        <div class="item-title">🧽 Mobile App</div>
-                        <div class="item-desc">Co-founded and developed an on-demand service mobile application similar to Uber but specialized for cleaning and dry cleaning services. Managed both business operations and technical development.</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-
-
-        <!-- Skills Section -->
-        <div class="section collapsed">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title">
-                    <span>Skills</span>
-                    <span class="section-icon"></span>
-                </div>
-            </div>
-            <div class="section-content">
-                <div class="subsection collapsed">
-                    <div class="subsection-header" onclick="toggleSubsection(this)">
-                        <div class="subsection-title">
-                            <span>🧩 Frontend</span>
-                            <span class="subsection-icon"></span>
-                        </div>
-                    </div>
-                    <div class="subsection-content">
-                        <div class="skills-tags">
-                            <div class="skill-tag">React</div>
-                            <div class="skill-tag">Next.js</div>
-                            <div class="skill-tag">JavaScript</div>
-                            <div class="skill-tag">TypeScript</div>
-                            <div class="skill-tag">HTML5</div>
-                            <div class="skill-tag">CSS3</div>
-                            <div class="skill-tag">Redux</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subsection collapsed">
-                    <div class="subsection-header" onclick="toggleSubsection(this)">
-                        <div class="subsection-title">
-                            <span>☁️ Backend & Cloud</span>
-                            <span class="subsection-icon"></span>
-                        </div>
-                    </div>
-                    <div class="subsection-content">
-                        <div class="skills-tags">
-                            <div class="skill-tag">Node.js</div>
-                            <div class="skill-tag">Express.js</div>
-                            <div class="skill-tag">Python</div>
-                            <div class="skill-tag">C</div>
-                            <div class="skill-tag">C++</div>
-                            <div class="skill-tag">Java</div>
-                            <div class="skill-tag">AWS</div>
-                            <div class="skill-tag">Docker</div>
-                            <div class="skill-tag">GitHub Actions</div>
-                            <div class="skill-tag">Linux</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subsection collapsed">
-                    <div class="subsection-header" onclick="toggleSubsection(this)">
-                        <div class="subsection-title">
-                            <span>🗃️ Databases</span>
-                            <span class="subsection-icon"></span>
-                        </div>
-                    </div>
-                    <div class="subsection-content">
-                        <div class="skills-tags">
-                            <div class="skill-tag">MySQL</div>
-                            <div class="skill-tag">PostgreSQL</div>
-                            <div class="skill-tag">Oracle</div>
-                            <div class="skill-tag">MongoDB</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="subsection collapsed">
-                    <div class="subsection-header" onclick="toggleSubsection(this)">
-                        <div class="subsection-title">
-                            <span>🧭 Development & Architecture</span>
-                            <span class="subsection-icon"></span>
-                        </div>
-                    </div>
-                    <div class="subsection-content">
-                        <div class="skills-tags">
-                            <div class="skill-tag">Microservices</div>
-                            <div class="skill-tag">CI/CD</div>
-                            <div class="skill-tag">REST API</div>
-                            <div class="skill-tag">Webpack</div>
-                            <div class="skill-tag">UML</div>
-                            <div class="skill-tag">Testing</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Core Competencies Section -->
-        <div class="section collapsed">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title">
-                    <span>Core Competencies</span>
-                    <span class="section-icon"></span>
-                </div>
-            </div>
-            <div class="section-content">
-                <div class="item">
-                    <div class="item-title">Systems Analysis & Design</div>
-                    <div class="item-desc">Strong at breaking down real-world requirements and turning them into clear, buildable solutions. I create UML artifacts (class, sequence, use case, and activity diagrams) in Visual Paradigm and use them to support scope, workflows, and technical decisions. Comfortable with stakeholder communication, requirements gathering, process documentation, and producing design specs that teams can actually implement.</div>
-                </div>
-                <div class="item">
-                    <div class="item-title">Technical Communication</div>
-                    <div class="item-desc">I translate technical complexity into simple, actionable communication. I write documentation, reports, and status updates, and I build presentations that prioritize clarity and accessibility. I’m comfortable presenting to both technical teams and non-technical stakeholders, and I’m often the person who “makes it make sense.”</div>
-                </div>
-                <div class="item">
-                    <div class="item-title">Full-Stack Web Development</div>
-                    <div class="item-desc">I build scalable web apps end-to-end using React/Next.js, Node.js/Express, and RESTful APIs. I’m experienced with cloud deployment, containerization, CI/CD pipelines, and authentication/authorization patterns. I care about clean architecture, secure defaults, and predictable behavior in production.</div>
-                </div>
-                <div class="item">
-                    <div class="item-title">Database Design & Optimization</div>
-                    <div class="item-desc">Strong foundation in relational and non-relational design, SQL, indexing, performance tuning, and database security. Comfortable with MongoDB, PostgreSQL, MySQL, and Oracle, and I enjoy designing schemas that support real business workflows without turning into spaghetti.</div>
-                </div>
-                <div class="item">
-                    <div class="item-title">Software Architecture</div>
-                    <div class="item-desc">Familiar with cloud service models (IaaS, PaaS, SaaS, serverless), microservice patterns, Docker-based workflows, and test-driven development. Solid grasp of object-oriented design (polymorphism, templates, reuse), and building maintainable codebases that don’t hate you six weeks later.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Community & Achievements Section -->
-        <div class="section collapsed">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title">
-                    <span> Community & Achievements</span>
-                    <span class="section-icon"></span>
-                </div>
-            </div>
-            <div class="section-content">
-                <div class="item">
-                    <div class="item-desc">Received a development grant from a TON blockchain DAO for smart contract innovation.</div>
-                </div>
-                <div class="item">
-                    <div class="item-desc">Ambassador for multiple Web3 platforms (DEX/CEX ecosystems).</div>
-                </div>
-                <div class="item">
-                    <div class="item-desc">Co-founded a DAO focused on practical decentralized applications.</div>
-                </div>
-                <div class="item">
-                    <div class="item-desc">Built an NFT-based document-signing protocol with a secure handshake flow.</div>
-                </div>
-                <div class="item">
-                    <div class="item-desc">Recognized for strong business communication and systems analysis (faculty feedback).</div>
-                </div>
-            </div>
-        </div>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+        <span aria-hidden="true">◐</span>
+        <span class="theme-label">Theme</span>
+      </button>
     </div>
-</div>   
-<script>
-        // Toggle section functionality
-        function toggleSection(header) {
-            const section = header.parentElement;
-            section.classList.toggle('collapsed');
-            header.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                header.style.transform = 'scale(1)';
-            }, 100);
-        }
+  </header>
 
-        // Toggle subsection functionality
-        function toggleSubsection(header) {
-            const subsection = header.parentElement;
-            subsection.classList.toggle('collapsed');
-            header.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                header.style.transform = 'scale(1)';
-            }, 100);
-        }
+  <main id="main-content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Newmarket, Ontario · Available across the GTA</p>
+          <h1 id="hero-title">Roman Harnastaeu</h1>
+          <p class="hero-role">Full-Stack Software Developer</p>
+          <p class="hero-stack">C#/.NET <span aria-hidden="true">•</span> React <span aria-hidden="true">•</span> TypeScript <span aria-hidden="true">•</span> SQL <span aria-hidden="true">•</span> REST APIs</p>
+          <p class="hero-intro">Graduating from Seneca Polytechnic’s Computer Programming &amp; Analysis advanced diploma program in August 2026. Based in Newmarket and available throughout the Greater Toronto Area.</p>
 
-        // Initialize effects
-        // Theme toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const root = document.documentElement;
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            root.setAttribute('data-theme', savedTheme);
-            if (themeToggle) {
-                themeToggle.textContent = savedTheme === 'dark' ? 'Light' : 'Dark';
-            }
-        }
-        themeToggle?.addEventListener('click', () => {
-            const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-            const next = current === 'dark' ? 'light' : 'dark';
-            if (next === 'dark') {
-                root.setAttribute('data-theme', 'dark');
-            } else {
-                root.removeAttribute('data-theme');
-            }
-            localStorage.setItem('theme', next);
-            themeToggle.textContent = next === 'dark' ? 'Light' : 'Dark';
-        });
+          <div class="hero-actions">
+            <a class="button button-primary" href="#projects">View Featured Projects</a>
+            <!-- TODO: Replace this anchor with Roman_Harnastaeu_Resume.pdf and add the download attribute after an approved PDF is provided. -->
+            <a class="button button-secondary" href="#resume-status" aria-describedby="resume-status">Download Resume PDF</a>
+          </div>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            createMatrixEffect();
-            
-            const diagnosticBtn = document.getElementById('diagnosticBtn');
-            const diagnosticStart = document.getElementById('diagnosticStart');
-            const diagnosticCancel = document.getElementById('diagnosticCancel');
-            const diagnosticConsent = document.getElementById('diagnosticConsent');
+          <nav class="social-links" aria-label="Professional profiles and email">
+            <a href="https://github.com/romanharnastaeu" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            <a href="https://linkedin.com/in/roman-harnastaeu-3433a634b" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+            <a href="mailto:harnastaeudev@gmail.com">Email Roman <span aria-hidden="true">→</span></a>
+          </nav>
+        </div>
 
-            diagnosticBtn?.addEventListener('click', openDiagnosticModal);
-            diagnosticCancel?.addEventListener('click', closeDiagnosticModal);
-            diagnosticStart?.addEventListener('click', () => {
-                if (!diagnosticConsent.checked) {
-                    showNotification('Please confirm consent before running the test.', 'error');
-                    return;
-                }
-                closeDiagnosticModal();
-                runFullDiagnostics();
-            });
-            
-            // Add hover effects to sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                });
-                
-                section.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-            
-            // GitHub widgets removed
-        });
-        
-        // Konami code easter egg
-        let konamiCode = [];
-        const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
-        
-        document.addEventListener('keydown', function(e) {
-            konamiCode.push(e.keyCode);
-            if (konamiCode.length > konamiSequence.length) {
-                konamiCode.shift();
-            }
-            
-            if (konamiCode.length === konamiSequence.length && 
-                konamiCode.every((code, index) => code === konamiSequence[index])) {
-                
-                // Easter egg activation
-                document.body.classList.add('glitch');
-                showNotification('🎮 CHEAT CODE ACTIVATED! 🎮', 'success');
-                
-                setTimeout(() => {
-                    document.body.classList.remove('glitch');
-                }, 3000);
-            }
-        });
-    </script>
+        <aside class="hero-panel" aria-label="Professional focus">
+          <div class="hero-panel-top">
+            <span class="code-kicker">developer.profile</span>
+            <span class="availability">Open to opportunities</span>
+          </div>
+          <dl class="profile-facts">
+            <div>
+              <dt>Primary focus</dt>
+              <dd>Backend APIs &amp; full-stack delivery</dd>
+            </div>
+            <div>
+              <dt>Core platform</dt>
+              <dd>C# / .NET / ASP.NET Core</dd>
+            </div>
+            <div>
+              <dt>Frontend</dt>
+              <dd>React / React Native / TypeScript</dd>
+            </div>
+            <div>
+              <dt>Data</dt>
+              <dd>SQL Server / PostgreSQL / Supabase</dd>
+            </div>
+          </dl>
+          <div class="hero-panel-footer">
+            <span>Expected graduation</span>
+            <strong>August 2026</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Professional summary</p>
+            <h2 id="about-title">Software built across the full request lifecycle.</h2>
+          </div>
+          <p>Backend- and API-oriented full-stack developer with hands-on experience spanning product interfaces, server workflows, databases, testing, deployment validation and production support.</p>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card">
+            <span class="card-number" aria-hidden="true">01</span>
+            <h3>Backend &amp; API thinking</h3>
+            <p>I design around clear contracts, validated data, predictable JSON workflows, authentication boundaries and maintainable client-server responsibilities.</p>
+          </article>
+          <article class="summary-card">
+            <span class="card-number" aria-hidden="true">02</span>
+            <h3>End-to-end delivery</h3>
+            <p>I work across React and mobile interfaces, API integrations, relational data models and the debugging path between UI, service and database layers.</p>
+          </article>
+          <article class="summary-card">
+            <span class="card-number" aria-hidden="true">03</span>
+            <h3>Production mindset</h3>
+            <p>Contract and web-operations experience shaped a practical approach to release checks, documentation, troubleshooting and clear stakeholder communication.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tinted" id="skills" aria-labelledby="skills-title">
+      <div class="shell">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">Core technology stack</p>
+            <h2 id="skills-title">Tools I use to ship dependable software.</h2>
+          </div>
+          <p>Grouped by where each technology supports the engineering workflow—not by arbitrary proficiency scores.</p>
+        </div>
+
+        <div class="skills-grid">
+          <article class="skill-group">
+            <h3>Backend &amp; APIs</h3>
+            <ul class="tag-list">
+              <li>C#</li><li>.NET / .NET Core</li><li>ASP.NET Core</li><li>Node.js</li><li>Express</li><li>Java</li><li>Python</li><li>REST APIs</li><li>HTTP &amp; JSON</li><li>Authentication</li><li>Authorization</li>
+            </ul>
+          </article>
+          <article class="skill-group">
+            <h3>Frontend &amp; Mobile</h3>
+            <ul class="tag-list">
+              <li>React</li><li>React Native</li><li>Expo</li><li>Next.js</li><li>TypeScript</li><li>JavaScript</li><li>HTML5</li><li>CSS</li><li>Responsive UI</li><li>Mobile-first development</li>
+            </ul>
+          </article>
+          <article class="skill-group">
+            <h3>Databases</h3>
+            <ul class="tag-list">
+              <li>Microsoft SQL Server</li><li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li><li>Supabase</li><li>Relational design</li><li>Schema design</li><li>SQL queries &amp; joins</li><li>Data validation</li><li>Query optimization</li>
+            </ul>
+          </article>
+          <article class="skill-group">
+            <h3>Testing &amp; Quality</h3>
+            <ul class="tag-list">
+              <li>Jest</li><li>Supertest</li><li>Postman</li><li>Unit testing</li><li>Integration testing</li><li>API testing</li><li>Debugging</li><li>Code review</li><li>Technical documentation</li>
+            </ul>
+          </article>
+          <article class="skill-group">
+            <h3>Cloud, DevOps &amp; Tools</h3>
+            <ul class="tag-list">
+              <li>Git</li><li>GitHub</li><li>GitHub Actions</li><li>Docker</li><li>Linux</li><li>AWS</li><li>Vercel</li><li>CI/CD</li><li>Agile / Scrum</li>
+            </ul>
+          </article>
+          <article class="skill-group">
+            <h3>Software Engineering</h3>
+            <ul class="tag-list">
+              <li>Object-oriented programming</li><li>Software analysis &amp; design</li><li>UML</li><li>Client-server architecture</li><li>Data structures</li><li>Algorithms</li><li>Requirements clarification</li><li>Production support</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Featured projects</p>
+            <h2 id="projects-title">Selected engineering work.</h2>
+          </div>
+          <p>Case studies prioritize the problem, architecture and implementation decisions. Confidential source and production data remain private.</p>
+        </div>
+
+        <div class="project-list">
+          <article class="project-card project-card-featured">
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-index">01</span>
+                <span class="project-status">Featured · Private source</span>
+              </div>
+              <h3>VeriGoods</h3>
+              <p class="problem"><strong>Problem:</strong> Product data is fragmented across categories and providers, making it difficult to turn a barcode or name search into a useful, personalized food or beauty-care recommendation.</p>
+
+              <div class="project-detail-grid">
+                <div>
+                  <h4>What I built</h4>
+                  <p>A mobile-first lookup platform with barcode and name search, product classification, evaluation workflows, profiles, preferences, favourites, scan history, recommendations and an admin application.</p>
+                </div>
+                <div>
+                  <h4>My contribution</h4>
+                  <p>Designed and implemented the cross-platform application flow, Supabase-backed data workflows, API integrations, GTIN handling, category-specific evaluation paths and structured error states.</p>
+                </div>
+              </div>
+
+              <ul class="project-stack" aria-label="VeriGoods technology stack">
+                <li>React Native</li><li>Expo</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li><li>Edge Functions</li><li>REST APIs</li>
+              </ul>
+
+              <ul class="highlight-list">
+                <li>Normalizes and validates GTINs before product lookup.</li>
+                <li>Separates food evaluation from beauty ingredient-risk screening.</li>
+                <li>Combines external product data with database-backed user preferences.</li>
+                <li>Returns explicit error and insufficient-data states instead of false certainty.</li>
+              </ul>
+
+              <div class="project-actions">
+                <a class="text-link" href="verigoods-case-study.html">Read case study <span aria-hidden="true">→</span></a>
+                <span class="muted-note">Source repositories remain private</span>
+              </div>
+            </div>
+
+            <figure class="project-visual verigoods-visual">
+              <div class="phone-frame" aria-hidden="true">
+                <div class="phone-bar"><span>VeriGoods</span><span>•••</span></div>
+                <div class="search-chip">012345678905</div>
+                <div class="product-mini-card">
+                  <span class="product-icon food-icon">F</span>
+                  <div><strong>Food product</strong><small>Evaluation ready</small></div>
+                  <span class="result-chip">Reviewed</span>
+                </div>
+                <div class="product-mini-card">
+                  <span class="product-icon beauty-icon">B</span>
+                  <div><strong>Beauty care</strong><small>Ingredient screening</small></div>
+                  <span class="result-chip">Check</span>
+                </div>
+                <div class="recommendation-block"><small>Recommendation</small><strong>Matched to your preferences</strong></div>
+              </div>
+              <div class="flow-stack" aria-hidden="true">
+                <span>Barcode / name</span><i></i><span>GTIN validation</span><i></i><span>Product data APIs</span><i></i><span>Evaluation</span><i></i><span>Recommendation</span>
+              </div>
+              <figcaption>Product workflow visual: a search is validated, enriched through product-data APIs, evaluated by category and matched to user preferences.</figcaption>
+            </figure>
+          </article>
+
+          <article class="project-card">
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-index">02</span>
+                <span class="project-status">Contract work · Client-confidential</span>
+              </div>
+              <h3>E-Commerce Web Application</h3>
+              <p class="problem"><strong>Problem:</strong> A production e-commerce application required reliable feature delivery and troubleshooting across its customer interface, API workflows and SQL data layer.</p>
+
+              <div class="project-detail-grid">
+                <div>
+                  <h4>What I built</h4>
+                  <p>React and Next.js customer-facing features, JSON request/response workflows and database-backed application behaviour using Microsoft SQL Server.</p>
+                </div>
+                <div>
+                  <h4>My contribution</h4>
+                  <p>Clarified requirements, implemented iterative changes, reviewed code, traced UI/API/database defects, supported releases and documented fixes for continued maintenance.</p>
+                </div>
+              </div>
+
+              <ul class="project-stack" aria-label="E-commerce technology stack">
+                <li>React</li><li>Next.js</li><li>JavaScript</li><li>REST / JSON</li><li>SQL Server</li><li>Git</li>
+              </ul>
+
+              <ul class="highlight-list">
+                <li>Debugged issues across interface, service and data boundaries.</li>
+                <li>Used targeted SQL queries and optimization during investigation.</li>
+                <li>Validated deployments and releases against expected behaviour.</li>
+                <li>Translated evolving requirements into incremental implementation work.</li>
+              </ul>
+
+              <div class="project-actions">
+                <a class="text-link" href="ecommerce-case-study.html">Read case study <span aria-hidden="true">→</span></a>
+                <span class="muted-note">Client source and business data are not published</span>
+              </div>
+            </div>
+
+            <figure class="project-visual architecture-visual">
+              <div class="architecture-layer browser-layer" aria-hidden="true"><span>01</span><strong>React / Next.js</strong><small>Customer interface</small></div>
+              <div class="connector" aria-hidden="true">JSON request / response</div>
+              <div class="architecture-layer api-layer" aria-hidden="true"><span>02</span><strong>Application APIs</strong><small>Business workflows</small></div>
+              <div class="connector" aria-hidden="true">Validated queries</div>
+              <div class="architecture-layer data-layer" aria-hidden="true"><span>03</span><strong>SQL Server</strong><small>Relational data</small></div>
+              <figcaption>Cross-layer troubleshooting model used to isolate behaviour in the interface, API workflow and SQL data layer.</figcaption>
+            </figure>
+          </article>
+
+          <article class="project-card">
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-index">03</span>
+                <span class="project-status">Open source · Additional domain</span>
+              </div>
+              <h3>BOLT Telegram Bot Framework</h3>
+              <p class="problem"><strong>Problem:</strong> A growing Telegram product needs clear separation between message handling, external data access and blockchain-specific services to remain maintainable.</p>
+
+              <div class="project-detail-grid">
+                <div>
+                  <h4>What I built</h4>
+                  <p>A modular Python bot framework for TON ecosystem features including price tracking, wallet analytics, smart-contract integration and reusable service components.</p>
+                </div>
+                <div>
+                  <h4>My contribution</h4>
+                  <p>Structured asynchronous handlers and service boundaries, added typed data validation, introduced caching and used dependency injection to reduce coupling between handlers and integrations.</p>
+                </div>
+              </div>
+
+              <ul class="project-stack" aria-label="BOLT Telegram Bot Framework technology stack">
+                <li>Python 3.11+</li><li>python-telegram-bot</li><li>aiohttp</li><li>Pydantic</li><li>Async I/O</li><li>TON</li>
+              </ul>
+
+              <ul class="highlight-list">
+                <li>Separates Telegram handlers from data and domain services.</li>
+                <li>Uses asynchronous HTTP workflows for external integrations.</li>
+                <li>Validates service data with typed models.</li>
+                <li>Applies caching and dependency injection to reduce coupling.</li>
+              </ul>
+
+              <div class="project-actions">
+                <a class="text-link" href="https://github.com/romanharnastaeu/jettonbot" target="_blank" rel="noopener noreferrer">View repository <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+
+            <figure class="project-visual bot-visual">
+              <div class="bot-message user-message" aria-hidden="true"><span>/wallet</span><small>Telegram command</small></div>
+              <div class="bot-route" aria-hidden="true"><span>Handler</span><span>Service</span><span>Data model</span></div>
+              <div class="bot-message bot-response" aria-hidden="true"><strong>Structured response</strong><small>Wallet · price · contract data</small></div>
+              <div class="bot-services" aria-hidden="true"><span>async HTTP</span><span>cache</span><span>validation</span></div>
+              <figcaption>Framework visual: Telegram commands move through handlers and isolated services before returning a validated response.</figcaption>
+            </figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tinted" id="experience" aria-labelledby="experience-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Professional experience</p>
+            <h2 id="experience-title">Delivery experience beyond the classroom.</h2>
+          </div>
+          <p>Roles that developed practical judgment across feature work, production troubleshooting and stakeholder support.</p>
+        </div>
+
+        <ol class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-date"><time datetime="2024-10">Oct 2024</time> — <time datetime="2025-04">Apr 2025</time></div>
+            <div class="timeline-content">
+              <p class="timeline-company">Independent Contractor · E-Commerce Web Application</p>
+              <h3>Contract Full-Stack Web Developer</h3>
+              <ul>
+                <li>Developed React and Next.js interface features alongside backend API and JSON request/response workflows.</li>
+                <li>Worked with Microsoft SQL Server for querying, data investigation and query optimization.</li>
+                <li>Troubleshot production issues across UI, API and database layers, then validated fixes through release and deployment checks.</li>
+                <li>Clarified requirements, reviewed code and documented changes through iterative delivery.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-date"><time datetime="2019-08">Aug 2019</time> — <time datetime="2021-03">Mar 2021</time></div>
+            <div class="timeline-content">
+              <p class="timeline-company">SmartSolutionsSupply</p>
+              <h3>Technical Support &amp; Web Operations</h3>
+              <ul>
+                <li>Supported a production web stack using a headless WordPress CMS with a React frontend integration.</li>
+                <li>Investigated hosting, content and integration issues affecting day-to-day website operations.</li>
+                <li>Performed reliability and release checks while coordinating technical updates with stakeholders.</li>
+                <li>Provided clear support communication during issue investigation and resolution.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="education" aria-labelledby="education-title">
+      <div class="shell education-grid">
+        <div>
+          <p class="eyebrow">Education</p>
+          <h2 id="education-title">Seneca Polytechnic</h2>
+          <p class="education-program">Ontario College Advanced Diploma<br><strong>Computer Programming &amp; Analysis</strong></p>
+          <p class="education-date">Expected August 2026</p>
+        </div>
+        <article class="honour-card">
+          <span class="honour-icon" aria-hidden="true">PH</span>
+          <div>
+            <p class="eyebrow">Academic distinction</p>
+            <h3>President’s Honour List</h3>
+            <p>Winter 2026</p>
+          </div>
+        </article>
+        <div class="education-focus">
+          <h3>Program focus</h3>
+          <p>Object-oriented programming, software analysis and design, database systems, web and mobile development, cloud technologies, data structures, algorithms, testing and technical communication.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tinted" id="achievements" aria-labelledby="achievements-title">
+      <div class="shell">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">Additional achievements</p>
+            <h2 id="achievements-title">Initiative across technical communities.</h2>
+          </div>
+        </div>
+        <div class="achievement-grid">
+          <article>
+            <span class="card-number" aria-hidden="true">A</span>
+            <h3>Grant-supported development</h3>
+            <p>Contributed to a grant-supported TON ecosystem smart-contract initiative focused on document-signing workflows.</p>
+          </article>
+          <article>
+            <span class="card-number" aria-hidden="true">B</span>
+            <h3>Open-source framework</h3>
+            <p>Published the BOLT Telegram bot framework to demonstrate modular Python architecture and integration design.</p>
+          </article>
+          <article>
+            <span class="card-number" aria-hidden="true">C</span>
+            <h3>Community leadership</h3>
+            <p>Co-founded BOLT Foundation and helped shape practical applications within the TON ecosystem.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="shell footer-grid">
+      <div class="footer-copy">
+        <p class="eyebrow">Contact</p>
+        <h2>Let’s build reliable software.</h2>
+        <p>I’m available for software development opportunities throughout the Greater Toronto Area.</p>
+        <a class="button button-primary" href="mailto:harnastaeudev@gmail.com">Email Roman</a>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/romanharnastaeu" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span aria-hidden="true">↗</span></a>
+        <a href="https://linkedin.com/in/roman-harnastaeu-3433a634b" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span aria-hidden="true">↗</span></a>
+        <a href="mailto:harnastaeudev@gmail.com"><span>Email</span><span aria-hidden="true">→</span></a>
+        <div class="resume-status" id="resume-status" tabindex="-1">
+          <strong>Resume PDF</strong>
+          <span>An approved downloadable PDF is being prepared. Email Roman for the current resume.</span>
+        </div>
+      </div>
+    </div>
+    <div class="shell footer-bottom">
+      <p>© <span id="current-year">2026</span> Roman Harnastaeu</p>
+      <p>Built with semantic HTML, modern CSS and a small amount of JavaScript.</p>
+    </div>
+  </footer>
 </body>
-</html> 
+</html>

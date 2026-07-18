@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VeriGoods Case Study | Roman Harnastaeu</title>
+  <meta name="description" content="A technical case study of VeriGoods, Roman Harnastaeu’s mobile-first product lookup and recommendation platform built with React Native, Expo, TypeScript and Supabase.">
+  <meta name="author" content="Roman Harnastaeu">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#f5f7f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1514" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://romanharnastaeu.github.io/verigoods-case-study.html">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="VeriGoods Case Study | Roman Harnastaeu">
+  <meta property="og:description" content="Architecture, product workflows and engineering decisions behind a mobile-first product lookup and recommendation platform.">
+  <meta property="og:url" content="https://romanharnastaeu.github.io/verigoods-case-study.html">
+  <meta property="og:image" content="https://romanharnastaeu.github.io/assets/roman-harnastaeu-og.jpg">
+  <meta property="og:image:alt" content="Roman Harnastaeu, Full-Stack Software Developer — C#/.NET, React, TypeScript, SQL and REST APIs">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VeriGoods Case Study | Roman Harnastaeu">
+  <meta name="twitter:description" content="Architecture and engineering decisions behind a React Native, Expo and Supabase product platform.">
+  <meta name="twitter:image" content="https://romanharnastaeu.github.io/assets/roman-harnastaeu-og.jpg">
+  <script>
+    try {
+      const savedTheme = localStorage.getItem('portfolio-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.dataset.theme = savedTheme;
+    } catch (_) {}
+  </script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#case-content">Skip to case study</a>
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="brand" href="index.html" aria-label="Roman Harnastaeu — portfolio home">
+        <span class="brand-mark" aria-hidden="true">RH</span>
+        <span class="brand-name">Roman Harnastaeu</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Open navigation</span>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+      <nav class="primary-nav" id="primary-navigation" aria-label="Primary navigation">
+        <a href="index.html#about">About</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#education">Education</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+        <span aria-hidden="true">◐</span><span class="theme-label">Theme</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="case-study-main" id="case-content">
+    <header class="case-study-hero">
+      <div class="shell">
+        <a class="back-link" href="index.html#projects">← Back to featured projects</a>
+        <p class="eyebrow">Private-source project · Technical case study</p>
+        <h1>VeriGoods</h1>
+        <p class="case-study-lede">A mobile-first product lookup and recommendation platform that turns barcode or name searches into category-aware food and beauty-care guidance while treating missing or uncertain data as an explicit product state.</p>
+        <dl class="case-facts">
+          <div><dt>Contribution</dt><dd>Full-stack product engineering</dd></div>
+          <div><dt>Client</dt><dd>React Native + Expo Router</dd></div>
+          <div><dt>Backend</dt><dd>Supabase + Edge Functions</dd></div>
+          <div><dt>Web delivery</dt><dd>Vercel</dd></div>
+        </dl>
+      </div>
+    </header>
+
+    <section class="case-section" aria-labelledby="challenge-title">
+      <div class="shell">
+        <div>
+          <p class="eyebrow">01 · Challenge</p>
+          <h2 id="challenge-title">One search, several kinds of uncertainty.</h2>
+        </div>
+        <div class="case-body">
+          <p>A scanned code is only the beginning of a useful product answer. Product identifiers can be malformed, external records can be incomplete, food and beauty products require different evaluation logic, and two users may care about different product attributes.</p>
+          <p>VeriGoods addresses that sequence as a connected system: validate the input, locate and classify the product, run the appropriate evaluation path, incorporate user preferences and return a structured result that can also explain when the available data is insufficient.</p>
+          <div class="case-callout">
+            <p><strong>Engineering principle:</strong> an incomplete upstream record should not be converted into a confident recommendation. Insufficient-data and error states are part of the response contract.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="architecture-title">
+      <div class="shell">
+        <div>
+          <p class="eyebrow">02 · Architecture</p>
+          <h2 id="architecture-title">A category-aware data path.</h2>
+        </div>
+        <div class="case-body">
+          <p>The client coordinates search, result, profile, favourite and history experiences. Supabase Auth establishes user identity; PostgreSQL stores application data; Edge Functions and REST-style workflows provide a controlled boundary around data lookups and evaluation.</p>
+          <ol class="architecture-flow" aria-label="VeriGoods system flow">
+            <li><span>01</span><strong>Expo client</strong><small>Barcode or name search</small></li>
+            <li><span>02</span><strong>Input handling</strong><small>GTIN normalization and validation</small></li>
+            <li><span>03</span><strong>API layer</strong><small>Edge Functions and structured JSON</small></li>
+            <li><span>04</span><strong>Product data</strong><small>Open Food Facts and Open Beauty Facts</small></li>
+            <li><span>05</span><strong>Supabase data</strong><small>Profiles, preferences, favourites and history</small></li>
+          </ol>
+          <h3>External data is input, not the final decision</h3>
+          <p>Product records from external APIs are classified and routed into separate food or beauty-care handling. The application then combines the usable product fields with its own database-backed user context before producing a result.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="workflow-title">
+      <div class="shell">
+        <div>
+          <p class="eyebrow">03 · Product workflow</p>
+          <h2 id="workflow-title">From lookup to recommendation.</h2>
+        </div>
+        <div class="case-body case-steps">
+          <article class="case-step"><span>01</span><div><h3>Capture the query</h3><p>The user searches by product name or submits a scanned barcode from the mobile-first interface.</p></div></article>
+          <article class="case-step"><span>02</span><div><h3>Normalize the identifier</h3><p>GTIN handling removes avoidable formatting differences and validates the identifier before an external lookup is attempted.</p></div></article>
+          <article class="case-step"><span>03</span><div><h3>Classify the result</h3><p>The workflow distinguishes food from beauty-care data so the next step uses the appropriate domain logic.</p></div></article>
+          <article class="case-step"><span>04</span><div><h3>Evaluate available evidence</h3><p>Food evaluation and beauty ingredient-risk screening operate as separate paths and can return insufficient-data states.</p></div></article>
+          <article class="case-step"><span>05</span><div><h3>Apply user context</h3><p>Profiles and preferences support dynamic recommendations, while favourites and scan history make results useful beyond one session.</p></div></article>
+          <article class="case-step"><span>06</span><div><h3>Support administration</h3><p>A separate admin application provides an operational surface for database-backed workflows.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="decisions-title">
+      <div class="shell">
+        <div>
+          <p class="eyebrow">04 · Engineering decisions</p>
+          <h2 id="decisions-title">Boundaries that keep the product understandable.</h2>
+        </div>
+        <div class="case-body">
+          <ul class="decision-list">
+            <li><strong>Normalize before lookup</strong><p>GTIN rules are applied before external requests so invalid identifiers fail early and predictable variants resolve consistently.</p></li>
+            <li><strong>Separate category logic</strong><p>Food evaluation and beauty ingredient screening remain distinct instead of forcing unlike domains into one scoring path.</p></li>
+            <li><strong>Return structured states</strong><p>JSON responses distinguish usable results, upstream failures and insufficient evidence for safer client rendering.</p></li>
+            <li><strong>Keep user data durable</strong><p>Supabase-backed profiles, preferences, favourites and history support personalized workflows across sessions.</p></li>
+            <li><strong>Isolate external providers</strong><p>Open Food Facts, Open Beauty Facts and other product-data APIs are treated as integrations behind the application workflow.</p></li>
+            <li><strong>Share a cross-platform foundation</strong><p>React Native, Expo and Expo Router support a mobile-first application with a web deployment path.</p></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="contribution-title">
+      <div class="shell">
+        <div>
+          <p class="eyebrow">05 · My contribution</p>
+          <h2 id="contribution-title">Work across product, data and integration layers.</h2>
+        </div>
+        <div class="case-body">
+          <ul>
+            <li>Built the mobile-first application flow with React Native, Expo Router and TypeScript.</li>
+            <li>Implemented Supabase Auth and PostgreSQL-backed profile, preference, favourite and scan-history workflows.</li>
+            <li>Integrated product-data services through REST-style API requests and structured JSON responses.</li>
+            <li>Developed GTIN normalization and validation before lookup.</li>
+            <li>Implemented category classification, food evaluation and beauty ingredient-risk screening paths.</li>
+            <li>Created recommendation, error and insufficient-data experiences, plus an admin application.</li>
+          </ul>
+          <h3>Technology</h3>
+          <ul class="project-stack" aria-label="VeriGoods technologies">
+            <li>React Native</li><li>Expo</li><li>Expo Router</li><li>TypeScript</li><li>Supabase Auth</li><li>PostgreSQL</li><li>Edge Functions</li><li>REST-style APIs</li><li>Open Food Facts</li><li>Open Beauty Facts</li><li>Vercel</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="privacy-title">
+      <div class="shell">
+        <div>
+          <p class="eyebrow">06 · Source &amp; privacy</p>
+          <h2 id="privacy-title">A useful case study without exposing private code.</h2>
+        </div>
+        <div class="case-body">
+          <p>The application source repositories are not linked from this portfolio. No keys, secrets, database records or private implementation details are included in this case study.</p>
+          <p>A future sanitized public case-study repository could contain redacted request/response examples, mock product data, architecture diagrams and approved screenshots. It should be created only after reviewing every artifact for proprietary code and credentials.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="case-study-footer">
+    <div class="shell">
+      <p>Interested in the engineering behind VeriGoods?</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="mailto:harnastaeudev@gmail.com">Email Roman</a>
+        <a class="button button-secondary" href="index.html#projects">View all projects</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
