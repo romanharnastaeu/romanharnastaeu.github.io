@@ -6,7 +6,7 @@ Recruiter-facing portfolio for Roman Harnastaeu, a full-stack software developer
 
 - `index.html` — portfolio homepage
 - `verigoods-case-study.html` — private-source VeriGoods engineering case study
-- `ecommerce-case-study.html` — client-confidential contract case study
+- `moneris-case-study.html` — client-confidential Moneris contract software development case study
 - `styles.css` — responsive light/dark presentation
 - `script.js` — accessible mobile navigation and theme preference
 - `robots.txt` and `sitemap.xml` — search discovery

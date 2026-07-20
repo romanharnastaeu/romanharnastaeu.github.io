@@ -701,6 +701,7 @@ a {
 
 .project-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.8rem;
   margin-bottom: 1.3rem;
@@ -1243,19 +1244,50 @@ a {
 .education-focus {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: minmax(11rem, 0.35fr) 1fr;
+  grid-template-columns: minmax(16rem, 0.42fr) minmax(0, 1fr);
   gap: 2rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border);
 }
 
 .education-focus h3,
+.education-focus h4,
 .education-focus p {
   margin: 0;
 }
 
 .education-focus p {
   color: var(--muted);
+}
+
+.education-focus > div:first-child p {
+  margin-top: 0.75rem;
+}
+
+.education-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.education-groups article {
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.education-groups h4 {
+  color: var(--accent-strong);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.education-groups p {
+  margin-top: 0.55rem;
+  font-size: 0.88rem;
 }
 
 .achievement-grid article {
@@ -1828,6 +1860,10 @@ a {
   .honour-card {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .education-groups {
+    grid-template-columns: 1fr;
   }
 
   .footer-bottom {
