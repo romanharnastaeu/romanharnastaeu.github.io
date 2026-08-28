@@ -191,20 +191,6 @@ a {
   text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  width: 2.2rem;
-  height: 2.2rem;
-  place-items: center;
-  border-radius: 0.65rem;
-  background: var(--accent);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: -0.08em;
-}
-
 .primary-nav {
   display: flex;
   align-items: center;
@@ -324,16 +310,6 @@ a {
   text-transform: uppercase;
 }
 
-.status-dot {
-  display: inline-block;
-  width: 0.52rem;
-  height: 0.52rem;
-  margin-right: 0.4rem;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 0.24rem color-mix(in srgb, var(--accent) 16%, transparent);
-}
-
 .hero h1 {
   max-width: 12ch;
   margin: 0;
@@ -451,35 +427,6 @@ a {
   box-shadow: var(--shadow-lg);
 }
 
-.hero-panel-top,
-.hero-panel-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.hero-panel-top {
-  padding: 1.15rem 1.3rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.code-kicker {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.availability {
-  padding: 0.28rem 0.55rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-  font-size: 0.68rem;
-  font-weight: 760;
-}
-
 .profile-facts {
   display: grid;
   margin: 0;
@@ -511,17 +458,6 @@ a {
   font-size: 0.9rem;
   font-weight: 700;
   overflow-wrap: anywhere;
-}
-
-.hero-panel-footer {
-  padding: 1rem 1.3rem;
-  background: var(--accent);
-  color: var(--bg);
-  font-size: 0.8rem;
-}
-
-.hero-panel-footer strong {
-  font-family: var(--font-mono);
 }
 
 .section {
@@ -1232,7 +1168,6 @@ a {
 }
 
 @media (max-width: 68rem) {
-  .brand-name,
   .theme-label {
     display: none;
   }
