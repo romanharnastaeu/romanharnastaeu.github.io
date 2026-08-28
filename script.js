@@ -64,19 +64,10 @@
     if (navShell && !navShell.contains(event.target)) setNavigation(false);
   });
 
-  window.matchMedia('(min-width: 54.01rem)').addEventListener?.('change', function (event) {
+  window.matchMedia('(min-width: 58.01rem)').addEventListener?.('change', function (event) {
     if (event.matches) setNavigation(false);
   });
 
   const year = document.getElementById('current-year');
   if (year) year.textContent = String(new Date().getFullYear());
-
-  const resumeStatus = document.getElementById('resume-status');
-  document.querySelectorAll('a[href="#resume-status"]').forEach(function (link) {
-    link.addEventListener('click', function () {
-      window.setTimeout(function () {
-        resumeStatus?.focus({ preventScroll: true });
-      }, 0);
-    });
-  });
 })();

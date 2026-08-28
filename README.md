@@ -1,29 +1,31 @@
-# Roman Harnastaeu — Developer Portfolio
+# Raman Harnastaeu — Software Developer Portfolio
 
-Recruiter-facing portfolio for Roman Harnastaeu, a full-stack software developer based in Newmarket, Ontario and available throughout the Greater Toronto Area.
+Recruiter-facing portfolio for Raman Harnastaeu, a software developer based in Newmarket, Ontario and available across the Greater Toronto Area.
+
+## Positioning
+
+The portfolio presents a general software-development profile with strengths across full-stack applications, backend systems, REST APIs, databases, testing, cloud computing, and AI-assisted development. Testing is treated as an engineering differentiator rather than a separate professional identity.
 
 ## Site structure
 
 - `index.html` — portfolio homepage
-- `verigoods-case-study.html` — private-source VeriGoods engineering case study
-- `moneris-case-study.html` — client-confidential Moneris contract software development case study
+- `verigoods-case-study.html` — private-source full-stack product case study
+- `moneris-case-study.html` — professional software-development experience case study
 - `styles.css` — responsive light/dark presentation
 - `script.js` — accessible mobile navigation and theme preference
+- `Raman_Harnastaeu_Software_Developer_Resume.pdf` — public downloadable resume
 - `robots.txt` and `sitemap.xml` — search discovery
-- `assets/` — favicon and social preview image
+- `assets/` — favicon and social-preview image
 
-The site is intentionally framework-free and has no analytics, trackers, diagnostic tooling or runtime dependencies.
+The site is intentionally framework-free and has no analytics, trackers, build step, or runtime dependencies.
 
-## Resume TODO
+## Accessibility and behaviour
 
-The repository does not currently contain an approved resume PDF. When one is ready:
+The site preserves semantic headings, skip links, keyboard-accessible navigation, Escape handling, visible focus states, reduced-motion support, responsive layouts, and light/dark theme preference.
 
-1. Add it at the repository root as `Roman_Harnastaeu_Resume.pdf`.
-2. Change the homepage resume link from `#resume-status` to `Roman_Harnastaeu_Resume.pdf`.
-3. Add the `download` attribute to that link.
-4. Remove the temporary pending-PDF message in the contact section.
+## Public identity
 
-Do not restore the previous resume screenshot: it contains personal contact information that is intentionally not published on the site.
+Visible portfolio copy uses **Raman Harnastaeu**. The established GitHub username, GitHub Pages domain, and LinkedIn slug retain their existing `roman...` URLs.
 
 ## GitHub Pages
 
