@@ -1,21 +1,27 @@
 # Raman Harnastaeu — Software Developer Portfolio
 
-Recruiter-facing portfolio for Raman Harnastaeu, a software developer based in Newmarket, Ontario and available across the Greater Toronto Area.
+Portfolio for Raman Harnastaeu, a software developer based in Newmarket, Ontario.
 
 ## Positioning
 
-The portfolio presents a general software-development profile with strengths across full-stack applications, backend systems, REST APIs, databases, testing, cloud computing, and AI-assisted development. Testing is treated as an engineering differentiator rather than a separate professional identity.
+The portfolio's biographical and technical content is limited to the supplied resume, `Roman H resume.pdf`. It covers full-stack, backend, and API-driven applications; experience at BoltFoundation, CleanFormula, NFT Signatures, and SmartSolutionsSupply; education at Seneca Polytechnic; and the two selected projects, VeriGoods and Java Backend Test Automation Framework.
+
+When updating the site, keep experience, dates, skills, project descriptions, contact details, metadata, and social previews supported by that resume. The public download is an unchanged copy of the supplied PDF.
+
+## Design
+
+The portfolio uses an editorial layout with warm ivory and forest-green colours, serif headings, and a concise introduction. The homepage presents both projects, all four experience entries, education, and an expandable skills list, with light and dark themes.
+
+The project illustrations summarize features and testing coverage listed in the resume; they are not application screenshots. All typography uses system fonts.
 
 ## Site structure
 
 - `index.html` — portfolio homepage
-- `verigoods-case-study.html` — private-source full-stack product case study
-- `moneris-case-study.html` — professional software-development experience case study
 - `styles.css` — responsive light/dark presentation
 - `script.js` — accessible mobile navigation and theme preference
 - `Raman_Harnastaeu_Software_Developer_Resume.pdf` — public downloadable resume
 - `robots.txt` and `sitemap.xml` — search discovery
-- `assets/` — favicon and social-preview image
+- `assets/` — favicon
 
 The site is intentionally framework-free and has no analytics, trackers, build step, or runtime dependencies.
 
@@ -25,7 +31,7 @@ The site preserves semantic headings, skip links, keyboard-accessible navigation
 
 ## Public identity
 
-Visible portfolio copy uses **Raman Harnastaeu**. The established GitHub username, GitHub Pages domain, and LinkedIn slug retain their existing `roman...` URLs.
+Visible portfolio copy uses **Raman Harnastaeu**, as written in the resume. The GitHub username and GitHub Pages domain use their existing `roman...` URLs.
 
 ## GitHub Pages
 

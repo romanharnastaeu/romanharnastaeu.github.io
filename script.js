@@ -2,6 +2,7 @@
   'use strict';
 
   const root = document.documentElement;
+  root.classList.add('js');
   const themeButton = document.querySelector('.theme-toggle');
   const themeLabel = themeButton?.querySelector('.theme-label');
   const darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
@@ -64,7 +65,7 @@
     if (navShell && !navShell.contains(event.target)) setNavigation(false);
   });
 
-  window.matchMedia('(min-width: 58.01rem)').addEventListener?.('change', function (event) {
+  window.matchMedia('(min-width: 54.01rem)').addEventListener?.('change', function (event) {
     if (event.matches) setNavigation(false);
   });
 
